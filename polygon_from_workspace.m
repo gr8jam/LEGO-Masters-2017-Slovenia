@@ -15,6 +15,7 @@ figure
 % figure('Position', [1550 100 40*35 20*35])
 hold on
 
+
 for i = 1:length(colorMap)
     bool = (colors == i-1);
     xDraw = xGrid(bool);
