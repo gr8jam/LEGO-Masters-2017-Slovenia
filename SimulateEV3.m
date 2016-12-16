@@ -2,11 +2,11 @@ function [v,w] = SimulateEV3(qTrue)
 global Robot Ts hhh
 
 % noise
-Q=diag([0.1^2,0.2^2])*1000000; % variance of actuator noise (translational velocity, angular velocity)
+Q=diag([3^2,0.2^2])*100; % variance of actuator noise (translational velocity, angular velocity)
 R=diag([0.1^2])*1;        % variance of distance sensor noise
 
 % initialize particels
-nParticles=300;
+nParticles=600;
 
 % all particles have equal weights
 W = ones(nParticles,1)/nParticles;
@@ -36,20 +36,24 @@ zTrueHeading = qTrue(3);
 for p = 1:nParticles
     % ocenjena meritev za vsak delec
     
-    zHeading = Robot.xP(3,p);
-    Innov = zTrueHeading-zHeading; %doloèimo inovacijo
-
-    % doloèimo uteži delcev (njihovo verjetnost)
-    RR=eye(1)*(3*pi/180)^2; % kovarianèna matrika meritve
-    W(p) = exp(-0.5*Innov'*inv(RR)*Innov)+0.0001;
-
+%     zHeading = Robot.xP(3,p);
+%     Innov = zTrueHeading-zHeading; %doloèimo inovacijo
+% 
+%     % doloèimo uteži delcev (njihovo verjetnost)
+%     RR=eye(1)*(3*pi/180)^2; % kovarianèna matrika meritve
+%     W(p) = exp(-0.5*Innov'*inv(RR)*Innov)+0.0001;
+% 
+    try
+       zColor = colors(uint64(Robot.xP(2,p)),uint64(Robot.xP(1,p)));
+    catch exception
+       fprintf('Error');
+    end
     
     
-    zColor = colors(int64(Robot.xP(2,p)),int64(Robot.xP(1,p)));
     if (zColor == zTrueColor)
         W(p) = W(p)*1;
     else
-        W(p) = W(p)*0.01;
+        W(p) = W(p)*0.05;
     end
     
     
@@ -78,7 +82,7 @@ Robot.q = x;     % here write current pose estimate from PF
 
 %% Odloèitev o nadaljevanju poti
 % Doloèi vhodne velièine
-v = 50;
+v = 250;
 w = 0;
 u = [v;w];
 
@@ -92,6 +96,9 @@ for p = 1:nParticles
                                          un(2) ] ;
     Robot.xP(3,p) = wrapToPi(Robot.xP(3,p));
 end
+
+Robot.xP((Robot.xP(1:2, :) < 1)) = 1;
+Robot.xP((Robot.xP(1:2, :) > 2500)) = 2500;
 
 
 end

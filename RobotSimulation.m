@@ -25,6 +25,8 @@ TrueRobot = InitTrueRobot([343 650 pi/2]');
 Robot = InitEV3([343 680 pi/2]');
 Obstacles = InitObstacles();
 
+StoreData();
+UpdateGrafic();
 
 %% Simulation
 
@@ -37,7 +39,7 @@ for i=1:length(ttt)
     StoreData();
     UpdateGrafic();
     
-    pause(0.03);
+    pause(0.01);
     
 end
 
