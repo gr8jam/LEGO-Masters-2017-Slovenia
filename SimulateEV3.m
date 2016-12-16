@@ -98,7 +98,8 @@ for p = 1:nParticles
 end
 
 Robot.xP((Robot.xP(1:2, :) < 1)) = 1;
-Robot.xP((Robot.xP(1:2, :) > 2500)) = 2500;
+Robot.xP((Robot.xP(1, :) > 2500)) = 2500;
+Robot.xP((Robot.xP(2, :) > 1800)) = 1800;
 
 
 end
