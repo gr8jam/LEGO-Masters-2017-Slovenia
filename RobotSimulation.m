@@ -151,9 +151,9 @@ function InitGrafic()
 
 global hhh
 figure(10); clf; 
-% set(10, 'Position', [-1900 -100 25*50 18*50]); 
+ set(10, 'Position', [-1900 0 25*70 18*70]); 
 % set(10, 'Position', [-750 -200 25*30 18*30]); 
-set(10, 'Position', [750 100 25*30 18*30]); 
+%set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 
 % Draw polygon colors
