@@ -7,12 +7,15 @@ global TrueRobot Robot
 global hhh
 global qqqTrue qqq qP
 
+global stanje stanjeend                                                     % naèin delovanja
+stanje = zeros(1);                                                          % naèin delovanja
+stanjeend = zeros(1);
 
 
 
 %% Init
 Ts=0.033; % sample time
-ttt=0:Ts:10; % time vector
+ttt=0:Ts:50; % time vector
 % U=[];Tvzorcenja=[] ;Z=[];
 
 qqqTrue = [];
@@ -21,7 +24,7 @@ qP = [];
 
 hhh = 0;
 InitGrafic();
-TrueRobot = InitTrueRobot([343 650 pi/2]');
+TrueRobot = InitTrueRobot([305 680 pi/2]');
 Robot = InitEV3([343 680 pi/2]');
 Obstacles = InitObstacles();
 
@@ -39,7 +42,7 @@ for i=1:length(ttt)
     StoreData();
     UpdateGrafic();
     
-    pause(0.01);
+    %pause(0.01);
     
 end
 
@@ -180,8 +183,12 @@ hhh(4)= plot(0,0,'--g','erasemode','none') ;  % ocenjena pot z odometrijo oz. fi
 hhh(5)= plot(0,0,'.','Color','r','erasemode','xor') ;   % particle
 hhh(6)= plot(nan,nan,'LineWidth',1,'Color','r') ; % particle dir
 hhh(7)= plot(nan,nan,'LineWidth',2,'Color','c') ; % sensor
-hhh(8)= plot(2650, 900, 'k.',  'LineStyle', 'none', 'MarkerSize', 100);  %'erasemode','xor',
+hhh(8)= plot(2600, 900, 'k.',  'LineStyle', 'none', 'MarkerSize', 50);  %'erasemode','xor',
 hhh(9)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
+hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
+hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
+hhh(12)= plot(2550, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
+hhh(13)= plot(2700, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 
 %hhh(6)=plot(0,0,'r','erasemode','xor')
 %legend('rob','robOdo','pot','odo.','ref.','okolje')

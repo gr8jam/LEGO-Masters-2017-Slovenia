@@ -2,8 +2,8 @@ function [minRazdalja] = SensorDistance(kot, q, R)
     global Okolje
   % parametri:
   % kot = kot pod katerim merimo razdaljo do ovire
-  % q= lega robota
-  % R= varianca šuma meritve razdalje
+  % q = lega robota
+  % R = varianca šuma meritve razdalje
   % minRazdalja = razdalja od robota do ovire v smeri kota
   
   MAX_DOSEG_SENZORJA=2000;
