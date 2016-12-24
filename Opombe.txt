@@ -1,27 +1,28 @@
 
-spremenljivka z opisom barv: colorPolygonMap		m
-global
+spremenljivka z opisom barv: PolygonMapColors		m
+scope: global
+opis barvnega poligona, matrika 1800x2500 z indeksi barv
 
 loèujeva funkije za senzorje:
-[HSV1, HSV2] = DriverRGB()  	p
-fiTrue 		 = DriverGyro() 	p
-distTrue 	 = DriverDist()		p
+[HSV1, HSV2] = DriverRGB()  	p		klièi funkcijo SimulationRGB
+fiTrue 		 = DriverGyro() 	p		klièi funkcijo SimulationGyro
+distTrue 	 = DriverDist()		p		klièi funkcijo SimulationDist
 
 
-RBG = getFromPolygonMap()
-[idx1, idx2] 	= SimulationRGB(q)			m
-fi 		  		= SimulationGyro(q)			p		
-dist 		  	= SimulationDist(q)			p
+idx = getIdxFromPolygonMap(q)				m
+[idx1, idx2] 	= SimulationRGB(q)			m		klièi funkcijo getIdxFromPolygonMap
+fi 				= SimulationGyro(q)			p		
+dist 			= SimulationDist(q)			p	
 
 
-Clasifikator barve
+Clasifikator barve							m
 function HSV = rgb2hsv(RGB)  -- matlab
 
 function [q1, q2] = getSensorPositions()  p
 
 design robota:
-1 RGB sensor (+5 cm, -3 cm)
-2 RGB sensor (+5 cm, +3 cm)
+Left  1 RGB sensor (+5 cm, -3 cm)
+Right 2 RGB sensor (+5 cm, +3 cm)
 
 
 
