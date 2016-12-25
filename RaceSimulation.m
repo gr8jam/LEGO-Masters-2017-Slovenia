@@ -29,7 +29,7 @@ qP = [];
 
 hhh = 0;
 InitGrafic();
-TrueRobot = InitTrueRobot([305 680 pi/2]');
+TrueRobot = InitTrueRobot([163 820 pi/4]');
 %Robot = InitEV3([343 680 pi/2]');
 Obstacles = InitObstacles();
 

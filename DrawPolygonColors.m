@@ -1,6 +1,8 @@
 clear all;
 load('PolygonColorData.mat')
 
+% PolygonMapColors = PolygonMapColors(:,end:-1:1);
+% save('PolygonColorData', 'PolygonMapColors','BarvnaLestvicaRGB','BarvnaLestvicaHSV');
 %% izris polygona
 figure
 hold on
