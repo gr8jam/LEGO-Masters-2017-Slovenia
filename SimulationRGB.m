@@ -1,6 +1,6 @@
-function [idxLeft, idxRight] = SimulationRGB(q, robot)
+function [idxLeft, idxRight] = SimulationRGB(q)
 
-global hhh
+global Robot
 
 x = q(1);
 y = q(2);
@@ -26,10 +26,9 @@ qL_global = T_L2G * R_L2G * qL_local;
 idxRight = getIdxFromPolygonMap(qR_global);
 idxLeft = getIdxFromPolygonMap(qL_global);
 
-if robot == 1
-    set(hhh(10),'XData',qL_global(1),'YData',qL_global(2));
-    set(hhh(11),'XData',qR_global(1),'YData',qR_global(2));
-end
+Robot.posL = qL_global(1:2);
+Robot.posR = qR_global(1:2);
+
 end
 
 function R = getRotMat(theta)

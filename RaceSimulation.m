@@ -6,6 +6,7 @@ global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV
 PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
 BarvnaLestvicaHSV = [];
+
 global TrueRobot Robot
 global hhh
 global qqqTrue qqq qP
@@ -33,8 +34,8 @@ TrueRobot = InitTrueRobot([163 820 pi/4]');
 %Robot = InitEV3([343 680 pi/2]');
 Obstacles = InitObstacles();
 
-% StoreData();
-% UpdateGrafic();
+StoreData();
+UpdateGrafic();
 
 %% Simulation
 
@@ -76,8 +77,10 @@ global TrueRobot Robot
 global qqqTrue qqq qP
 
 qqqTrue = [qqqTrue TrueRobot.q];
-qqq = [qqq Robot.q];
-qP = Robot.xP;
+if (~isempty(Robot))
+    qqq = [qqq Robot.q];
+    qP = Robot.xP;
+end
 
 end
 
@@ -86,13 +89,20 @@ function UpdateGrafic()
 global TrueRobot Robot
 global qqqTrue qqq qP hhh
 DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
-DrawRobot(Robot.q,2);            % drugi parameter: robot=1, odometrija=2
-set(hhh(3),'XData',qqqTrue(1,:),'YData',qqqTrue(2,:));     % izris prave poti
-set(hhh(4),'XData',qqq(1,:),'YData',qqq(2,:));             % izris ocenjene poti
+if (~isempty(Robot))
+    DrawRobot(Robot.q,2);            % drugi parameter: robot=1, odometrija=2
 
-LeOdometrija = 0;
-if( ~LeOdometrija)
-    set(hhh(5),'XData',qP(1,:),'YData',qP(2,:));  % izris delcev
+    set(hhh(3),'XData',qqqTrue(1,:),'YData',qqqTrue(2,:));      % izris prave poti
+    set(hhh(4),'XData',qqq(1,:),'YData',qqq(2,:));              % izris ocenjene poti
+    set(hhh(5),'XData',qP(1,:),'YData',qP(2,:));                % izris delcev
+    set(hhh(10),'XData',Robot.posL(1),'YData',Robot.posL(2));   % izris pozicije LEVEGA rgb senzorja
+    set(hhh(11),'XData',Robot.posR(1),'YData',Robot.posR(2));   % izris pozicije DESNEGA rgb senzorja
+    
+end
+
+% LeOdometrija = 0;
+% if( ~LeOdometrija)
+%     
 %     rr=.15;       
 %     if(DRAW_MORE)
 %        set(hhh(6), ...   % particle dir
@@ -100,8 +110,8 @@ if( ~LeOdometrija)
 %             'YData', reshape([xP(2,:); xP(2,:)+rr*sin(xP(3,:)); nan(1,nParticles)], 1, []), ...
 %             'ZData', reshape([10+0.1*ones(1, nParticles); 10+0.1*ones(1, nParticles); 10+0.1*ones(1, nParticles)], 1, []));
 %     end
-end
-
+% end
+% 
 % if(DRAW_MORE)
 % set(hhh(7), ...   % sensor
 %     'XData', reshape([qTrue(1)*ones(1,3); qTrue(1)*ones(1,3)+zTrue'.*cos(qTrue(3)+[-2*pi/3,0,2*pi/3]); nan(1,3)], 1, []), ...
@@ -136,11 +146,11 @@ end
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function DrawRobot(Xr,tip);
+function DrawRobot(Xr,tip)
 global hhh
 
 P=[1 4 4 -4 -4 -1 -1 -4 -4 4 4 1 1;...  % oblika robota
-   3 3 4 4 3 3 -3 -3 -4 -4 -3 -3 3]*15;         
+   3 3 4 4 3 3 -3 -3 -4 -4 -3 -3 3]*20;         
 
 theta = Xr(3); 
 Rkolo=[cos(theta) -sin(theta); sin(theta) cos(theta)];
@@ -179,16 +189,17 @@ axis equal
 axis([-5,2805,-5,1805]); 
 
 % Initialize data sets
-hhh(1)= plot(0,0,'b','erasemode','xor','LineWidth',2) ;     % dejanski robot 
-hhh(2)= plot(0,0,'g','erasemode','xor','LineWidth',2) ;     % robot z odometrijo 
+hhh(1)= plot(0,0,'c','erasemode','xor','LineWidth',2) ;     % dejanski robot 
+hhh(2)= plot(0,0,'m','erasemode','xor','LineWidth',2) ;     % robot z odometrijo 
 
 hhh(3)= plot(0,0,'--b','erasemode','none') ;  % dejanska pot
 hhh(4)= plot(0,0,'--g','erasemode','none') ;  % ocenjena pot z odometrijo oz. filtrom delcev
 hhh(5)= plot(0,0,'.','Color','r','erasemode','xor') ;   % particle
-hhh(6)= plot(nan,nan,'LineWidth',1,'Color','r') ; % particle dir
-hhh(7)= plot(nan,nan,'LineWidth',2,'Color','c') ; % sensor
-hhh(8)= plot(2575, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 50);  % Levi RGB sensor
-hhh(9)= plot(2675, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 50);  % Desni RGB sensor
+hhh(6)= plot(nan,nan,'LineWidth',1,'Color','r') ;       % particle dir
+hhh(7)= plot(nan,nan,'LineWidth',2,'Color','c') ;       % sensor
+
+hhh(8)= plot(2575, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 45);  % Levi RGB sensor
+hhh(9)= plot(2675, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 45);  % Desni RGB sensor
 
 hhh(10)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Levega RGB senzorja
 hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RGB senzorja

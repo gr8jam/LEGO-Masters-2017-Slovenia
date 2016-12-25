@@ -2,7 +2,7 @@ function DriverRGB()
 global TrueRobot Robot
 global BarvnaLestvicaHSV  BarvnaLestvicaRGB hhh
 
-[idxL,idxR] = SimulationRGB(TrueRobot.q, 1);
+[idxL,idxR] = SimulationRGB(TrueRobot.q);
 
 
 Robot.hsvL = BarvnaLestvicaHSV(idxL);
@@ -13,4 +13,6 @@ Robot.idxR = idxR;
 
 set(hhh(8),'Color',  BarvnaLestvicaRGB(idxL,:)/255);
 set(hhh(9),'Color',  BarvnaLestvicaRGB(idxR,:)/255);
+
+
 end

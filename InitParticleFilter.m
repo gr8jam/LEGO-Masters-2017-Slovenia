@@ -14,7 +14,7 @@ for p = 1:nParticles
         xP(1,p) = int32(xP(1,p) * 2499 + 1);
         xP(2,p) = int32(xP(2,p) * 1799 + 1);
         
-        [idxLxP, idxRxP] = SimulationRGB(xP(:,p), 0);
+        [idxLxP, idxRxP] = SimulationRGB(xP(:,p));
         if ((idxL == idxLxP) && (idxR == idxRxP)) 
 %         if ((idxR == idxRxP)) 
             not_done = false;
