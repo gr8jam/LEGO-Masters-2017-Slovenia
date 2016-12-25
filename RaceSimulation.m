@@ -1,16 +1,21 @@
-function RobotSimulation
-
+function RaceSimulation
 close all, clear all 
 
-global Ts Obstacles
+global Ts Obstacles 
+global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV
+PolygonMapColors  = [];
+BarvnaLestvicaRGB = [];
+BarvnaLestvicaHSV = [];
 global TrueRobot Robot
 global hhh
 global qqqTrue qqq qP
 
-global stanje stanjeend                                                     % naèin delovanja
-stanje = zeros(1);                                                          % naèin delovanja
+global stanje stanjeend        % naèin delovanja
+stanje = zeros(1);             % naèin delovanja
 stanjeend = zeros(1);
 
+
+load('PolygonColorData.mat')
 
 
 %% Init
@@ -25,11 +30,11 @@ qP = [];
 hhh = 0;
 InitGrafic();
 TrueRobot = InitTrueRobot([305 680 pi/2]');
-Robot = InitEV3([343 680 pi/2]');
+%Robot = InitEV3([343 680 pi/2]');
 Obstacles = InitObstacles();
 
-StoreData();
-UpdateGrafic();
+% StoreData();
+% UpdateGrafic();
 
 %% Simulation
 
@@ -42,7 +47,7 @@ for i=1:length(ttt)
     StoreData();
     UpdateGrafic();
     
-    %pause(0.01);
+    pause(0.01);
     
 end
 
@@ -148,29 +153,28 @@ end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
-
+global PolygonMapColors BarvnaLestvicaRGB
 global hhh
 figure(10); clf; 
- set(10, 'Position', [-1900 0 25*70 18*70]); 
+%  set(10, 'Position', [-1900 0 25*70 18*70]); 
 % set(10, 'Position', [-750 -200 25*30 18*30]); 
-%set(10, 'Position', [750 100 25*30 18*30]); 
+set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 
 % Draw polygon colors
-load('Polygon_map');                % load polygon_map
-% colorMap = colorMap_Original;     % Choose colorMap
-colorMap = colorMap_Pastel;         
-
-for i = 1:length(colorMap)          % draw each color
-    bool = (colors == i-1);
+colorMap = BarvnaLestvicaRGB/255;
+xGrid = repmat(1:2500,1800,1);
+yGrid = repmat(1:1800,1,2500);
+for idx = 1:length(BarvnaLestvicaRGB)
+    bool = (PolygonMapColors == idx);
     xDraw = xGrid(bool);
     yDraw = yGrid(bool);
-    plot(xDraw, yDraw, 'Color', colorMap(i,:), 'Marker', '.', 'LineStyle', 'none', 'MarkerSize', 1);
+    plot(xDraw, yDraw, 'Color', colorMap(idx,:), 'Marker', '.', 'LineStyle', 'none', 'MarkerSize', 1);
 end
 
 % Apperance setings
 zoom on;
-title('Localization of diferential drive robot');xlabel('x (m)');ylabel('y (m)');
+title('Localization of diferential drive robot');xlabel('x (mm)');ylabel('y (mm)');
 axis equal
 axis([-5,2805,-5,1805]); 
 
@@ -183,12 +187,16 @@ hhh(4)= plot(0,0,'--g','erasemode','none') ;  % ocenjena pot z odometrijo oz. fi
 hhh(5)= plot(0,0,'.','Color','r','erasemode','xor') ;   % particle
 hhh(6)= plot(nan,nan,'LineWidth',1,'Color','r') ; % particle dir
 hhh(7)= plot(nan,nan,'LineWidth',2,'Color','c') ; % sensor
-hhh(8)= plot(2600, 900, 'k.',  'LineStyle', 'none', 'MarkerSize', 50);  %'erasemode','xor',
-hhh(9)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
-hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
-hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
-hhh(12)= plot(2550, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
-hhh(13)= plot(2700, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
+hhh(8)= plot(2575, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 50);  % Levi RGB sensor
+hhh(9)= plot(2675, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 50);  % Desni RGB sensor
+
+hhh(10)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Levega RGB senzorja
+hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RGB senzorja
+ 
+% hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
+% hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
+% hhh(12)= plot(2550, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
+% hhh(13)= plot(2700, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 
 %hhh(6)=plot(0,0,'r','erasemode','xor')
 %legend('rob','robOdo','pot','odo.','ref.','okolje')

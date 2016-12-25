@@ -1,21 +1,27 @@
-function [v,w] = SimulateEV3()
-
+function [v,w] = SimulateEV3(qTrue)
+global Robot
 
 persistent first
 if isempty(first)
     first = true;
 end
+
+DriverRGB();        % pero
+% DriverGyro();       % pero
+% DriverDist();       % pero
+
 if (first)
-    InitEV3();
+    Robot = InitEV3(qTrue);
     first = false;
+    v = 0;
+    w = 0;
+    fprintf('EV3 init complete \n')
+else
+    [v,w] = Motion(Robot.q);
+    [Robot.q] = Localization(v,w);
 end
 
 
-DriverRGB();        % pero
-DriverGyro();       % pero
-DriverDist();       % pero
-[v,w] = Motion(q);
-[q] = Localization(v,w);
 
 end
 
