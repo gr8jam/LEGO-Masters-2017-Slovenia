@@ -1,4 +1,4 @@
-function [idxLeft, idxRight] = SimulationRGB(q)
+function [idxLeft, idxRight, posLeft, posRight] = SimulationRGB(q)
 
 global Robot
 
@@ -26,8 +26,8 @@ qL_global = T_L2G * R_L2G * qL_local;
 idxRight = getIdxFromPolygonMap(qR_global);
 idxLeft = getIdxFromPolygonMap(qL_global);
 
-Robot.posL = qL_global(1:2);
-Robot.posR = qR_global(1:2);
+posLeft =  qL_global(1:2);
+posRight = qR_global(1:2);
 
 end
 

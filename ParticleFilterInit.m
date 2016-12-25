@@ -1,18 +1,20 @@
-function qMean = InitParticleFilter
+function qMean = ParticleFilterInit
 global Robot TrueRobot
 
 idxL = Robot.idxL;
 idxR = Robot.idxR;
 
-nParticles=600;
+nParticles=400;
 xP = zeros(3,nParticles);
 for p = 1:nParticles
     
     not_done = true;
     while not_done
-        xP(:,p) = rand(3,1);
+        xP(1:2,p) = rand(2,1);
         xP(1,p) = int32(xP(1,p) * 2499 + 1);
         xP(2,p) = int32(xP(2,p) * 1799 + 1);
+%         xP(3,p) = Robot.fi;
+        xP(3,p) = TrueRobot.q(3);
         
         [idxLxP, idxRxP] = SimulationRGB(xP(:,p));
         if ((idxL == idxLxP) && (idxR == idxRxP)) 

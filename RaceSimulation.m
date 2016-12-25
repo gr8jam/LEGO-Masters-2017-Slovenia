@@ -7,7 +7,7 @@ PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
 BarvnaLestvicaHSV = [];
 
-global TrueRobot Robot
+global TrueRobot
 global hhh
 global qqqTrue qqq qP
 

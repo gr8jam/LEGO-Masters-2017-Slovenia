@@ -1,21 +1,28 @@
 function [q] = Localization(v,w)
-global Ts Robot
+q = [0 0 0]';
+Init = 1;
+Operational = 2;
 
-persistent first
-if isempty(first)
-    first = true;
+persistent state
+if isempty(state)
+    state = Init;
 end
 
-if first
-    InitParticleFilter();
-    first = false;
-    fprintf('PF init complete \n')
-else
-    q = Robot.q + [v v 0]'*Ts;
-    
+switch state
+    case Init
+        q = InitParticleFilter();
+        state = Operational;
+        fprintf('PF init complete. \n')
+        
+    case Operational
+        q = ParticleFilter([v w]');
+        
+        reInit = ParticleFilterEstimation();
+        if reInit
+            state = Init;
+        end
+    otherwise
+        error('PF in unknown state! \n')
 end
-
-q = Robot.q + [v 0 0]'*Ts;
-% q = Robot.q + [v 0 0]'*Ts;
 
 end
