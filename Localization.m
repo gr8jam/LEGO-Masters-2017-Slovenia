@@ -10,7 +10,7 @@ end
 
 switch state
     case Init
-        q = InitParticleFilter();
+        q = ParticleFilterInit();
         state = Operational;
         fprintf('PF init complete. \n')
         

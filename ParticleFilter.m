@@ -41,9 +41,9 @@ for p = 1:nParticles
     if (zTrueL == zL) && (zTrueR == zR)
         W(p) = W(p)*1;
     elseif (zTrueL == zL) || (zTrueR == zR)
-        W(p) = W(p)*0.7;
+        W(p) = W(p)*0.5;
     else
-        W(p) = W(p)*0.05;
+        W(p) = W(p)*0.10;
     end
     
     
