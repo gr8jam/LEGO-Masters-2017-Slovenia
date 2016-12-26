@@ -4,7 +4,7 @@ global Robot TrueRobot
 idxL = Robot.idxL;
 idxR = Robot.idxR;
 
-nParticles=50;
+nParticles=100;
 xP = zeros(3,nParticles);
 for p = 1:nParticles
     

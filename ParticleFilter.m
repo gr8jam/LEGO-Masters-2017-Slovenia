@@ -9,11 +9,11 @@ end
 start = toc;
 
 % noise
-Q=diag([3^2,0.1^2]); % variance of actuator noise (translational velocity, angular velocity)
+Q=diag([3^2,0.5^2]); % variance of actuator noise (translational velocity, angular velocity)
 R=diag([0.1^2])*1;        % variance of distance sensor noise
 
 % initialize particels
-nParticles=50;
+nParticles=100;
 
 % all particles have equal weights
 W = ones(nParticles,1)/nParticles;
@@ -98,7 +98,7 @@ for idx = 1:badIdxCnt
 %         ParticleFilterInit;
     end
     
-    Robot.xP(1:2,badParticleIdx(idx)) = Robot.xP(1:2, newIdx) + [cos(TrueRobot.q(3)); sin(TrueRobot.q(3))] .* randi([-2 3],2,1);
+    Robot.xP(1:2,badParticleIdx(idx)) = Robot.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
 %     Robot.xP(3,badParticleIdx(idx)) = Robot.fi;
     Robot.xP(3,badParticleIdx(idx)) = TrueRobot.q(3);
 end
@@ -106,7 +106,7 @@ end
 for idx = 1:10:goodIdxCnt
     if greatIdxCnt > 0
         newIdx = greatParticleIdx(randi(greatIdxCnt));
-        Robot.xP(1:2,goodParticleIdx(idx)) = Robot.xP(1:2, newIdx) + [cos(TrueRobot.q(3)); sin(TrueRobot.q(3))] .* randi([-2 3],2,1);
+        Robot.xP(1:2,goodParticleIdx(idx)) = Robot.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
 %         Robot.xP(3,goodParticleIdx(idx)) = Robot.fi;
         Robot.xP(3,goodParticleIdx(idx)) = TrueRobot.q(3);
     end

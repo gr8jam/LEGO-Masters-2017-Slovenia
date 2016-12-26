@@ -20,7 +20,7 @@ load('PolygonColorData.mat')
 
 
 %% Init
-Tend = 20;      % Simulation lasts 50s
+Tend = 50;      % Simulation lasts 50s
 Ts=0.033;       % sample time
 ttt=0:Ts:Tend;    % time vector
 % U=[];Tvzorcenja=[] ;Z=[];
@@ -234,11 +234,11 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%               
 function SimulateTrueRobot(v,w)
   global Ts TrueRobot
-  flag_sum = 1; % stikalo za vkolop ali izkolp šuma
+  flag_sum = 0; % stikalo za vkolop ali izkolp šuma
   
   %nimamo toènega podatka o dimenzijah robota Rkolo in Lrob, ki so v resnici
-  Rt=TrueRobot.R;
-  Lt=TrueRobot.L;
+  Rt=TrueRobot.R+0.001;
+  Lt=TrueRobot.L+0.003;
   % dodatno se dejansko kolo zaradi majnih zdrsov, neravnin, itd... vrti z
   % nekim dodanim šumom
   SIGMA_W=0.3;
