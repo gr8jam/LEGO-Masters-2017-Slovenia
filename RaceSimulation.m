@@ -67,12 +67,8 @@ fprintf('Simulated %i sec, simulation finished in %i sec. /n', Tend, int32(durat
 % xlabel('t [s]'),ylabel('d [m/s]'),legend('d1','d2','d3'),
 end
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%% FUNKCIJE    %%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -103,25 +99,6 @@ if (~isempty(Robot))
     set(hhh(11),'XData',Robot.posR(1),'YData',Robot.posR(2));   % izris pozicije DESNEGA rgb senzorja
     
 end
-
-% LeOdometrija = 0;
-% if( ~LeOdometrija)
-%     
-%     rr=.15;       
-%     if(DRAW_MORE)
-%        set(hhh(6), ...   % particle dir
-%             'XData', reshape([xP(1,:); xP(1,:)+rr*cos(xP(3,:)); nan(1,nParticles)], 1, []), ...
-%             'YData', reshape([xP(2,:); xP(2,:)+rr*sin(xP(3,:)); nan(1,nParticles)], 1, []), ...
-%             'ZData', reshape([10+0.1*ones(1, nParticles); 10+0.1*ones(1, nParticles); 10+0.1*ones(1, nParticles)], 1, []));
-%     end
-% end
-% 
-% if(DRAW_MORE)
-% set(hhh(7), ...   % sensor
-%     'XData', reshape([qTrue(1)*ones(1,3); qTrue(1)*ones(1,3)+zTrue'.*cos(qTrue(3)+[-2*pi/3,0,2*pi/3]); nan(1,3)], 1, []), ...
-%     'YData', reshape([qTrue(2)*ones(1,3); qTrue(2)*ones(1,3)+zTrue'.*sin(qTrue(3)+[-2*pi/3,0,2*pi/3]); nan(1,3)], 1, []), ...
-%     'ZData', reshape([10+0.1*ones(1, 3); 10+0.1*ones(1, 3); 10+0.1*ones(1, 3)], 1, []));
-% end
 
 drawnow;
 end
@@ -217,47 +194,11 @@ hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RG
 %hhh(6)=plot(0,0,'r','erasemode','xor')
 %legend('rob','robOdo','pot','odo.','ref.','okolje')
 %legend('rob.','pot','ref.')
-legend('rob','robEst','path','pathEst','particles')
+legend('TrueRobot','EV3','path','path EV3','particles')
 
 hold off;
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-end
 
-
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function TrueRobot = InitTrueRobot(q0)
-TrueRobot = struct('R', 0.05,...
-                   'L', 0.15,...
-                   'q', q0);       
 end
-               
-%% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%               
-function SimulateTrueRobot(v,w)
-  global Ts TrueRobot
-  flag_sum = 0; % stikalo za vkolop ali izkolp šuma
-  
-  %nimamo toènega podatka o dimenzijah robota Rkolo in Lrob, ki so v resnici
-  Rt=TrueRobot.R+0.001;
-  Lt=TrueRobot.L+0.003;
-  % dodatno se dejansko kolo zaradi majnih zdrsov, neravnin, itd... vrti z
-  % nekim dodanim šumom
-  SIGMA_W=0.3;
-  % kotne hitrosti koles glede na vhode z dodanim šumom
-  wR=1/(TrueRobot.R)*(v+w*(TrueRobot.L)/2)+SIGMA_W*randn(1,1)*flag_sum;
-  wL=1/(TrueRobot.R)*(v-w*(TrueRobot.L)/2)+SIGMA_W*randn(1,1)*flag_sum;
-  
-  % dejanska hitrost robota je torej
-    vt=Rt/2*(wR+wL);
-    wt=Rt/Lt*(wR-wL);
-   
- 	TrueRobot.q(1)= TrueRobot.q(1) + Ts*vt*cos( TrueRobot.q(3) + Ts*wt/2 );
-	TrueRobot.q(2)= TrueRobot.q(2) + Ts*vt*sin( TrueRobot.q(3) + Ts*wt/2 );
-    TrueRobot.q(3)= TrueRobot.q(3) + Ts*wt;
-    
-    TrueRobot.q(3)=wrapToPi(TrueRobot.q(3));    % popravi kot q(3)  
-    
-end
-
 
 
 
