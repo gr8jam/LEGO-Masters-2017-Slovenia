@@ -15,14 +15,21 @@ switch state
         fprintf('PF init complete. \n')
         
     case Operational
+        
         q = ParticleFilter([v w]');
         
         reInit = ParticleFilterEstimation();
         if reInit
             state = Init;
         end
+        
+        
+
     otherwise
         error('PF in unknown state! \n')
 end
+
+
+
 
 end

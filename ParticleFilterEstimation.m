@@ -15,7 +15,7 @@ else
     errCnt = errCnt +1;
 end
 
-if errCnt > 50
+if errCnt > 50000
     reInit = true;
     errCnt = 0;
 else

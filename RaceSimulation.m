@@ -20,8 +20,9 @@ load('PolygonColorData.mat')
 
 
 %% Init
-Ts=0.033; % sample time
-ttt=0:Ts:50; % time vector
+Tend = 20;      % Simulation lasts 50s
+Ts=0.033;       % sample time
+ttt=0:Ts:Tend;    % time vector
 % U=[];Tvzorcenja=[] ;Z=[];
 
 qqqTrue = [];
@@ -30,7 +31,7 @@ qP = [];
 
 hhh = 0;
 InitGrafic();
-TrueRobot = InitTrueRobot([163 820 pi/4]');
+TrueRobot = InitTrueRobot([163 820 pi/2]');
 %Robot = InitEV3([343 680 pi/2]');
 Obstacles = InitObstacles();
 
@@ -39,6 +40,7 @@ UpdateGrafic();
 
 %% Simulation
 
+tic;
 for i=1:length(ttt)
     
     [v,w] = SimulateEV3(TrueRobot.q);
@@ -48,9 +50,11 @@ for i=1:length(ttt)
     StoreData();
     UpdateGrafic();
     
-    pause(0.01);
+%     pause(0.03);
     
 end
+duration = toc;
+fprintf('Simulated %i sec, simulation finished in %i sec. /n', Tend, int32(duration));
 
 % figure
 % plot(qqTrue(:,1),qqTrue(:,2),qq(:,1),qq(:,2),'--')
@@ -166,14 +170,14 @@ function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
 global hhh
 figure(10); clf; 
-%  set(10, 'Position', [-1900 0 25*70 18*70]); 
+set(10, 'Position', [1600 -150 25*60 18*60]); 
 % set(10, 'Position', [-750 -200 25*30 18*30]); 
-set(10, 'Position', [750 100 25*30 18*30]); 
+% set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 
 % Draw polygon colors
 colorMap = BarvnaLestvicaRGB/255;
-xGrid = repmat(1:2500,1800,1);
+xGrid = repmat(1:2500,1805,1);
 yGrid = repmat(1:1800,1,2500);
 for idx = 1:length(BarvnaLestvicaRGB)
     bool = (PolygonMapColors == idx);
