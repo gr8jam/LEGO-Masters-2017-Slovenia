@@ -9,7 +9,7 @@ end
 start = toc;
 
 % noise
-Q=diag([3^2,0.5^2]); % variance of actuator noise (translational velocity, angular velocity)
+Q=diag([5^2,0.5^2]); % variance of actuator noise (translational velocity, angular velocity)
 R=diag([0.1^2])*1;        % variance of distance sensor noise
 
 % initialize particels
