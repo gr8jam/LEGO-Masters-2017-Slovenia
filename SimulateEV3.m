@@ -7,8 +7,8 @@ if isempty(first)
 end
 
 DriverRGB();        % pero
-% DriverGyro();       % pero
-% DriverDist();       % pero
+DriverGyro();       % pero
+DriverDist();       % pero
 
 if (first)
     Robot = InitEV3(qTrue);
@@ -17,6 +17,9 @@ if (first)
     w = 0;
     fprintf('EV3 init complete \n')
 else
+%     DriverRGB();        % pero
+%     DriverGyro();       % pero
+%     DriverDist();       % pero
     [v,w] = Motion(Robot.q);
     [Robot.q] = Localization(v,w);
 end

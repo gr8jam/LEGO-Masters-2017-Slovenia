@@ -105,8 +105,8 @@ function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
 global hhh Obstacles
 figure(10); clf; 
-set(10, 'Position', [1600 -150 25*60 18*60]); 
-% set(10, 'Position', [-750 -200 25*30 18*30]); 
+%set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
+set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
 % set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 

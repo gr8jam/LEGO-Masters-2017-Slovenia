@@ -10,7 +10,7 @@ distTrue 	 = DriverDist()		p		klièi funkcijo SimulationDist
 
 
 idx = getIdxFromPolygonMap(q)				m
-[idx1, idx2] 	= SimulationRGB(q)			m		klièi funkcijo getIdxFromPolygonMap
+[idx1, idx2, posL, posR] 	= SimulationRGB(q)			m		klièi funkcijo getIdxFromPolygonMap
 fi 				= SimulationGyro(q)			p		
 dist 			= SimulationDist(q)			p	
 
