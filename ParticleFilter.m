@@ -102,7 +102,7 @@ for idx = 1:badIdxCnt
 %     Robot.xP(3,badParticleIdx(idx)) = TrueRobot.q(3);
 end
 
-for idx = 1:10:goodIdxCnt
+for idx = 1:4:goodIdxCnt
     if greatIdxCnt > 0
         newIdx = greatParticleIdx(randi(greatIdxCnt));
         Robot.PF.xP(1:2,goodParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);

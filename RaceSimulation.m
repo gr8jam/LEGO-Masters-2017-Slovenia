@@ -51,7 +51,7 @@ for i=1:length(ttt)
     StoreData();
     UpdateGrafic();
     
-    pause(0.03);
+%    pause(0.03);
 %     if (ttt(i) > 30)
 %       pause(0.03);
 %     end   
