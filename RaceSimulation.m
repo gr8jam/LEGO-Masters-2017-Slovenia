@@ -31,7 +31,8 @@ qP = [];
 
 hhh = 0;
 InitGrafic();
-TrueRobot = InitTrueRobot([163 820 pi/2]');
+% TrueRobot = InitTrueRobot([163 820 pi/2]');
+TrueRobot = InitTrueRobot([293 820 pi/4]');
 %Robot = InitEV3([343 680 pi/2]');
 
 
@@ -50,8 +51,10 @@ for i=1:length(ttt)
     StoreData();
     UpdateGrafic();
     
-%     pause(0.03);
-    
+    pause(0.03);
+%     if (ttt(i) > 30)
+%       pause(0.03);
+%     end   
 end
 duration = toc;
 fprintf('Simulated %i sec, simulation finished in %i sec. /n', Tend, int32(duration));
@@ -79,7 +82,10 @@ global qqqTrue qqq qP
 qqqTrue = [qqqTrue TrueRobot.q];
 if (~isempty(Robot))
     qqq = [qqq Robot.q];
-    qP = Robot.xP;
+    
+    if (~isempty(Robot.PF.xP))
+        qP = Robot.PF.xP;
+    end
 end
 
 end
@@ -105,8 +111,8 @@ function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
 global hhh Obstacles
 figure(10); clf; 
-%set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
-set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
+set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
+% set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
 % set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 

@@ -12,11 +12,10 @@ start = toc;
 Q=diag([5^2,0.5^2]); % variance of actuator noise (translational velocity, angular velocity)
 R=diag([0.1^2])*1;        % variance of distance sensor noise
 
-% initialize particels
-nParticles=100;
+
 
 % all particles have equal weights
-W = ones(nParticles,1)/nParticles;
+W = ones(Robot.PF.nParticles,1)/Robot.PF.nParticles;
 
 
 %% Pridobi meritev
@@ -34,7 +33,7 @@ greatIdxCnt = 0;
 
 
 %% Korekcija delcev
-for p = 1:nParticles
+for p = 1:Robot.PF.nParticles
     % ocenjena meritev za vsak delec
     
 %      zHeading = Robot.xP(3,p);
@@ -45,9 +44,9 @@ for p = 1:nParticles
 %     W(p) = exp(-0.5*Innov'*inv(RR)*Innov)+0.0001;
 % 
     try
-       [zL, zR] = SimulationRGB(Robot.xP(:,p));
+       [zL, zR] = SimulationRGB(Robot.PF.xP(:,p));
     catch exception
-       fprintf('Error: Simulation od %i particle in PF', p);
+       fprintf('Error: Simulation od %i particle in PF \n', p);
     end
     
 %     
@@ -98,17 +97,17 @@ for idx = 1:badIdxCnt
 %         ParticleFilterInit;
     end
     
-    Robot.xP(1:2,badParticleIdx(idx)) = Robot.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
-%     Robot.xP(3,badParticleIdx(idx)) = Robot.fi;
-    Robot.xP(3,badParticleIdx(idx)) = TrueRobot.q(3);
+    Robot.PF.xP(1:2,badParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
+    Robot.PF.xP(3,badParticleIdx(idx)) = Robot.fi;
+%     Robot.xP(3,badParticleIdx(idx)) = TrueRobot.q(3);
 end
 
 for idx = 1:10:goodIdxCnt
     if greatIdxCnt > 0
         newIdx = greatParticleIdx(randi(greatIdxCnt));
-        Robot.xP(1:2,goodParticleIdx(idx)) = Robot.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
-%         Robot.xP(3,goodParticleIdx(idx)) = Robot.fi;
-        Robot.xP(3,goodParticleIdx(idx)) = TrueRobot.q(3);
+        Robot.PF.xP(1:2,goodParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
+        Robot.PF.xP(3,goodParticleIdx(idx)) = Robot.fi;
+%         Robot.xP(3,goodParticleIdx(idx)) = TrueRobot.q(3);
     end
 end
 
@@ -119,27 +118,27 @@ end
         
 %% Oceni dejanska stanja robota
 % ocena stanja je povpreèje delcev
-x = mean(Robot.xP,2);
+x = mean(Robot.PF.xP,2);
 x(3) = wrapToPi(x(3));
 % Particle filter (PF) estimate is obtained by the avarage od praticle states 
 qMean = x;     % here write current pose estimate from PF 
-
+qMean(3) = Robot.fi;
 
 %% Predikcija delcev
 % Naredi predikcijo in poèakaj na novo meritev
-c = cos(Robot.xP(3,p));
-s = sin(Robot.xP(3,p));
-for p = 1:nParticles
+c = cos(Robot.PF.xP(3,p));
+s = sin(Robot.PF.xP(3,p));
+for p = 1:Robot.PF.nParticles
     un = u + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
-    Robot.xP(:,p) = Robot.xP(:,p) + Ts*[ un(1)*c; ...
+    Robot.PF.xP(:,p) = Robot.PF.xP(:,p) + Ts*[ un(1)*c; ...
                                          un(1)*s; ...
                                          un(2) ] ;
-    Robot.xP(3,p) = wrapToPi(Robot.xP(3,p));
+    Robot.PF.xP(3,p) = wrapToPi(Robot.PF.xP(3,p));
 end
 
-Robot.xP((Robot.xP(1:2, :) < 1)) = 1;
-Robot.xP((Robot.xP(1, :) > 2500)) = 2500;
-Robot.xP((Robot.xP(2, :) > 1800)) = 1800;
+Robot.PF.xP((Robot.PF.xP(1:2, :) < 1)) = 1;
+Robot.PF.xP((Robot.PF.xP(1, :) > 2500)) = 2500;
+Robot.PF.xP((Robot.PF.xP(2, :) > 1800)) = 1800;
 
 
 finish = toc - start;

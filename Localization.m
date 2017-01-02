@@ -1,4 +1,6 @@
 function [q] = Localization(v,w)
+global Robot
+
 q = [0 0 0]';
 Init = 1;
 Operational = 2;
@@ -10,7 +12,7 @@ end
 
 switch state
     case Init
-        q = ParticleFilterInit();
+        Robot.PF = ParticleFilterInit();
         state = Operational;
         fprintf('PF init complete. \n')
         
@@ -23,8 +25,6 @@ switch state
             state = Init;
         end
         
-        
-
     otherwise
         error('PF in unknown state! \n')
 end

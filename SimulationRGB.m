@@ -1,6 +1,6 @@
 function [idxLeft, idxRight, posLeft, posRight] = SimulationRGB(q)
 
-global Robot
+% global Robot
 
 x = q(1);
 y = q(2);

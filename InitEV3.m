@@ -1,5 +1,6 @@
 function Robot = InitEV3(q0)
 
+
 % Get this data from sensors
 hsvL = [0 0 0];
 hsvR = [0 0 0];
@@ -9,6 +10,9 @@ posL = [0 0]';
 posR = [0 0]';
 dist = 1;
 fi = 0;
+
+PF = struct('nParticles', 100,...
+            'xP', zeros(3, 100));
 
 Robot = struct('R', 0.05,...
                'L', 0.15,...
@@ -21,8 +25,14 @@ Robot = struct('R', 0.05,...
                'posL', posL,...
                'posR', posR,...
                'dist', dist,...
-               'fi', fi);   
- 
+               'fi', fi,...
+               'PF', PF); 
+
+DriverRGB();
+DriverGyro();
+DriverDist();
+ParticleFilterInit();
+
 end
 
 

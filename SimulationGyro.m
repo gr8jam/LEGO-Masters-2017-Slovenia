@@ -1,6 +1,6 @@
 function  fi = SimulationGyro(q)
 
-fi = q(3);
+fi = wrapToPi(q(3));
 
 end
 

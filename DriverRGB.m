@@ -1,6 +1,6 @@
 function DriverRGB()
 global TrueRobot Robot
-global BarvnaLestvicaHSV  BarvnaLestvicaRGB hhh
+global BarvnaLestvicaHSV  % BarvnaLestvicaRGB
 
 [idxL,idxR, posL, posR] = SimulationRGB(TrueRobot.q);
 

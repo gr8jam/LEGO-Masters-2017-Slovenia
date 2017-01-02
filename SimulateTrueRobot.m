@@ -3,8 +3,8 @@ function SimulateTrueRobot(v,w)
   flag_sum = 0; % stikalo za vkolop ali izkolp šuma
   
   %nimamo toènega podatka o dimenzijah robota Rkolo in Lrob, ki so v resnici
-  Rt=TrueRobot.R+0.001;
-  Lt=TrueRobot.L+0.003;
+  Rt=TrueRobot.R+0.0005 * 0;
+  Lt=TrueRobot.L+0.001 * 0;
   % dodatno se dejansko kolo zaradi majnih zdrsov, neravnin, itd... vrti z
   % nekim dodanim šumom
   SIGMA_W=0.3;
