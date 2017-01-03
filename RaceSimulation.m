@@ -31,8 +31,9 @@ qP = [];
 
 hhh = 0;
 InitGrafic();
-% TrueRobot = InitTrueRobot([163 820 pi/2]');
-TrueRobot = InitTrueRobot([293 820 pi/4]');
+% TrueRobot = InitTrueRobot([190 530 3*pi/7]');
+TrueRobot = InitTrueRobot([163 820 pi/3]');
+% TrueRobot = InitTrueRobot([293 820 pi/4]');
 %Robot = InitEV3([343 680 pi/2]');
 
 
@@ -111,9 +112,9 @@ function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
 global hhh Obstacles
 figure(10); clf; 
-set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
+% set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
 % set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
-% set(10, 'Position', [750 100 25*30 18*30]); 
+set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 
 % Apperance setings
