@@ -1,4 +1,4 @@
-function [v,w] = SimulateEV3(qTrue)
+function [v,w] = SimulateEV3(qTrue,i)
 global Robot
 
 persistent first
@@ -17,6 +17,33 @@ if (first)
     w = 0;
     fprintf('EV3 init complete \n')
 else
+    
+    if i == 91+15
+        fprintf('--- menjava na srednji pas ---')
+        Robot.Motion.dkot = -70;
+        Robot.Motion.SwitchRight = 3;
+        Robot.Motion.Ptr = 10;
+    end
+    if i == 600+10
+        fprintf('--- menjava na notranji pas ---')
+        Robot.Motion.dkot = -45;
+        Robot.Motion.SwitchRight = 3;
+        Robot.Motion.Ptr = 10;
+    end
+    
+    if i == 600+150+230
+        fprintf('--- menjava na srednji pas ---')
+        Robot.Motion.dkot = 45;
+        Robot.Motion.SwitchLeft = 3;
+        Robot.Motion.Ptr = 10;
+    end
+    if i == 600+150+230+250
+        fprintf('--- menjava na zunanji pas ---')
+        Robot.Motion.dkot = 45;
+        Robot.Motion.SwitchLeft = 3;
+        Robot.Motion.Ptr = 10;
+    end
+        
 %     DriverRGB();        % pero
 %     DriverGyro();       % pero
 %     DriverDist();       % pero
