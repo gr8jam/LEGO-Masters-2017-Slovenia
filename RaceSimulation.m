@@ -17,7 +17,7 @@ stanjeend = zeros(1);
 
 
 load('PolygonColorData.mat')
-Obstacles = InitObstacles();
+
 
 %% Init
 Tend = 120;      % Simulation lasts 50s
@@ -30,6 +30,8 @@ qqq = [];
 qP = [];
 
 hhh = 0;
+InitGrafic();
+Obstacles = InitObstacles(1);
 InitGrafic();
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
 TrueRobot = InitTrueRobot([163 820 pi/2]');
@@ -92,19 +94,28 @@ end
 end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function Obstacles = InitObstacles()
+function Obstacles = InitObstacles(f)
+load('Obstacles.mat');
+if f == 1
+    fprintf('Izberi pozicijo štirih ovir \n\r')
+    [x,y] = ginput(4);
+    obst = GetObstacleVertex( x,y );  
+    Obstacles = [Obstacles; obst];
+end
+    
 % TODO: v nadaljevanje bi lahko tudi ovire bile shranjene v ".mat" datoteki
 % osnovni element je daljica podana z daljico: x1 y1 x2 y2
-Obstacles=[  0 0 2500 0;...         % spodnji rob
-             0 0 0 1800;...         % levi rob
-             0 1800 2500 1800;...   % zgornji rob
-             2500 0 2500 1800;....  % desni rob
-             1349 0 1349 275;...                    % spodnja ovira
-             2500-1349 1800 2500-1349 1800-275;...  % zgornja ovira
-             625 610 625 610+580;...                % leva ovira
-             625+1250 610 625+1250 610+580;...      % desna ovira
-             625 1800/2 625+1250 1800/2  ];         % sredinska ovira
-             
+% Obstacles=[  0 0 2500 0;...         % spodnji rob
+%              0 0 0 1800;...         % levi rob
+%              0 1800 2500 1800;...   % zgornji rob
+%              2500 0 2500 1800;....  % desni rob
+%              1349 0 1349 275;...                    % spodnja ovira
+%              2500-1349 1800 2500-1349 1800-275;...  % zgornja ovira
+%              625 610 625 610+580;...                % leva ovira
+%              625+1250 610 625+1250 610+580;...      % desna ovira
+%              625 1800/2 625+1250 1800/2  ];         % sredinska ovira
+
+
 end
 
 
