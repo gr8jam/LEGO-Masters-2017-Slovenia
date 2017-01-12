@@ -2,7 +2,7 @@ function RaceSimulation
 close all, clear all 
 
 global Ts Obstacles 
-global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV
+global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV DRAW_MORE
 PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
 BarvnaLestvicaHSV = [];
@@ -30,9 +30,15 @@ qqq = [];
 qP = [];
 
 hhh = 0;
+
+% DRAW_MORE = 1;
+StartMode = 2;
+if StartMode == 1
+    InitGrafic();
+end
+Obstacles = InitObstacles(StartMode);
 InitGrafic();
-Obstacles = InitObstacles(1);
-InitGrafic();
+
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
 TrueRobot = InitTrueRobot([163 820 pi/2]');
 % TrueRobot = InitTrueRobot([293 820 pi/4]');
@@ -98,9 +104,12 @@ function Obstacles = InitObstacles(f)
 load('Obstacles.mat');
 if f == 1
     fprintf('Izberi pozicijo štirih ovir \n\r')
-    [x,y] = ginput(4);
+    [x,y] = ginput(4);    
     obst = GetObstacleVertex( x,y );  
     Obstacles = [Obstacles; obst];
+    save('ObstaclesP.mat','Obstacles')
+elseif f == 2
+    load('ObstaclesP.mat')
 end
     
 % TODO: v nadaljevanje bi lahko tudi ovire bile shranjene v ".mat" datoteki
@@ -122,7 +131,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
-global hhh Obstacles
+global hhh Obstacles 
 figure(10); clf; 
 % set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
 set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
@@ -185,7 +194,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function UpdateGrafic()
 global TrueRobot Robot BarvnaLestvicaRGB
-global qqqTrue qqq qP hhh
+global qqqTrue qqq qP hhh 
 DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
 if (~isempty(Robot))
     DrawRobot(Robot.q,2);            % drugi parameter: robot=1, odometrija=2
@@ -198,6 +207,13 @@ if (~isempty(Robot))
     set(hhh(10),'XData',Robot.posL(1),'YData',Robot.posL(2));   % izris pozicije LEVEGA rgb senzorja
     set(hhh(11),'XData',Robot.posR(1),'YData',Robot.posR(2));   % izris pozicije DESNEGA rgb senzorja
     
+%     if(DRAW_MORE)
+%       set(hhh(7), ...   % sensor
+%             'XData', reshape([TrueRobot.q(1)*ones(1,1); TrueRobot.q(1)*ones(1,1)+Robot.dist.*cos(TrueRobot.q(3)); nan(1,1)], 1, []), ...
+%             'YData', reshape([TrueRobot.q(2)*ones(1,1); TrueRobot.q(2)*ones(1,1)+Robot.dist.*sin(TrueRobot.q(3)); nan(1,1)], 1, []), ...
+%             'ZData', reshape([10+0.1*ones(1, 1); 10+0.1*ones(1, 1); 10+0.1*ones(1, 1)], 1, []));
+%      end
+%     Robot.dist
 end
 
 drawnow;
