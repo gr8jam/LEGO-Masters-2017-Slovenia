@@ -179,6 +179,18 @@ if ~isempty(Obstacles)
        line(Obstacles(i,[1,3]),Obstacles(i,[2,4]),'LineWidth',3,'Color','m'); 
     end
 end
+load('SrediscaOvir.mat')
+ang = 0:0.1745:2*pi;
+R = 54;
+colo = [ 0.7 0.7 0.7];
+for i=1:length(x)
+    xd = R * cos(ang) + x(i);
+    yd = R * sin(ang) + y(i);
+    plot(xd, yd, 'LineWidth',4 , 'Color', colo);
+    xd = (R-28) * cos(ang) + x(i);
+    yd = (R-28) * sin(ang) + y(i);
+    plot(xd, yd, 'LineWidth',18 , 'Color', colo);
+end
 
 % hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 % hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
