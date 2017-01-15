@@ -2,7 +2,7 @@ function RaceSimulation
 close all, clear all 
 
 global Ts Obstacles 
-global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV
+global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV DRAW_MORE
 PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
 BarvnaLestvicaHSV = [];
@@ -17,7 +17,7 @@ stanjeend = zeros(1);
 
 
 load('PolygonColorData.mat')
-Obstacles = InitObstacles();
+
 
 %% Init
 Tend = 120;      % Simulation lasts 50s
@@ -30,7 +30,15 @@ qqq = [];
 qP = [];
 
 hhh = 0;
+
+% DRAW_MORE = 1;
+StartMode = 2;
+if StartMode == 1
+    InitGrafic();
+end
+Obstacles = InitObstacles(StartMode);
 InitGrafic();
+
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
 TrueRobot = InitTrueRobot([163 820 pi/2]');
 % TrueRobot = InitTrueRobot([293 820 pi/4]');
@@ -92,26 +100,38 @@ end
 end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function Obstacles = InitObstacles()
+function Obstacles = InitObstacles(f)
+load('Obstacles.mat');
+if f == 1
+    fprintf('Izberi pozicijo štirih ovir \n\r')
+    [x,y] = ginput(4);    
+    obst = GetObstacleVertex( x,y );  
+    Obstacles = [Obstacles; obst];
+    save('ObstaclesP.mat','Obstacles')
+elseif f == 2
+    load('ObstaclesP.mat')
+end
+    
 % TODO: v nadaljevanje bi lahko tudi ovire bile shranjene v ".mat" datoteki
 % osnovni element je daljica podana z daljico: x1 y1 x2 y2
-Obstacles=[  0 0 2500 0;...         % spodnji rob
-             0 0 0 1800;...         % levi rob
-             0 1800 2500 1800;...   % zgornji rob
-             2500 0 2500 1800;....  % desni rob
-             1349 0 1349 275;...                    % spodnja ovira
-             2500-1349 1800 2500-1349 1800-275;...  % zgornja ovira
-             625 610 625 610+580;...                % leva ovira
-             625+1250 610 625+1250 610+580;...      % desna ovira
-             625 1800/2 625+1250 1800/2  ];         % sredinska ovira
-             
+% Obstacles=[  0 0 2500 0;...         % spodnji rob
+%              0 0 0 1800;...         % levi rob
+%              0 1800 2500 1800;...   % zgornji rob
+%              2500 0 2500 1800;....  % desni rob
+%              1349 0 1349 275;...                    % spodnja ovira
+%              2500-1349 1800 2500-1349 1800-275;...  % zgornja ovira
+%              625 610 625 610+580;...                % leva ovira
+%              625+1250 610 625+1250 610+580;...      % desna ovira
+%              625 1800/2 625+1250 1800/2  ];         % sredinska ovira
+
+
 end
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
-global hhh Obstacles
+global hhh Obstacles 
 figure(10); clf; 
 set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
 % set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
@@ -174,7 +194,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function UpdateGrafic()
 global TrueRobot Robot BarvnaLestvicaRGB
-global qqqTrue qqq qP hhh
+global qqqTrue qqq qP hhh 
 DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
 if (~isempty(Robot))
     DrawRobot(Robot.q,2);            % drugi parameter: robot=1, odometrija=2
@@ -187,6 +207,13 @@ if (~isempty(Robot))
     set(hhh(10),'XData',Robot.posL(1),'YData',Robot.posL(2));   % izris pozicije LEVEGA rgb senzorja
     set(hhh(11),'XData',Robot.posR(1),'YData',Robot.posR(2));   % izris pozicije DESNEGA rgb senzorja
     
+%     if(DRAW_MORE)
+%       set(hhh(7), ...   % sensor
+%             'XData', reshape([TrueRobot.q(1)*ones(1,1); TrueRobot.q(1)*ones(1,1)+Robot.dist.*cos(TrueRobot.q(3)); nan(1,1)], 1, []), ...
+%             'YData', reshape([TrueRobot.q(2)*ones(1,1); TrueRobot.q(2)*ones(1,1)+Robot.dist.*sin(TrueRobot.q(3)); nan(1,1)], 1, []), ...
+%             'ZData', reshape([10+0.1*ones(1, 1); 10+0.1*ones(1, 1); 10+0.1*ones(1, 1)], 1, []));
+%      end
+%     Robot.dist
 end
 
 drawnow;

@@ -1,5 +1,5 @@
 function dist = SimulationDist( q )
-global Okolje
+global Obstacles
 
 R = 10;
 kot = 0;
@@ -26,8 +26,8 @@ kot = 0;
     minRazdalja=100000;
  
      % tu testiraj premice in vrni kot
-     for i=1:size(Okolje,1)
-        x1=Okolje(i,1); y1=Okolje(i,2); x2=Okolje(i,3);  y2=Okolje(i,4);
+     for i=1:size(Obstacles,1)
+        x1=Obstacles(i,1); y1=Obstacles(i,2); x2=Obstacles(i,3);  y2=Obstacles(i,4);
 
         A2=  y2-y1;   % enaèba premice daljice okola A2x+B2y+C2=0  
         B2= -x2+x1;

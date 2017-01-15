@@ -1,7 +1,7 @@
 function [v,w] = Motion(q)
-global Robot 
+global Robot OdoRobot
 DriverRGB();
-
+Lokal = 0;
 
 L = Robot.idxL;
 D = Robot.idxR;
@@ -23,7 +23,14 @@ if Robot.Motion.SwitchLeft == 0 && Robot.Motion.SwitchRight == 0
         Robot.Motion.ww = 0;
     end
 end
-
+%% ovira pred lokalizacijo
+% if Robot.dist < 270 && Robot.Motion.Localisation == 0 && Robot.Motion.Odo == 0
+%     Robot.Motion.Odo = 1;
+%     OdoRobot = InitOdoEV3([0 0 0], Robot.Motion.vv,  Robot.Motion.ww);
+% end
+% if Robot.Motion.Odo == 1
+%     [ Robot.Motion.vv,  Robot.Motion.ww] = OdoAroundObstacle(); 
+% end
     
 %% menjava pasu ven
 if Robot.Motion.SwitchLeft == 3

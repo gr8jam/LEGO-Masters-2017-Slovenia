@@ -1,5 +1,5 @@
 function [v,w] = SimulateEV3(qTrue,i)
-global Robot
+global Robot OdoRobot
 
 persistent first
 if isempty(first)
@@ -39,7 +39,7 @@ else
     end
     if i == 600+150+230+250
         fprintf('--- menjava na zunanji pas ---')
-        Robot.Motion.dkot = 45;
+        Robot.Motion.dkot = 35;
         Robot.Motion.SwitchLeft = 3;
         Robot.Motion.Ptr = 10;
     end
