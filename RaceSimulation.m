@@ -104,7 +104,8 @@ function Obstacles = InitObstacles(f)
 load('Obstacles.mat');
 if f == 1
     fprintf('Izberi pozicijo štirih ovir \n\r')
-    [x,y] = ginput(4);    
+    [x,y] = ginput(4);  
+    save('SrediscaOvir.mat','x','y')
     obst = GetObstacleVertex( x,y );  
     Obstacles = [Obstacles; obst];
     save('ObstaclesP.mat','Obstacles')
@@ -133,8 +134,8 @@ function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
 global hhh Obstacles 
 figure(10); clf; 
-set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
-% set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
+%set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
+set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
 % set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 
