@@ -165,7 +165,7 @@ hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RG
 colorMap = BarvnaLestvicaRGB/255;
 xGrid = repmat(1:2500,1800,1);
 yGrid = repmat(1:1800,1,2500);
-for idx = 1:length(BarvnaLestvicaRGB)
+for idx = length(BarvnaLestvicaRGB):-1:1
     bool = (PolygonMapColors == idx);
     xDraw = xGrid(bool);
     yDraw = yGrid(bool);
