@@ -176,7 +176,7 @@ end
 % Draw obstacles
 if ~isempty(Obstacles)
     for i=1:size(Obstacles,1)
-       line(Obstacles(i,[1,3]),Obstacles(i,[2,4]),'LineWidth',3,'Color','m'); 
+       line(Obstacles(i,[1,3]),Obstacles(i,[2,4]),'LineWidth',3,'Color',[0.86 0.74 0.55]); 
     end
 end
 load('SrediscaOvir.mat')
