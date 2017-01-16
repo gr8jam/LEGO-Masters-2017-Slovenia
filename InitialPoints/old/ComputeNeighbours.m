@@ -1,6 +1,5 @@
 function ComputeNeighbours
 
-
 close all;
 clear all;
 

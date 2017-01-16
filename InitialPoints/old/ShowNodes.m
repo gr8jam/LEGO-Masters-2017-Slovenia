@@ -1,22 +1,46 @@
-function ShowNodesConnections
+close all;
+clear all;
 
-global Nodes d_max_tr_1 d_max_tr_2 d_max_tr_3
+load('Nodes');
 
-%% Show all nodes as red dots
+fig = figure;
+set(fig, 'Position', [1600 -150 25*60 18*60]); %% matej
+hold on;
+
+% Draw polygon colors
+load('PolygonColorData.mat')
+colorMap = BarvnaLestvicaRGB/255;
+xS = 1;
+xF = 2500;
+yS = 1;
+yF = 1800;
+
+xGrid = repmat(xS:xF,yF-yS+1,1);
+yGrid = repmat(yS:yF,xF-xS+1,1)';
+
+[m,n] = size(BarvnaLestvicaRGB);
+idx = 1; % draw only black
+bool = (PolygonMapColors(yS:yF,xS:xF) == idx);
+xDraw = xGrid(bool);
+yDraw = yGrid(bool);
+plot(xDraw, yDraw, 'Color', colorMap(idx,:)+0.8, 'Marker', '.', 'LineStyle', 'none', 'MarkerSize', 1);
+
+
 for i = 1:length(Nodes)
     plot(Nodes(i).x,Nodes(i).y,'r.','MarkerSize',20)
 end
 
-%% Add handels for current node, node area, node connections
-hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor'); % current node
-hd = plot(1250,900,'b-','LineWidth',1,'erasemode','xor');   % current node area
+% hj = plot(1250,900,'r.','MarkerSize',20,'erasemode','xor');
+hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor');
+hd = plot(1250,900,'b-','LineWidth',1,'erasemode','xor');
 for j = 1:length(Nodes(i).Neighbours)
-    hj(j) = plot([0 0],[0 1],'b-','LineWidth',2,'erasemode','xor'); % current node connections
+    hj(j) = plot([0 0],[0 1],'b-','LineWidth',2,'erasemode','xor');
+%     hj(j) = quiver(0,0,0,0,'b-','LineWidth',2,'erasemode','xor');
 end
-
-%% Go trough all nodes 
+    
 i = 1;
-while i <= length(Nodes)
+for n = 1:length(Nodes)
+    
     %% Draw current Node
     xi = Nodes(i).x;
     yi = Nodes(i).y;
@@ -25,11 +49,11 @@ while i <= length(Nodes)
     %% Draw area circle around current Node
     switch floor((i-1)/32) + 1 
         case 1
-            d_max = d_max_tr_1;
+            d_max = 290;
         case 2
-            d_max = d_max_tr_2;
+            d_max = 330;
         case 3
-            d_max = d_max_tr_3;
+            d_max = 380;
         otherwise
             d_max = 10;
     end

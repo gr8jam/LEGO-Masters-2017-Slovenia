@@ -1,46 +1,21 @@
-close all;
-clear all;
+function DrawNodesConnections(fig)
+global Nodes d_max_tr_1 d_max_tr_2 d_max_tr_3
+if isempty(Nodes)
+    error('variable Nodes is empty! \n ');
+end
+%% Show all nodes as red dots
+DrawNodesPositions(fig, 0);
 
-load('Nodes');
-
-fig = figure;
-set(fig, 'Position', [-1600 -150 25*60 18*60]); %% matej
-hold on;
-
-% Draw polygon colors
-load('PolygonColorData.mat')
-colorMap = BarvnaLestvicaRGB/255;
-xS = 1;
-xF = 2500;
-yS = 1;
-yF = 1800;
-
-xGrid = repmat(xS:xF,yF-yS+1,1);
-yGrid = repmat(yS:yF,xF-xS+1,1)';
-
-[m,n] = size(BarvnaLestvicaRGB);
-idx = 17; % draw only black
-bool = (PolygonMapColors(yS:yF,xS:xF) == idx);
-xDraw = xGrid(bool);
-yDraw = yGrid(bool);
-plot(xDraw, yDraw, 'Color', colorMap(idx,:)+0.8, 'Marker', '.', 'LineStyle', 'none', 'MarkerSize', 1);
-
-
-for i = 1:length(Nodes)
-    plot(Nodes(i).x,Nodes(i).y,'r.','MarkerSize',20)
+%% Add handels for current node, node area, node connections
+hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor'); % current node
+hd = plot(1250,900,'b-','LineWidth',2,'erasemode','xor');   % current node area
+for j = 1:length(Nodes(1).Neighbours)
+    hj(j) = plot([0 0],[0 1],'b-','LineWidth',3,'erasemode','xor'); % current node connections
 end
 
-% hj = plot(1250,900,'r.','MarkerSize',20,'erasemode','xor');
-hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor');
-hd = plot(1250,900,'b-','LineWidth',1,'erasemode','xor');
-for j = 1:length(Nodes(i).Neighbours)
-    hj(j) = plot([0 0],[0 1],'b-','LineWidth',2,'erasemode','xor');
-%     hj(j) = quiver(0,0,0,0,'b-','LineWidth',2,'erasemode','xor');
-end
-    
+%% Go trough all nodes 
 i = 1;
-for n = 1:length(Nodes)
-    
+while i <= length(Nodes)
     %% Draw current Node
     xi = Nodes(i).x;
     yi = Nodes(i).y;
@@ -49,11 +24,11 @@ for n = 1:length(Nodes)
     %% Draw area circle around current Node
     switch floor((i-1)/32) + 1 
         case 1
-            d_max = 290;
+            d_max = d_max_tr_1;
         case 2
-            d_max = 330;
+            d_max = d_max_tr_2;
         case 3
-            d_max = 380;
+            d_max = d_max_tr_3;
         otherwise
             d_max = 10;
     end
@@ -77,7 +52,7 @@ for n = 1:length(Nodes)
             xj = Nodes(idxj).x;
             yj = Nodes(idxj).y;
             fi_arrow = atan2(yi-yj,xi-xj);
-            d_arrow = 25;
+            d_arrow = 35;
             xarrow = xj + [d_arrow*cos(fi_arrow-pi/6);
                            0;
                            d_arrow*cos(fi_arrow+pi/6)]';
