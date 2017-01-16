@@ -104,7 +104,8 @@ function Obstacles = InitObstacles(f)
 load('Obstacles.mat');
 if f == 1
     fprintf('Izberi pozicijo štirih ovir \n\r')
-    [x,y] = ginput(4);    
+    [x,y] = ginput(4);  
+    save('SrediscaOvir.mat','x','y')
     obst = GetObstacleVertex( x,y );  
     Obstacles = [Obstacles; obst];
     save('ObstaclesP.mat','Obstacles')
@@ -133,8 +134,8 @@ function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB
 global hhh Obstacles 
 figure(10); clf; 
-set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
-% set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
+%set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
+set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
 % set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 
@@ -175,8 +176,20 @@ end
 % Draw obstacles
 if ~isempty(Obstacles)
     for i=1:size(Obstacles,1)
-       line(Obstacles(i,[1,3]),Obstacles(i,[2,4]),'LineWidth',3,'Color','m'); 
+       line(Obstacles(i,[1,3]),Obstacles(i,[2,4]),'LineWidth',3,'Color',[0.86 0.74 0.55]); 
     end
+end
+load('SrediscaOvir.mat')
+ang = 0:0.1745:2*pi;
+R = 54;
+colo = [ 0.7 0.7 0.7];
+for i=1:length(x)
+    xd = R * cos(ang) + x(i);
+    yd = R * sin(ang) + y(i);
+    plot(xd, yd, 'LineWidth',4 , 'Color', colo);
+    xd = (R-28) * cos(ang) + x(i);
+    yd = (R-28) * sin(ang) + y(i);
+    plot(xd, yd, 'LineWidth',18 , 'Color', colo);
 end
 
 % hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);

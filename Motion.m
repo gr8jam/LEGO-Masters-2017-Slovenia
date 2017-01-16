@@ -7,15 +7,17 @@ L = Robot.idxL;
 D = Robot.idxR;
 k = 0.75;
 
+crna = 1;
+bela = 2;
 
 if Robot.Motion.SwitchLeft == 0 && Robot.Motion.SwitchRight == 0
-    if L ~= 17 && D ~= 17
+    if L ~= crna && D ~= crna
         Robot.Motion.ww = 0; 
         Robot.Motion.vv = 100;
-    elseif L == 17 && D ~= 17
+    elseif L == crna && D ~= crna
         Robot.Motion.ww = k;
         Robot.Motion.vv = 80;
-    elseif L ~= 17 && D == 17 
+    elseif L ~= crna && D == crna 
         Robot.Motion.ww = -k;
         Robot.Motion.vv = 80;
     else 
@@ -58,25 +60,25 @@ if Robot.Motion.SwitchLeft == 3
            end
            3
         case 12
-            if L == 1 && D == 1
+            if L == bela && D == bela
                Robot.Motion.inc = 1; 
                Robot.Motion.vv = 70;
                12
             end
         case 13
-            if  L == 17 && D == 17
+            if  L == crna && D == crna
                 41
                Robot.Motion.ww = -0.55;
                Robot.Motion.vv = 20;
                Robot.Motion.tDly = 0.066;
                Robot.Motion.Ptr = 15;
-            elseif L ~= 17 && D == 17
+            elseif L ~= crna && D == crna
                Robot.Motion.ww = -0.55;
                Robot.Motion.vv = 60;
                Robot.Motion.Ptr = 0;
                Robot.Motion.SwitchLeft = 0;
                42
-            elseif L == 17 && D ~= 17
+            elseif L == crna && D ~= crna
                 Robot.Motion.Ptr = 20;
                 Robot.Motion.ww = 0;
                 Robot.Motion.vv = 55;
@@ -89,21 +91,21 @@ if Robot.Motion.SwitchLeft == 3
         case 14
         case 15
             6
-            if Robot.Motion.tDly == 0 || L ~= 17
+            if Robot.Motion.tDly == 0 || L ~= crna
               Robot.Motion.SwitchLeft = 0;
               Robot.Motion.Ptr = 0; 
               7
             end
         case 20
-            if L ~= 17 && D == 17
+            if L ~= crna && D == crna
               Robot.Motion.SwitchLeft = 0;
               Robot.Motion.Ptr = 0;
               21
-            elseif L ~= 17 && D ~= 17
+            elseif L ~= crna && D ~= crna
               Robot.Motion.SwitchLeft = 0;
               Robot.Motion.Ptr = 0;
               22
-            elseif L == 17 && D ~= 17
+            elseif L == crna && D ~= crna
                 if Robot.Motion.F_t == 0
                    Robot.Motion.F_t = 1; 
                    Robot.Motion.tDly = 0.066;
@@ -156,25 +158,25 @@ if Robot.Motion.SwitchRight == 3
            end
            3
         case 12
-            if L == 1 && D == 1
+            if L == bela && D == bela
                Robot.Motion.inc = 1; 
                Robot.Motion.vv = 70;
                12
             end
         case 13
-            if  L == 17 && D == 17
+            if  L == crna && D == crna
                 41
                Robot.Motion.ww = +0.55;
                Robot.Motion.vv = 20;
                Robot.Motion.tDly = 0.066;
                Robot.Motion.Ptr = 15;
-            elseif L == 17 && D ~= 17
+            elseif L == crna && D ~= crna
                Robot.Motion.ww = +0.55;
                Robot.Motion.vv = 60;
                Robot.Motion.Ptr = 0;
                Robot.Motion.SwitchRight = 0;
                42
-            elseif L ~= 17 && D == 17
+            elseif L ~= crna && D == crna
                 Robot.Motion.Ptr = 20;
                 Robot.Motion.vv = 55;
                 43
@@ -186,21 +188,21 @@ if Robot.Motion.SwitchRight == 3
         case 14
         case 15
             6
-            if Robot.Motion.tDly == 0 || D ~= 17
+            if Robot.Motion.tDly == 0 || D ~= crna
               Robot.Motion.SwitchRight = 0;
               Robot.Motion.Ptr = 0; 
               7
             end
         case 20
-            if L == 17 && D ~= 17
+            if L == crna && D ~= crna
               Robot.Motion.SwitchRight = 0;
               Robot.Motion.Ptr = 0;
               21
-            elseif L ~= 17 && D ~= 17
+            elseif L ~= crna && D ~= crna
               Robot.Motion.SwitchRight = 0;
               Robot.Motion.Ptr = 0;
               22
-            elseif L ~= 17 && D == 17
+            elseif L ~= crna && D == crna
                 if Robot.Motion.F_t == 0
                    Robot.Motion.F_t = 1; 
                    Robot.Motion.tDly = 0.066;
