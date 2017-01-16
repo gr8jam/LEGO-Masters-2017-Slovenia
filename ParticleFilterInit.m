@@ -1,6 +1,8 @@
 function PF = ParticleFilterInit()
 global Robot
 
+load('Nodes');
+
 nParticles = 100;
 
 PF = struct('nParticles', nParticles,...
@@ -16,13 +18,20 @@ for p = 1:nParticles
     
     not_done = true;
     while not_done
-        xP(1:2,p) = rand(2,1);
-%         xP(1,p) = int32(xP(1,p) * 2499 + 1);
-%         xP(2,p) = int32(xP(2,p) * 1799 + 1);
-        xP(1,p) = int32(xP(1,p) * 1250 + 1);
-        xP(2,p) = int32(xP(2,p) * 900 + 1);
-        xP(3,p) = Robot.fi;
-%         xP(3,p) = TrueRobot.q(3);
+        idxNode = randi(96);
+        xP(1,p) = Nodes(idxNode).x + randi(11) - 5;
+        xP(2,p) = Nodes(idxNode).y + randi(11) - 5;
+        xP(3,p) = Nodes(idxNode).fi;
+        
+        
+%         
+%         xP(1:2,p) = rand(2,1);
+% %         xP(1,p) = int32(xP(1,p) * 2499 + 1);
+% %         xP(2,p) = int32(xP(2,p) * 1799 + 1);
+%         xP(1,p) = int32(xP(1,p) * 1250 + 1);
+%         xP(2,p) = int32(xP(2,p) * 900 + 1);
+%         xP(3,p) = Robot.fi;
+% %         xP(3,p) = TrueRobot.q(3);
         
         [idxLxP, idxRxP] = SimulationRGB(xP(:,p));
         if ((idxL == idxLxP) && (idxR == idxRxP)) 

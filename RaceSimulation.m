@@ -2,10 +2,11 @@ function RaceSimulation
 close all, clear all 
 
 global Ts Obstacles 
-global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV DRAW_MORE
+global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV BarvnaLestvicaRGB_pastel DRAW_MORE
 PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
 BarvnaLestvicaHSV = [];
+BarvnaLestvicaRGB_pastel = [];
 
 global TrueRobot
 global hhh
@@ -17,7 +18,7 @@ stanjeend = zeros(1);
 
 
 load('PolygonColorData.mat')
-
+load('Nodes.mat');
 
 %% Init
 Tend = 120;      % Simulation lasts 50s
@@ -40,7 +41,13 @@ Obstacles = InitObstacles(StartMode);
 InitGrafic();
 
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
-TrueRobot = InitTrueRobot([163 820 pi/2]');
+idx0 = 80;
+x0 = Nodes(idx0).x;
+y0 = Nodes(idx0).y;
+fi0 = Nodes(idx0).fi;
+TrueRobot = InitTrueRobot([x0 y0 fi0]');
+% TrueRobot = InitTrueRobot([163 820 pi/2]');
+
 % TrueRobot = InitTrueRobot([293 820 pi/4]');
 %Robot = InitEV3([343 680 pi/2]');
 
@@ -53,6 +60,9 @@ UpdateGrafic();
 tic;
 for i=1:length(ttt)
     
+    if (2 < i ) && (i < 35)
+        pause(0.4 - i/100);
+    end
     [v,w] = SimulateEV3(TrueRobot.q,i);
     
     SimulateTrueRobot(v,w);
@@ -131,11 +141,11 @@ end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
-global PolygonMapColors BarvnaLestvicaRGB
+global PolygonMapColors BarvnaLestvicaRGB %BarvnaLestvicaRGB_pastel
 global hhh Obstacles 
 figure(10); clf; 
-%set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
-set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
+set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
+% set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
 % set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;
 
@@ -152,7 +162,7 @@ hhh(2)= plot(0,0,'m','erasemode','xor','LineWidth',2) ;     % robot z odometrijo
 
 hhh(3)= plot(0,0,'--b','erasemode','none') ;  % dejanska pot
 hhh(4)= plot(0,0,'--g','erasemode','none') ;  % ocenjena pot z odometrijo oz. filtrom delcev
-hhh(5)= plot(0,0,'.','Color','r','erasemode','xor') ;   % particle
+hhh(5)= plot(0,0,'.','Color','r','erasemode','xor', 'MarkerSize', 20) ;   % particle
 hhh(6)= plot(nan,nan,'LineWidth',1,'Color','r') ;       % particle dir
 hhh(7)= plot(nan,nan,'LineWidth',2,'Color','c') ;       % sensor
 
@@ -163,10 +173,11 @@ hhh(10)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Levega RGB
 hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RGB senzorja
 
 % Draw polygon colors
+% colorMap = BarvnaLestvicaRGB_pastel;
 colorMap = BarvnaLestvicaRGB/255;
 xGrid = repmat(1:2500,1800,1);
 yGrid = repmat(1:1800,1,2500);
-for idx = length(BarvnaLestvicaRGB):-1:1
+for idx = length(colorMap):-1:1
     bool = (PolygonMapColors == idx);
     xDraw = xGrid(bool);
     yDraw = yGrid(bool);
