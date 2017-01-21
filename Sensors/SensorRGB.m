@@ -2,7 +2,7 @@ function [ barva, P1, P2 ] = SensorRGB( q , mapa)
 
  barva = zeros(4,1);                                                        % vektor za prebrano barvo
 
- P1 = [20;(16 + 20)];                                                               % pozicija prvega senzorja
+ P1 = [20;(16 + 20)];                                                       % pozicija prvega senzorja
  P11= [20;(18 + 20)];
  P2 = [20;-16];                                                             % pozicija drugega senzorja 
  P21= [20;-18];
