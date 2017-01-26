@@ -165,7 +165,7 @@ end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
-global BarvnaLestvicaRGB %BarvnaLestvicaRGB_pastel
+global BarvnaLestvicaRGB Obstacles %BarvnaLestvicaRGB_pastel
 global hhh
 figure(10); clf; 
 set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
@@ -202,7 +202,7 @@ colorMap = BarvnaLestvicaRGB/255;
 DrawPolygonMapColors(10,colorMap);
 
 % Draw obstacles
-DrawObstacles(10);
+DrawObstacles(10, Obstacles);
 
 % hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 % hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);

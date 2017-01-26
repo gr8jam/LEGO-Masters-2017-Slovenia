@@ -3,6 +3,7 @@ function DrawPolygonMapColors(fig,colorMap)
 global PolygonMapColors
 
 figure(fig)
+axis([-20 2700 -20 1820])
 axis equal
 hold on;
 xGrid = repmat(1:2500,1800,1);

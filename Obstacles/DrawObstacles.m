@@ -1,5 +1,4 @@
-function DrawObstacles(fig)
-global Obstacles
+function DrawObstacles(fig, Obstacles)
 
 figure(fig);
 hold on;
