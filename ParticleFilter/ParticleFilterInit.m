@@ -40,7 +40,7 @@ for p = 1:nParticles
         end
     end
 %     xP(3,p) = xP(3,p) * 2*pi - pi;
-    xP(3,p) = Robot.fi;
+%     xP(3,p) = Robot.fi;
 %     xP(3,p) = TrueRobot.q(3);
     
     

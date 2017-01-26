@@ -46,7 +46,7 @@ for p = 1:Robot.PF.nParticles
        fprintf('Error: Simulation od %i particle in PF \n', p);
     end
     
-%     
+    
     if (zTrueL == zL) && (zTrueR == zR)
         W(p) = W(p)*1;
         greatIdxCnt = greatIdxCnt +1;
@@ -95,7 +95,7 @@ for idx = 1:badIdxCnt
     end
     
     Robot.PF.xP(1:2,badParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
-    Robot.PF.xP(3,badParticleIdx(idx)) = Robot.fi;
+    Robot.PF.xP(3,badParticleIdx(idx)) = Robot.PF.xP(3, newIdx);
 %     Robot.xP(3,badParticleIdx(idx)) = TrueRobot.q(3);
 end
 
@@ -103,7 +103,7 @@ for idx = 1:4:goodIdxCnt
     if greatIdxCnt > 0
         newIdx = greatParticleIdx(randi(greatIdxCnt));
         Robot.PF.xP(1:2,goodParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
-        Robot.PF.xP(3,goodParticleIdx(idx)) = Robot.fi;
+        Robot.PF.xP(3,goodParticleIdx(idx)) = Robot.PF.xP(3, newIdx);
 %         Robot.xP(3,goodParticleIdx(idx)) = TrueRobot.q(3);
     end
 end
@@ -114,22 +114,42 @@ end
 
         
 %% Oceni dejanska stanja robota
+% Odpravi cikliènost kota
+countNegativePi = 0;
+countPositivePi = 0;
+
+for p = 1:Robot.PF.nParticles
+    if Robot.PF.xP(3,p) < -3*pi/4;
+        countNegativePi = countNegativePi + 1;
+    elseif Robot.PF.xP(3,p) > 3*pi/4;
+        countPositivePi = countPositivePi + 1;
+    end
+end
+
+if (countNegativePi > 0) && (countPositivePi > 0)
+    for p = 1:Robot.PF.nParticles
+        if Robot.PF.xP(3,p) < -3*pi/4;
+            Robot.PF.xP(3,p) = Robot.PF.xP(3,p) + 2*pi;
+        end
+    end
+end
+
 % ocena stanja je povpreèje delcev
 x = mean(Robot.PF.xP,2);
 x(3) = wrapToPi(x(3));
 % Particle filter (PF) estimate is obtained by the avarage od praticle states 
 qMean = x;     % here write current pose estimate from PF 
-qMean(3) = Robot.fi;
+
 
 %% Predikcija delcev
 % Naredi predikcijo in poèakaj na novo meritev
-c = cos(Robot.PF.xP(3,p));
-s = sin(Robot.PF.xP(3,p));
+% c = cos(Robot.PF.xP(3,p));
+% s = sin(Robot.PF.xP(3,p));
 for p = 1:Robot.PF.nParticles
     un = u + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
-    Robot.PF.xP(:,p) = Robot.PF.xP(:,p) + Ts*[ un(1)*c; ...
-                                         un(1)*s; ...
-                                         un(2) ] ;
+    Robot.PF.xP(:,p) = Robot.PF.xP(:,p) + Ts*[ un(1)*cos(Robot.PF.xP(3,p)); ...
+                                               un(1)*sin(Robot.PF.xP(3,p)); ...
+                                               un(2) ] ;
     Robot.PF.xP(3,p) = wrapToPi(Robot.PF.xP(3,p));
 end
 
