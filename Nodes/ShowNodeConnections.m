@@ -8,14 +8,16 @@ d_max_tr_3 = 0;
 Nodes = [];
 PolygonMapColors = [];
 
-load('Nodes');
+addpath('..\PolygonMap')
+
+load('Nodes2');
 
 fig = figure;
 set(fig, 'Position', [1600 -150 25*60 18*60]); %% matej
 hold on;
-load('../PolygonColorData.mat')
+load('PolygonColorData.mat')
 
-wait =3;
+wait =0;
 %% Draw Polygon
 colorMap = BarvnaLestvicaRGB/255;
 DrawPolygonMapColors(fig,colorMap)
@@ -31,11 +33,11 @@ pause(wait);
 clf;
 colorMap = [0 0 0] + 0.65;
 DrawPolygonMapColors(fig,colorMap)
-pause(1);
+pause(0);
 
 %% Show all nodes as red dots
-DrawNodesPositions(fig, 4/96);
-pause(2);
+DrawNodesPositions(fig, Nodes, 0);
+pause(0);
 DrawNodesConnections(fig);
 
 %%

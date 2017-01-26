@@ -133,7 +133,7 @@ for i = 1:length(Nodes)
 end
 
 %%
-% save('Nodes','Nodes','d_max_tr_1','d_max_tr_2','d_max_tr_3');
+save('Nodes2','Nodes','d_max_tr_1','d_max_tr_2','d_max_tr_3');
 % 
 % clear all
 % load('Nodes')

@@ -4,12 +4,12 @@ if isempty(Nodes)
     error('variable Nodes is empty! \n ');
 end
 %% Show all nodes as red dots
-DrawNodesPositions(fig, 0);
+DrawNodesPositions(fig, Nodes, 0);
 
 %% Add handels for current node, node area, node connections
 hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor'); % current node
 hd = plot(1250,900,'b-','LineWidth',2,'erasemode','xor');   % current node area
-for j = 1:length(Nodes(1).Neighbours)
+for j = 1:length(Nodes(1).ConnIndex)
     hj(j) = plot([0 0],[0 1],'b-','LineWidth',3,'erasemode','xor'); % current node connections
 end
 
@@ -39,13 +39,13 @@ while i <= length(Nodes)
     drawnow;
     
     %% Draw connection to current Node's Neighbours
-    for j = 1:length(Nodes(i).Neighbours)
+    for j = 1:length(Nodes(i).ConnIndex)
         set(hj(j),'XData',[0 0],'YData',[0 0]);
         drawnow;
     end
         
-    for j = 1:length(Nodes(i).Neighbours)
-        idxj = Nodes(i).Neighbours(j).idx;
+    for j = 1:length(Nodes(i).ConnIndex)
+        idxj = Nodes(i).ConnIndex(j);
         if (idxj == 0)
             break;
         else
