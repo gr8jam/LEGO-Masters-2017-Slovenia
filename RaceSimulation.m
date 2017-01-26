@@ -1,6 +1,8 @@
 function RaceSimulation
 close all, clear all 
 
+cd(fileparts(mfilename('fullpath')))
+
 addpath('ParticleFilter');
 addpath('LineFollower');
 addpath('Nodes');
