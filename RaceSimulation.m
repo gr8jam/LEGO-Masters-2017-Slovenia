@@ -168,7 +168,7 @@ function InitGrafic()
 global BarvnaLestvicaRGB Obstacles %BarvnaLestvicaRGB_pastel
 global hhh
 figure(10); clf; 
-set(10, 'Position', [1600 -150 25*60 18*60]); %% matej
+set(10, 'Position', [0 170 25*35 18*35]); %% matej
 % set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
 % set(10, 'Position', [750 100 25*30 18*30]); 
 hold on;

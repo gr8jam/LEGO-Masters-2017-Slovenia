@@ -4,6 +4,8 @@ clear all;
 global Nodes Obstacles PolygonMapColors
 Nodes = [];
 BarvnaLestvicaRGB_pastel = [];
+PolygonMapColors = [];
+
 % d_max_tr_1 = 290;
 % d_max_tr_2 = 330;
 % d_max_tr_3 = 380;
@@ -17,7 +19,7 @@ load('PolygonColorData.mat');
 Obstacles = InitObstacles(2);
 
 fig = figure;
-set(fig, 'Position', [1600 -150 25*60 18*60]); %% matej
+set(fig, 'Position', [0 170 25*35 18*35]); %% matej
 hold on;
 
 colorMap = BarvnaLestvicaRGB_pastel;
@@ -31,6 +33,7 @@ hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor');
 hd = plot(1250,900,'b-','MarkerSize',2);
 hn = plot(1250,900,'b-','LineWidth',3);
 ho = plot(1250,900,'r-','LineWidth',3);
+hr = plot(1250,900,'b-','LineWidth',2);
 
 %% Loop trough all Nodes
 for i = 1:length(Nodes)
@@ -95,6 +98,7 @@ for i = 1:length(Nodes)
             beta = wrapToPi(beta);
             ang_limit = pi/2+pi/36;
             gama = beta * 180 / pi;
+
             if (-ang_limit <= beta && beta <= ang_limit)
                 %% Check if no 
                 xj = Nodes(j).x;
@@ -107,18 +111,28 @@ for i = 1:length(Nodes)
                 
                 d_to_obst = SimulationDist([xi yi fi_to_node]);
                 
-                set(hn,'XData',[xi xj],'YData',[yi yj]);
-                
-                if (d_to_node < d_to_obst)
-                    Nodes(i).ConnCount = Nodes(i).ConnCount + 1;
-                    Nodes(i).ConnIndex(Nodes(i).ConnCount) = j;
-                    Nodes(i).ConnWeight(Nodes(i).ConnCount) = d_to_node;
-                else 
-                    xo = d_to_obst*cos(fi_to_node) + xi;
-                    yo = d_to_obst*sin(fi_to_node) + yi;
-                    set(ho,'XData',[xi xo],'YData',[yi yo]);
+                ang = fi-ang_limit : 0.01 : fi+ang_limit;
+                xr = 900*cos(ang) + xi;
+                yr = 900*sin(ang) + yi;
+                set(hr,'XData',xr,'YData',yr);
+
+                if (d_to_node < 900)
+                    set(hn,'XData',[xi xj],'YData',[yi yj]);
+                    
+                    if (d_to_node < d_to_obst) 
+                        Nodes(i).ConnCount = Nodes(i).ConnCount + 1;
+                        Nodes(i).ConnIndex(Nodes(i).ConnCount) = j;
+                        Nodes(i).ConnWeight(Nodes(i).ConnCount) = d_to_node;
+                    else 
+                        xo = d_to_obst*cos(fi_to_node) + xi;
+                        yo = d_to_obst*sin(fi_to_node) + yi;
+                        set(ho,'XData',[xi xo],'YData',[yi yo]);
+                    end
+
+                    if (89 < i) && (i < 96)
+                        pause(0.5);
+                    end
                 end
-%                 pause(0.1);
                 
             end
         end

@@ -17,5 +17,5 @@ elseif f == 2
 end
 
 Obstacles = [Walls; obst];
-Obstacles = Walls;
+% Obstacles = Walls;
 end
