@@ -10,3 +10,4 @@ Walls = [    0 0 2500 0;...         % spodnji rob
              625 1800/2 625+1250 1800/2  ];         % sredinska ovira
          
 save('Walls.mat', 'Walls'); 
+

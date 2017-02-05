@@ -1,5 +1,17 @@
 function dist = SimulationDist( q )
-global Obstacles
+global Obstacles Walls
+
+Enviroment = [Walls];
+
+v = 50;
+for i = 1:size(Obstacles,1)
+    OctagonLines = GetOctagonLines(Obstacles(i,1), Obstacles(i,2), v);
+    
+    Enviroment = [Enviroment;
+                  OctagonLines];
+end
+
+
 
 R = 10;
 kot = 0;
@@ -26,8 +38,8 @@ kot = 0;
     minRazdalja=100000;
  
      % tu testiraj premice in vrni kot
-     for i=1:size(Obstacles,1)
-        x1=Obstacles(i,1); y1=Obstacles(i,2); x2=Obstacles(i,3);  y2=Obstacles(i,4);
+     for i=1:size(Enviroment,1)
+        x1=Enviroment(i,1); y1=Enviroment(i,2); x2=Enviroment(i,3);  y2=Enviroment(i,4);
 
         A2=  y2-y1;   % enaèba premice daljice okola A2x+B2y+C2=0  
         B2= -x2+x1;

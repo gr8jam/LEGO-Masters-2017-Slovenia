@@ -10,8 +10,10 @@ addpath('Sensors');
 addpath('PolygonMap');
 addpath('Obstacles');
 
-global Ts Obstacles 
-global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV BarvnaLestvicaRGB_pastel DRAW_MORE
+global Ts Obstacles Walls
+global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV BarvnaLestvicaRGB_pastel 
+global DRAW_MORE
+
 PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
 BarvnaLestvicaHSV = [];
@@ -47,6 +49,8 @@ if StartMode == 1
     InitGrafic();
 end
 Obstacles = InitObstacles(StartMode);
+Walls = InitWalls();
+
 InitGrafic();
 
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
@@ -165,7 +169,8 @@ end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
-global BarvnaLestvicaRGB Obstacles %BarvnaLestvicaRGB_pastel
+global PolygonMapColors BarvnaLestvicaRGB %BarvnaLestvicaRGB_pastel
+global Walls Obstacles
 global hhh
 figure(10); clf; 
 set(10, 'Position', [0 170 25*35 18*35]); %% matej
@@ -198,11 +203,17 @@ hhh(10)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Levega RGB
 hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RGB senzorja
 
 % Draw polygon colors
-colorMap = BarvnaLestvicaRGB/255;
-DrawPolygonMapColors(10,colorMap);
+ColorMap = BarvnaLestvicaRGB/255;
+DrawPolygonMapColors(10, PolygonMapColors, ColorMap);
+
+% Draw Walls
+DrawWalls(10, Walls)
 
 % Draw obstacles
 DrawObstacles(10, Obstacles);
+
+% % Draw KeepOut
+% DrawKeepOut(10, KeepOut);
 
 % hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 % hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
