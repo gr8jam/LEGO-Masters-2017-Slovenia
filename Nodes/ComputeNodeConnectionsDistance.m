@@ -122,9 +122,9 @@ for i = 1:length(Nodes)
                         set(ho,'XData',[xi xo],'YData',[yi yo]);
                     end
 
-                    if (89 < i) && (i < 96)
-                        pause(0.1);
-                    end
+%                     if (89 < i) && (i < 96)
+%                         pause(0.1);
+%                     end
                 end
                 
             end

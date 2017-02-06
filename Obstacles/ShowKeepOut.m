@@ -3,10 +3,12 @@ close all;
 
 addpath('..\PolygonMap')
 
-load('Walls.mat');
-load('Obstacles.mat'); 
+ 
 load('PolygonColorData.mat');
 
+
+Walls = InitWalls();
+Obstacles = InitObstacles(2);
 KeepOut = InitKeepOut(Walls, Obstacles);
 
 fig = figure;

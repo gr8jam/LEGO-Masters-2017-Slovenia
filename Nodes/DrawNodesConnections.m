@@ -1,5 +1,5 @@
-function DrawNodesConnections(fig)
-global Nodes d_max_tr_1 d_max_tr_2 d_max_tr_3
+function DrawNodesConnections(fig,Nodes)
+% global  d_max_tr_1 d_max_tr_2 d_max_tr_3
 if isempty(Nodes)
     error('variable Nodes is empty! \n ');
 end
@@ -7,14 +7,14 @@ end
 DrawNodesPositions(fig, Nodes, 0);
 
 %% Add handels for current node, node area, node connections
-hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor'); % current node
-hd = plot(1250,900,'b-','LineWidth',2,'erasemode','xor');   % current node area
+hi = plot(1250,900,'g.','MarkerSize',20); % current node
+hd = plot(1250,900,'b-','LineWidth',2);   % current node area
 for j = 1:length(Nodes(1).ConnIndex)
-    hj(j) = plot([0 0],[0 1],'b-','LineWidth',3,'erasemode','xor'); % current node connections
+    hj(j) = plot([0 0],[0 1],'k-','LineWidth',2.2); % current node connections
 end
-
+% ,'erasemode','xor'
 %% Go trough all nodes 
-i = 1;
+i = 5;
 while i <= length(Nodes)
     %% Draw current Node
     xi = Nodes(i).x;
@@ -22,16 +22,17 @@ while i <= length(Nodes)
     set(hi,'XData',xi,'YData',yi);
     
     %% Draw area circle around current Node
-    switch floor((i-1)/32) + 1 
-        case 1
-            d_max = d_max_tr_1;
-        case 2
-            d_max = d_max_tr_2;
-        case 3
-            d_max = d_max_tr_3;
-        otherwise
-            d_max = 10;
-    end
+%     switch floor((i-1)/32) + 1 
+%         case 1
+%             d_max = d_max_tr_1;
+%         case 2
+%             d_max = d_max_tr_2;
+%         case 3
+%             d_max = d_max_tr_3;
+%         otherwise
+%             d_max = 10;
+%     end
+    d_max = 900;
     ang = Nodes(i).fi-pi/2-pi/36 : 0.01 : Nodes(i).fi+pi/2+pi/36;
     xd = d_max*cos(ang) + xi;
     yd = d_max*sin(ang) + yi;
@@ -39,10 +40,10 @@ while i <= length(Nodes)
     drawnow;
     
     %% Draw connection to current Node's Neighbours
-    for j = 1:length(Nodes(i).ConnIndex)
-        set(hj(j),'XData',[0 0],'YData',[0 0]);
-        drawnow;
-    end
+%     for j = 1:length(Nodes(i).ConnIndex)
+%         set(hj(j),'XData',[0 0],'YData',[0 0]);
+%         drawnow;
+%     end
         
     for j = 1:length(Nodes(i).ConnIndex)
         idxj = Nodes(i).ConnIndex(j);
@@ -51,20 +52,13 @@ while i <= length(Nodes)
         else
             xj = Nodes(idxj).x;
             yj = Nodes(idxj).y;
-            fi_arrow = atan2(yi-yj,xi-xj);
-            d_arrow = 35;
-            xarrow = xj + [d_arrow*cos(fi_arrow-pi/6);
-                           0;
-                           d_arrow*cos(fi_arrow+pi/6)]';
-            yarrow = yj + [d_arrow*sin(fi_arrow-pi/6);
-                           0;
-                           d_arrow*sin(fi_arrow+pi/6)]';
-            
+
+            [xarrow, yarrow] = ComputeArrowHead(xi,yi,xj,yj,pi/6,35);
 %             hj(j) = plot([xi xj],[yi yj],'b-','LineWidth',2,'erasemode','xor');    
             set(hj(j),'XData',[xi xj xarrow],'YData',[yi yj yarrow]);
             drawnow;
         end
-        pause(0.2);
+%         pause(0.01);
     end
     
     selectedPts = mouseinput_timeout(1, gca);
@@ -79,10 +73,14 @@ while i <= length(Nodes)
             
             if (abs(xClick-xk) < 30) && (abs(yClick-yk) < 30)
                 i = k;
+                fprintf('You selected node %d', k);
                 break;
             end
         end
     end
+    
+    axis([-70 2540 -180 1840]);
+    break;
     
 end
 

@@ -1,44 +1,54 @@
 close all;
 clear all;
 
-global Nodes d_max_tr_1 d_max_tr_2 d_max_tr_3 PolygonMapColors
-d_max_tr_1 = 0;
-d_max_tr_2 = 0;
-d_max_tr_3 = 0;
-Nodes = [];
-PolygonMapColors = [];
 
+addpath('..\Obstacles')
+addpath('..\Nodes')
 addpath('..\PolygonMap')
-
 load('Nodes2');
 
+
+screensize = get( groot, 'Screensize' );
+W_screen = screensize(3);
+H_screen = screensize(4);
+W = W_screen/1.1;
+H = 18/25 * W;
+
 fig = figure;
-set(fig, 'Position', [1600 -150 25*60 18*60]); %% matej
+set(fig, 'Position', [0 H_screen-H W H]); %% matej
 hold on;
 load('PolygonColorData.mat')
 
 wait =0;
 %% Draw Polygon
-colorMap = BarvnaLestvicaRGB/255;
-DrawPolygonMapColors(fig,colorMap)
-pause(wait);
-
-%% Draw Polygon with Pastel colors
-% clf;
-% colorMap = BarvnaLestvicaRGB_pastel;
-% DrawPolygonMapColors(fig,colorMap)
+% ColorMap = BarvnaLestvicaRGB/255;
+% DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 % pause(wait);
 
-%%
-clf;
-colorMap = [0 0 0] + 0.65;
-DrawPolygonMapColors(fig,colorMap)
-pause(0);
+%% Draw Polygon with Pastel colors
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
+pause(wait);
+
+%% Draw Enviroment and KeepOut
+Walls = InitWalls();
+Obstacles = InitObstacles(2);
+KeepOut = InitKeepOut(Walls, Obstacles);
+
+DrawWalls(fig, Walls)
+DrawObstacles(fig, Obstacles);
+DrawKeepOut(fig, KeepOut);
+
+%% Draw Gray polygon
+% clf;
+% ColorMap = [0 0 0] + 0.65;
+% DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
+% pause(0);
 
 %% Show all nodes as red dots
 DrawNodesPositions(fig, Nodes, 0);
 pause(0);
-DrawNodesConnections(fig);
+DrawNodesConnections(fig,Nodes);
 
 %%
 
