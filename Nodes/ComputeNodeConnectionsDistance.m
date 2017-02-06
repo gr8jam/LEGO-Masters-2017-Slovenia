@@ -16,16 +16,20 @@ addpath('..\Obstacles')
 
 load('Nodes');
 load('PolygonColorData.mat');
+
+Walls = InitWalls();
 Obstacles = InitObstacles(2);
+KeepOut = InitKeepOut(Walls, Obstacles);
 
 fig = figure;
 set(fig, 'Position', [0 170 25*35 18*35]); %% matej
 hold on;
 
-colorMap = BarvnaLestvicaRGB_pastel;
-DrawPolygonMapColors(fig,colorMap);
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawPolygonMapColors(fig,PolygonMapColors,ColorMap);
 DrawNodesPositions(fig,Nodes,0);
 DrawObstacles(fig, Obstacles);
+DrawKeepOut(fig, KeepOut);
 
 %% Init plot handels
 hj = plot(1250,900,'b.','MarkerSize',20,'erasemode','xor');
@@ -45,33 +49,18 @@ for i = 1:length(Nodes)
     
     
     %% Area around current node  
-    d_max = linspace(0,2500,200);
+    r_max = 900;
+    d_max = linspace(0,r_max,200);  %
     
     ang = [fi-pi/2-pi/36, fi+pi/2+pi/36];
     xdd = d_max'*cos(ang) + xi;
     ydd = d_max'*sin(ang) + yi;
     
-    xdd = reshape(xdd, 1,400);
-    ydd = reshape(ydd, 1,400);
-    
-    xd = xdd(xdd<=2500);
-    yd = ydd(xdd<=2500);
-    xdd = xd;
-    ydd = yd;
-    xd = xdd(xdd>=0);
-    yd = ydd(xdd>=0);
-    
-    xdd = xd;
-    ydd = yd;
-    xd = xdd(ydd<=1800);
-    yd = ydd(ydd<=1800);
-    xdd = xd;
-    ydd = yd;
-    xd = xdd(ydd>=0);
-    yd = ydd(ydd>=0);
+    bool = (0<=xdd)&(xdd<=2500)&(0<=ydd)&(ydd<=1800);
+    xd = xdd(bool);
+    yd = ydd(bool);
     
     set(hd,'XData',xd,'YData',yd);
-    
     
     %% Debug tool
     if i == 8
@@ -109,14 +98,18 @@ for i = 1:length(Nodes)
                 d_to_node = sqrt((Nodes(i).x-Nodes(j).x)^2 + ...
                                  (Nodes(i).y-Nodes(j).y)^2 );
                 
-                d_to_obst = SimulationDist([xi yi fi_to_node]);
+                d_to_obst = SimulationDist([xi yi fi_to_node], KeepOut);
                 
                 ang = fi-ang_limit : 0.01 : fi+ang_limit;
-                xr = 900*cos(ang) + xi;
-                yr = 900*sin(ang) + yi;
+                xr = r_max*cos(ang) + xi;
+                yr = r_max*sin(ang) + yi;
+                bool = (0<=xr)&(xr<=2500)&(0<=yr)&(yr<=1800);
+                xr = xr(bool);
+                yr = yr(bool);
+                
                 set(hr,'XData',xr,'YData',yr);
 
-                if (d_to_node < 900)
+                if (d_to_node < r_max)
                     set(hn,'XData',[xi xj],'YData',[yi yj]);
                     
                     if (d_to_node < d_to_obst) 
@@ -130,7 +123,7 @@ for i = 1:length(Nodes)
                     end
 
                     if (89 < i) && (i < 96)
-                        pause(0.5);
+                        pause(0.1);
                     end
                 end
                 

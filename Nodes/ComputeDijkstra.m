@@ -26,7 +26,7 @@ while(~isempty(OpenListIndex))
 %     IdxCurr = popOpenList();
 
     %% Take element with smallest cost out form OpenList
-    IdxCurr = popOpenList()
+    IdxCurr = popOpenList();
     
     if draw_flag
         xi = Nodes(IdxCurr).x;
@@ -36,7 +36,7 @@ while(~isempty(OpenListIndex))
     %% Compute new cost and connections
     j = 1;
     while (Nodes(IdxCurr).ConnIndex(j) ~= 0)
-        IdxConn = Nodes(IdxCurr).ConnIndex(j)
+        IdxConn = Nodes(IdxCurr).ConnIndex(j);
         
         if draw_flag
             xj = Nodes(IdxConn).x;
@@ -44,11 +44,11 @@ while(~isempty(OpenListIndex))
             set(hj,'XData',xj,'YData',yj);
         end
         if (~checkCloseList(IdxConn))
-            new_cost = Nodes(IdxCurr).cost + Nodes(IdxCurr).ConnWeight(j)
-            old_cost = Nodes(IdxConn).cost
+            new_cost = Nodes(IdxCurr).cost + Nodes(IdxCurr).ConnWeight(j);
+            old_cost = Nodes(IdxConn).cost;
             if (Nodes(IdxConn).cost > new_cost)
-                Nodes(IdxConn).cost = new_cost
-                Nodes(IdxConn).path = IdxCurr
+                Nodes(IdxConn).cost = new_cost;
+                Nodes(IdxConn).path = IdxCurr;
             end
             pushOpenList(IdxConn, Nodes(IdxConn).cost);
             
