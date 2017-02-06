@@ -1,15 +1,15 @@
-function dist = SimulationDist( q )
-global Obstacles Walls
+function dist = SimulationDist(q, Enviroment)
+% global Obstacles Walls
 
-Enviroment = [Walls];
-
-v = 50;
-for i = 1:size(Obstacles,1)
-    OctagonLines = GetOctagonLines(Obstacles(i,1), Obstacles(i,2), v);
-    
-    Enviroment = [Enviroment;
-                  OctagonLines];
-end
+% Enviroment = [Walls];
+% 
+% v = 50;
+% for i = 1:size(Obstacles,1)
+%     OctagonLines = GetOctagonLines(Obstacles(i,1), Obstacles(i,2), v);
+%     
+%     Enviroment = [Enviroment;
+%                   OctagonLines];
+% end
 
 
 
