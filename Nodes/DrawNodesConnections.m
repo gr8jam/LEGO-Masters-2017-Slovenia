@@ -10,9 +10,9 @@ DrawNodesPositions(fig, Nodes, 0);
 hi = plot(1250,900,'g.','MarkerSize',20); % current node
 hd = plot(1250,900,'b-','LineWidth',2);   % current node area
 for j = 1:length(Nodes(1).ConnIndex)
-    hj(j) = plot([0 0],[0 1],'k-','LineWidth',2.2); % current node connections
+    hj(j) = plot([0 0],[0 1],'k-','LineWidth',2.2,'erasemode','xor'); % current node connections
 end
-% ,'erasemode','xor'
+ 
 %% Go trough all nodes 
 i = 5;
 while i <= length(Nodes)
@@ -22,16 +22,6 @@ while i <= length(Nodes)
     set(hi,'XData',xi,'YData',yi);
     
     %% Draw area circle around current Node
-%     switch floor((i-1)/32) + 1 
-%         case 1
-%             d_max = d_max_tr_1;
-%         case 2
-%             d_max = d_max_tr_2;
-%         case 3
-%             d_max = d_max_tr_3;
-%         otherwise
-%             d_max = 10;
-%     end
     d_max = 900;
     ang = Nodes(i).fi-pi/2-pi/36 : 0.01 : Nodes(i).fi+pi/2+pi/36;
     xd = d_max*cos(ang) + xi;
@@ -40,10 +30,10 @@ while i <= length(Nodes)
     drawnow;
     
     %% Draw connection to current Node's Neighbours
-%     for j = 1:length(Nodes(i).ConnIndex)
-%         set(hj(j),'XData',[0 0],'YData',[0 0]);
-%         drawnow;
-%     end
+    for j = 1:length(Nodes(i).ConnIndex)
+        set(hj(j),'XData',[0 0],'YData',[0 0]);
+        drawnow;
+    end
         
     for j = 1:length(Nodes(i).ConnIndex)
         idxj = Nodes(i).ConnIndex(j);
@@ -78,10 +68,6 @@ while i <= length(Nodes)
             end
         end
     end
-    
-    axis([-70 2540 -180 1840]);
-    break;
-    
 end
 
 

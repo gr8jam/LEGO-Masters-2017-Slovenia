@@ -14,7 +14,7 @@ for i = 1:length(OptimalPath)-1
       
     [x_arrow, y_arrow] =  ComputeArrowHead(xs,ys,xe,ye,pi/6,35);
     
-    plot([xs xe x_arrow],[ys ye y_arrow],'r-','LineWidth', 3);
+    plot([xs xe x_arrow],[ys ye y_arrow],'k-','LineWidth', 2.5);
 %     quiver(xs,ys,xe-xs,ye-ys,'r-','LineWidth', 2);
     pause(delay);
 end

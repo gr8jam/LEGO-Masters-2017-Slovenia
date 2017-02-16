@@ -4,7 +4,7 @@ close all, clear all
 cd(fileparts(mfilename('fullpath')))
 
 addpath('ParticleFilter');
-addpath('LineFollower');
+addpath('Motion');
 addpath('Nodes');
 addpath('Sensors');
 addpath('PolygonMap');
@@ -13,6 +13,10 @@ addpath('Obstacles');
 global Ts Obstacles Walls
 global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV BarvnaLestvicaRGB_pastel 
 global DRAW_MORE
+global user
+
+user = 'matej';
+% user = 'peter';
 
 PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
@@ -48,7 +52,7 @@ StartMode = 2;
 if StartMode == 1
     InitGrafic();
 end
-Obstacles = InitObstacles(StartMode);
+Obstacles = InitTrueObstacles(StartMode);
 Walls = InitWalls();
 
 InitGrafic();
@@ -172,20 +176,16 @@ function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB %BarvnaLestvicaRGB_pastel
 global Walls Obstacles
 global hhh
+global user
 figure(10); clf; 
-set(10, 'Position', [0 170 25*35 18*35]); %% matej
-% set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
-% set(10, 'Position', [750 100 25*30 18*30]); 
+FigureSettings(10,user);
 hold on;
 
-% Apperance setings
-zoom on;
-title('Localization of diferential drive robot');xlabel('x (mm)');ylabel('y (mm)');
-axis equal
-axis([-5,2805,-5,1805]); 
+% set(10, 'Position', [0 170 25*35 18*35]); %% matej
+% set(10, 'Position', [-1600 20 25*60 18*60]);  %% pero
+% set(10, 'Position', [750 100 25*30 18*30]); 
 
 % Initialize data sets
-
 hhh(1)= plot(0,0,'c','erasemode','xor','LineWidth',2) ;     % dejanski robot 
 hhh(2)= plot(0,0,'m','erasemode','xor','LineWidth',2) ;     % robot z odometrijo 
 
@@ -195,7 +195,7 @@ hhh(5)= plot(0,0,'.','Color','r','erasemode','xor', 'MarkerSize', 20) ;   % part
 hhh(6)= plot(nan,nan,'LineWidth',1,'Color','r') ;       % particle dir
 hhh(7)= plot(nan,nan,'LineWidth',2,'Color','c') ;       % sensor
 
-plot([2575,2675], [900,900], 'ko', 'MarkerSize', 21, 'LineWidth', 3);
+plot([2575,2675], [900,900], 'ko', 'MarkerSize', 21, 'LineWidth', 3);                   % round circles around sensors
 hhh(8)= plot(2575, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 50);  % Levi RGB sensor
 hhh(9)= plot(2675, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize', 50);  % Desni RGB sensor
 
@@ -224,6 +224,7 @@ DrawObstacles(10, Obstacles);
 legend('TrueRobot','EV3','path','path EV3','particles')
 
 hold off;
+zoom on;
 
 end
 

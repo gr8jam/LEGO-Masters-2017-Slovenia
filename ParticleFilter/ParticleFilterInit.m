@@ -14,15 +14,14 @@ idxR = Robot.idxR;
 
 
 xP = zeros(3,nParticles);
-for p = 1:nParticles
-    
+
+for p = 1:nParticles    
     not_done = true;
     while not_done
         idxNode = randi(96);
         xP(1,p) = Nodes(idxNode).x + randi(11) - 5;
         xP(2,p) = Nodes(idxNode).y + randi(11) - 5;
         xP(3,p) = Nodes(idxNode).fi;
-        
         
 %         
 %         xP(1:2,p) = rand(2,1);

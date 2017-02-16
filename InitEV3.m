@@ -1,5 +1,10 @@
 function Robot = InitEV3(q0)
+global SenColor_L SenColor_D SenDist SenGyro
 
+SenColor_L = InitSenColor(50,-30);
+SenColor_D = InitSenColor(50, 30);
+SenDist = InitSenDist(50,0);
+SenGyro = InitSenGyro();
 
 % Get this data from sensors
 hsvL = [0 0 0];
@@ -29,7 +34,8 @@ Motion = struct('inc'        , 0,...
                 'Localisation',0,...
                 'Odo'        , 0);
 
-PF = struct('nParticles', 100,...
+PF = struct('Estimate', 'Searching',...
+            'nParticles', 100,...
             'xP', zeros(3, 100));
 
 Robot = struct('R', 0.05,...

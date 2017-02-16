@@ -1,4 +1,5 @@
-function [v,w] = Motion(q)
+function [v,w] = LineTracking(q)
+
 global Robot OdoRobot
 DriverRGB();
 Lokal = 0;

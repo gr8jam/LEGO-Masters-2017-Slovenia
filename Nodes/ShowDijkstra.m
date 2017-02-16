@@ -5,7 +5,9 @@ clear all;
 global Nodes
 Nodes = [];
 
+cd(fileparts(mfilename('fullpath')))
 addpath('..\PolygonMap')
+addpath('..\Obstacles')
 
 load('Nodes2');
 load('../PolygonMap/PolygonColorData.mat')
@@ -29,7 +31,7 @@ DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 
 %% Draw Enviroment and KeepOut
 Walls = InitWalls();
-Obstacles = InitObstacles(2);
+Obstacles = InitTrueObstacles(2);
 KeepOut = InitKeepOut(Walls, Obstacles);
 
 DrawWalls(fig, Walls)
@@ -47,13 +49,14 @@ DrawNodesPositions(fig, Nodes, 0);
 % pause(2);
 
 %% Run Dijkstra Algorithm
-StartIdx = 73;
+StartIdx = 58;
+tic;
 ComputeDijkstra(StartIdx);
 
 %% Obtain optimal path
-StopIdx = 41;
+StopIdx = 55;
 OptimalPath = ComputeOptimalPathDijkstra(Nodes, StartIdx, StopIdx);
-
+duration = toc
 %% Highlight Start and End position
 plot(Nodes(StartIdx).x,Nodes(StartIdx).y,'g.','MarkerSize',35)
 % pause(1);
@@ -61,9 +64,10 @@ plot(Nodes(StopIdx).x,Nodes(StopIdx).y,'r.','MarkerSize',35)
 % pause(4);
 
 %% Draw optimal path
-delay = 0.4;
+delay = 0;
 DrawOptimalPathDijkstra(fig, Nodes, OptimalPath, delay);
 
+axis([-200 2770 -200 1950])
 
 
 

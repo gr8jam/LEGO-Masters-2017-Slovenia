@@ -1,23 +1,15 @@
 close all;
 clear all;
 
-
+addpath('..\')
 addpath('..\Obstacles')
 addpath('..\Nodes')
 addpath('..\PolygonMap')
 load('Nodes2');
-
-
-screensize = get( groot, 'Screensize' );
-W_screen = screensize(3);
-H_screen = screensize(4);
-W = W_screen/1.1;
-H = 18/25 * W;
+load('PolygonColorData.mat')
 
 fig = figure;
-set(fig, 'Position', [0 H_screen-H W H]); %% matej
-hold on;
-load('PolygonColorData.mat')
+FigureSettings(fig,'matej');
 
 wait =0;
 %% Draw Polygon
