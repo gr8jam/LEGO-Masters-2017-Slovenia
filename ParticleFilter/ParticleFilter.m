@@ -1,6 +1,6 @@
 function qMean = ParticleFilter(u)
 
-global TrueRobot Robot Ts
+global Robot Ts
 
 persistent WCET
 if isempty(WCET)
@@ -94,7 +94,7 @@ for idx = 1:badIdxCnt
 %         ParticleFilterInit;
     end
     
-    Robot.PF.xP(1:2,badParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
+    Robot.PF.xP(1:2,badParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + randi([-5 5],2,1);
     Robot.PF.xP(3,badParticleIdx(idx)) = Robot.PF.xP(3, newIdx);
 %     Robot.xP(3,badParticleIdx(idx)) = TrueRobot.q(3);
 end
@@ -102,7 +102,7 @@ end
 for idx = 1:4:goodIdxCnt
     if greatIdxCnt > 0
         newIdx = greatParticleIdx(randi(greatIdxCnt));
-        Robot.PF.xP(1:2,goodParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + [sin(TrueRobot.q(3)); -cos(TrueRobot.q(3))] .* randi([-3 3],2,1);
+        Robot.PF.xP(1:2,goodParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + randi([-5 5],2,1);
         Robot.PF.xP(3,goodParticleIdx(idx)) = Robot.PF.xP(3, newIdx);
 %         Robot.xP(3,goodParticleIdx(idx)) = TrueRobot.q(3);
     end

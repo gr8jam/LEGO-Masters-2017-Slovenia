@@ -143,6 +143,11 @@ if (~isempty(Robot))
     set(hhh(10),'XData',Robot.posL(1),'YData',Robot.posL(2));   % izris pozicije LEVEGA rgb senzorja
     set(hhh(11),'XData',Robot.posR(1),'YData',Robot.posR(2));   % izris pozicije DESNEGA rgb senzorja
     
+    if (~isempty(Robot.q_path))
+        [x,y,u,v] = getQuiverOptimalPath(Robot.q_path);
+        set(hhh(12),'XData',x,'YData',y,'UData',u,'VData',v);   % naèrtovane poti
+    end
+    
 %     if(DRAW_MORE)
 %       set(hhh(7), ...   % sensor
 %             'XData', reshape([TrueRobot.q(1)*ones(1,1); TrueRobot.q(1)*ones(1,1)+Robot.dist.*cos(TrueRobot.q(3)); nan(1,1)], 1, []), ...
@@ -202,9 +207,11 @@ hhh(9)= plot(2675, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize'
 hhh(10)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Levega RGB senzorja
 hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RGB senzorja
 
+hhh(12)= quiver(0,0,0,0,'b','LineWidth',2); % optimal path
+
 % Draw polygon colors
 ColorMap = BarvnaLestvicaRGB/255;
-DrawPolygonMapColors(10, PolygonMapColors, ColorMap);
+% DrawPolygonMapColors(10, PolygonMapColors, ColorMap);
 
 % Draw Walls
 DrawWalls(10, Walls)
