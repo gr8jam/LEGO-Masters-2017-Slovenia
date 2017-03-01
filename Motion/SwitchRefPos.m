@@ -1,4 +1,6 @@
-function q_ref_out = SwitchRefPos(q_sen, q_path)
+function q_ref_out = SwitchRefPos(q_sen)
+
+global Nodes Path
 
 persistent idx
 if isempty(idx)
@@ -7,16 +9,23 @@ end
 
 persistent q_ref
 if isempty(q_ref)
-    q_ref = q_path(1:3,idx);
+    x = Nodes(Path(idx)).x;
+    y = Nodes(Path(idx)).y;
+    fi = Nodes(Path(idx)).fi;
+    q_ref = [x y fi]';
 end
 
-d_min = 25;
+d_min = 35;
 
 if (abs(q_ref(1) - q_sen(1)) < d_min) && (abs(q_ref(2) - q_sen(2)) < d_min)
     idx = idx + 1;
-    q_ref = q_path(1:3,idx);
+    x = Nodes(Path(idx)).x;
+    y = Nodes(Path(idx)).y;
+    fi = Nodes(Path(idx)).fi;
+    q_ref = [x y fi]';
+    
     DEBUG = true;
-    if (DEBUG) fprintf('path_idx = %d\n', q_path(4,idx)); end;
+    if (DEBUG) fprintf('path_idx = %d\n', Path(idx)); end;
     
 end
 

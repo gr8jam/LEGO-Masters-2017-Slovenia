@@ -1,6 +1,6 @@
 function qMean = ParticleFilter(u)
 
-global Robot Ts
+global Ts PF SenRGB
 
 persistent WCET
 if isempty(WCET)
@@ -13,11 +13,14 @@ Q=diag([5^2,0.5^2]); % variance of actuator noise (translational velocity, angul
 R=diag([0.1^2])*1;        % variance of distance sensor noise
 
 % all particles have equal weights
-W = ones(Robot.PF.nParticles,1)/Robot.PF.nParticles;
+W = ones(PF.nParticles,1)/PF.nParticles;
 
 %% Pridobi meritev
-zTrueL = Robot.idxL;
-zTrueR = Robot.idxR;
+zTrueL = SenRGB.Left.idx;
+zTrueR = SenRGB.Right.idx;
+
+% zTrueL = Robot.idxL;
+% zTrueR = Robot.idxR;
 % zTrueHeading = TrueRobot.q(3);
 
 badParticleIdx = zeros(600,1);
@@ -30,7 +33,7 @@ greatIdxCnt = 0;
 
 
 %% Korekcija delcev
-for p = 1:Robot.PF.nParticles
+for p = 1:PF.nParticles
     % ocenjena meritev za vsak delec
     
 %      zHeading = Robot.xP(3,p);
@@ -41,7 +44,7 @@ for p = 1:Robot.PF.nParticles
 %     W(p) = exp(-0.5*Innov'*inv(RR)*Innov)+0.0001;
 % 
     try
-       [zL, zR] = SimulationRGB(Robot.PF.xP(:,p));
+       [zL, zR] = SimulationRGB(PF.xP(:,p));
     catch exception
        fprintf('Error: Simulation od %i particle in PF \n', p);
     end
@@ -94,16 +97,16 @@ for idx = 1:badIdxCnt
 %         ParticleFilterInit;
     end
     
-    Robot.PF.xP(1:2,badParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + randi([-5 5],2,1);
-    Robot.PF.xP(3,badParticleIdx(idx)) = Robot.PF.xP(3, newIdx);
+    PF.xP(1:2,badParticleIdx(idx)) = PF.xP(1:2, newIdx) + randi([-5 5],2,1);
+    PF.xP(3,badParticleIdx(idx)) = PF.xP(3, newIdx);
 %     Robot.xP(3,badParticleIdx(idx)) = TrueRobot.q(3);
 end
 
 for idx = 1:4:goodIdxCnt
     if greatIdxCnt > 0
         newIdx = greatParticleIdx(randi(greatIdxCnt));
-        Robot.PF.xP(1:2,goodParticleIdx(idx)) = Robot.PF.xP(1:2, newIdx) + randi([-5 5],2,1);
-        Robot.PF.xP(3,goodParticleIdx(idx)) = Robot.PF.xP(3, newIdx);
+        PF.xP(1:2,goodParticleIdx(idx)) = PF.xP(1:2, newIdx) + randi([-5 5],2,1);
+        PF.xP(3,goodParticleIdx(idx)) = PF.xP(3, newIdx);
 %         Robot.xP(3,goodParticleIdx(idx)) = TrueRobot.q(3);
     end
 end
@@ -118,24 +121,24 @@ end
 countNegativePi = 0;
 countPositivePi = 0;
 
-for p = 1:Robot.PF.nParticles
-    if Robot.PF.xP(3,p) < -3*pi/4;
+for p = 1:PF.nParticles
+    if PF.xP(3,p) < -3*pi/4;
         countNegativePi = countNegativePi + 1;
-    elseif Robot.PF.xP(3,p) > 3*pi/4;
+    elseif PF.xP(3,p) > 3*pi/4;
         countPositivePi = countPositivePi + 1;
     end
 end
 
 if (countNegativePi > 0) && (countPositivePi > 0)
-    for p = 1:Robot.PF.nParticles
-        if Robot.PF.xP(3,p) < -3*pi/4;
-            Robot.PF.xP(3,p) = Robot.PF.xP(3,p) + 2*pi;
+    for p = 1:PF.nParticles
+        if PF.xP(3,p) < -3*pi/4;
+            PF.xP(3,p) = PF.xP(3,p) + 2*pi;
         end
     end
 end
 
 % ocena stanja je povpreèje delcev
-x = mean(Robot.PF.xP,2);
+x = mean(PF.xP,2);
 x(3) = wrapToPi(x(3));
 % Particle filter (PF) estimate is obtained by the avarage od praticle states 
 qMean = x;     % here write current pose estimate from PF 
@@ -143,19 +146,19 @@ qMean = x;     % here write current pose estimate from PF
 
 %% Predikcija delcev
 % Naredi predikcijo in poèakaj na novo meritev
-% c = cos(Robot.PF.xP(3,p));
-% s = sin(Robot.PF.xP(3,p));
-for p = 1:Robot.PF.nParticles
+% c = cos(PF.xP(3,p));
+% s = sin(PF.xP(3,p));
+for p = 1:PF.nParticles
     un = u + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
-    Robot.PF.xP(:,p) = Robot.PF.xP(:,p) + Ts*[ un(1)*cos(Robot.PF.xP(3,p)); ...
-                                               un(1)*sin(Robot.PF.xP(3,p)); ...
+    PF.xP(:,p) = PF.xP(:,p) + Ts*[ un(1)*cos(PF.xP(3,p)); ...
+                                               un(1)*sin(PF.xP(3,p)); ...
                                                un(2) ] ;
-    Robot.PF.xP(3,p) = wrapToPi(Robot.PF.xP(3,p));
+    PF.xP(3,p) = wrapToPi(PF.xP(3,p));
 end
 
-Robot.PF.xP((Robot.PF.xP(1:2, :) < 1)) = 1;
-Robot.PF.xP((Robot.PF.xP(1, :) > 2500)) = 2500;
-Robot.PF.xP((Robot.PF.xP(2, :) > 1800)) = 1800;
+PF.xP((PF.xP(1:2, :) < 1)) = 1;
+PF.xP((PF.xP(1, :) > 2500)) = 2500;
+PF.xP((PF.xP(2, :) > 1800)) = 1800;
 
 
 finish = toc - start;

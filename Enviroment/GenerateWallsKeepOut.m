@@ -1,4 +1,4 @@
-function GenerateKeepOutWalls
+function GenerateWallsKeepOut
 clear all;
 close all;
 
@@ -9,7 +9,7 @@ d = 55;
 Walls = [];
 load('Walls.mat');
 
-KeepOutWalls = Walls(1:4,:) +   [+d +d -d +d;
+WallsKeepOut = Walls(1:4,:) +   [+d +d -d +d;
                                  +d +d +d -d;
                                  +d -d -d -d;
                                  -d +d -d -d];
@@ -23,7 +23,7 @@ KeepOutWalls = Walls(1:4,:) +   [+d +d -d +d;
 verL = GetOctagonVertices(Walls(5,3),Walls(5,4),d); % low
 verH = GetOctagonVertices(Walls(6,3),Walls(6,4),d); % high
 
-KeepOutWalls= [KeepOutWalls;
+WallsKeepOut= [WallsKeepOut;
                Walls(5,1)+d Walls(5,2)+d verL(1,:);
                verL(1,:) verL(2,:);
                verL(2,:) verL(3,:);
@@ -42,7 +42,7 @@ verLL = GetOctagonVertices(Walls(7,1),Walls(7,1),d); % left low
 verRH = GetOctagonVertices(Walls(8,3),Walls(7,4),d); % right high
 verRL = GetOctagonVertices(Walls(8,1),Walls(7,1),d); % right low
 
-KeepOutWalls= [KeepOutWalls;
+WallsKeepOut= [WallsKeepOut;
                verLH(1,:) verLH(2,:);
                verLH(2,:) verLH(3,:);
                verLH(3,:) verLH(4,:);
@@ -69,6 +69,6 @@ KeepOutWalls= [KeepOutWalls;
 
                ];
 
-save('KeepOutWalls.mat' ,'KeepOutWalls');
+save('WallsKeepOut.mat' ,'WallsKeepOut');
 
 end

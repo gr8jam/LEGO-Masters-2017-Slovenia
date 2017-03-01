@@ -1,7 +1,7 @@
-function SenDist = InitSenDist(dx, dy)
+function SenDist = InitSenDist()
 
 SenDist.dist = 0;
-SenDist.dx = dx;
-SenDist.dy = dy;
+SenDist.dx = 50;
+SenDist.dy = 0;
 
 end

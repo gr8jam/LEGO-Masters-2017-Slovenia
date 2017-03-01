@@ -1,0 +1,9 @@
+function PF = InitParticleFilter()
+
+PF = struct('Estimate', 'Searching',...
+            'nParticles', 100,...
+            'xP', zeros(3, 100),...
+            'q', [1250 900 0]');
+
+end
+        

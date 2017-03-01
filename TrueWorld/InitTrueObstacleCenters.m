@@ -1,16 +1,16 @@
-function TrueObstacleCenters = InitTrueObstacleCenters(f)
+function TrueObstaclesCenters = InitTrueObstacleCenters(f)
 %% Parameter f
 % f = 1 : manually select obstacles
 % f = 2 : load previouslly selected obstacles
 
-TrueObstacleCenters = [];
+TrueObstaclesCenters = [];
 if f == 1
     fprintf('Izberi pozicijo štirih ovir \n\r')
     [x,y] = ginput(4);  
-    TrueObstacleCenters = [x y];
-    save('TrueObstacleCenters.mat', 'TrueObstacleCenters') 
+    TrueObstaclesCenters = [x y];
+    save('TrueObstaclesCenters.mat', 'TrueObstaclesCenters') 
 elseif f == 2
-    load('TrueObstacleCenters.mat');
+    load('TrueObstaclesCenters.mat');
 end
 
 end

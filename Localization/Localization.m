@@ -1,5 +1,5 @@
 function [q] = Localization(v,w)
-global Robot LocalizationState
+global Robot LocalizationState PF
 DEBUG = true;
 
 q = [0 0 0]';
@@ -10,24 +10,24 @@ q = [0 0 0]';
 
 switch LocalizationState
     case 'Init'
-        Robot.PF = ParticleFilterInit();
+        InitParticles();
         LocalizationState = 'Operational';
-        Robot.PF.Estimate = 'Searching';
+        PF.Estimate = 'Searching';
         
         if (DEBUG) fprintf('PF init complete. \n'); end;
         
     case 'Reinit'
-        Robot.PF = ParticleFilterInit();
+        InitParticles();
         LocalizationState = 'Operational';
-        Robot.PF.Estimate = 'Searching';
+        PF.Estimate = 'Searching';
         
         if (DEBUG) fprintf('PF reinit complete. \n'); end;
         
     case 'Operational'
         Robot.q = ParticleFilter([v w]');
-        Robot.PF.Estimate = ParticleFilterEstimation();
+        PF.Estimate = ParticleFilterEstimation();
         
-        switch Robot.PF.Estimate
+        switch PF.Estimate
             case 'Working'
                 LocalizationState = 'Operational';
                 

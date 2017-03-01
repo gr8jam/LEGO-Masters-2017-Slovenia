@@ -9,10 +9,10 @@ load('PolygonColorData.mat');
 % load('Walls.mat')
 % load('KeepOutWalls.mat')
 
-load('TrueObstacleCenters.mat');
+load('TrueObstaclesCenters.mat');
 
-Obstacles = ComputeObstacles(TrueObstacleCenters, 50);
-KeepOutObstacles = ComputeObstacles(TrueObstacleCenters, 105);
+Obstacles = ComputeObstacles(TrueObstaclesCenters, 50);
+ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstaclesCenters, 105);
 
 fig = figure;
 set(fig, 'Position', [0 170 25*35 18*35]); %% matej
@@ -22,6 +22,6 @@ DrawPolygonMapColors(fig,PolygonMapColors,BarvnaLestvicaRGB_pastel);
 % DrawWalls(fig, Walls)
 % DrawKeepOut(fig, KeepOutWalls);
 
-DrawObstacles(fig, TrueObstacleCenters);
-DrawKeepOut(fig, Obstacles);
-DrawKeepOut(fig, KeepOutObstacles);
+DrawObstacles(fig, TrueObstaclesCenters);
+DrawKeepOut(fig, Obstacles, 'r--');
+DrawKeepOut(fig, ObstaclesKeepOut, 'b--');

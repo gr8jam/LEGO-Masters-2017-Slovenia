@@ -3,7 +3,7 @@ close all, clear all
 
 cd(fileparts(mfilename('fullpath')))
 
-addpath('ParticleFilter');
+addpath('Localization');
 addpath('Motion');
 addpath('PathPlanning');
 addpath('Sensors');
@@ -56,7 +56,7 @@ if StartMode == 1
 end
 
 load('TrueWalls.mat')
-load('TrueObstacleCenters.mat')
+load('TrueObstaclesCenters.mat')
 
 TrueWalls = InitTrueWalls();
 TrueObstacleCenters = InitTrueObstacleCenters(StartMode);
@@ -66,8 +66,8 @@ InitGrafic();
 
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
 idx0 = 80;
-x0 = Nodes(idx0).x + randi([-15 15]);
-y0 = Nodes(idx0).y + randi([-15 15]);
+x0 = Nodes(idx0).x + randi([-1 1]);
+y0 = Nodes(idx0).y + randi([-1 1]);
 fi0 = Nodes(idx0).fi + randi([-10 10])*pi/180;
 TrueRobot = InitTrueRobot([x0 y0 fi0]');
 % TrueRobot = InitTrueRobot([163 820 pi/2]');
@@ -81,13 +81,19 @@ UpdateGrafic();
 
 %% Simulation
 
+time_debug_stop = 15;
+
 tic;
 for i=1:length(ttt)
+    
+    if (i*Ts > time_debug_stop)
+        time_debug_stop = time_debug_stop + 1;
+    end
     
 %     if (2 < i ) && (i < 35)
 %         pause(0.4 - i/100);
 %     end
-    [v,w] = SimulateEV3(TrueRobot.q,i);
+    [v,w] = SimulateEV3(i);
     
     SimulateTrueRobot(v,w);
     
@@ -151,7 +157,7 @@ if (~isempty(Robot))
     set(hhh(11),'XData',Robot.posR(1),'YData',Robot.posR(2));   % izris pozicije DESNEGA rgb senzorja
     
     if (~isempty(Robot.q_path))
-        [x,y,u,v] = getQuiverOptimalPath(Robot.q_path);
+        [x,y,u,v] = getQuiverOptimalPath(Robot.Path);
         set(hhh(12),'XData',x,'YData',y,'UData',u,'VData',v);   % naèrtovane poti
     end
     
@@ -201,8 +207,8 @@ hold on;
 hhh(1)= plot(0,0,'c','erasemode','xor','LineWidth',2) ;     % dejanski robot 
 hhh(2)= plot(0,0,'m','erasemode','xor','LineWidth',2) ;     % robot z odometrijo 
 
-hhh(3)= plot(0,0,'--b','erasemode','none') ;  % dejanska pot
-hhh(4)= plot(0,0,'--g','erasemode','none') ;  % ocenjena pot z odometrijo oz. filtrom delcev
+hhh(3)= plot(0,0,'--c','erasemode','none') ;  % dejanska pot
+hhh(4)= plot(0,0,'--m','erasemode','none') ;  % ocenjena pot z odometrijo oz. filtrom delcev
 hhh(5)= plot(0,0,'.','Color','r','erasemode','xor', 'MarkerSize', 20) ;   % particle
 hhh(6)= plot(nan,nan,'LineWidth',1,'Color','r') ;       % particle dir
 hhh(7)= plot(nan,nan,'LineWidth',2,'Color','c') ;       % sensor
@@ -235,7 +241,7 @@ DrawKeepOut(10, TrueKeepOut, 'r--');
 % hhh(13)= plot(2700, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 
 %hhh(6)=plot(0,0,'r','erasemode','xor')
-legend('TrueRobot','EV3','path','path EV3','particles')
+legend('TrueRobot','EV3','path True','path EV3','particles')
 
 hold off;
 zoom on;

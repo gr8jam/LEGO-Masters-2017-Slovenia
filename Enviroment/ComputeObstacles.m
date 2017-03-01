@@ -1,8 +1,8 @@
-function Obstacles = ComputeObstacles(ObstacleCenters, d)
+function Obstacles = ComputeObstacles(ObstaclesCenters, d)
 Obstacles = [];
 
-for i = 1:size(ObstacleCenters,1)
-    OctagonLines = GetOctagonLines(ObstacleCenters(i,1), ObstacleCenters(i,2), d);
+for i = 1:size(ObstaclesCenters,1)
+    OctagonLines = GetOctagonLines(ObstaclesCenters(i,1), ObstaclesCenters(i,2), d);
     Obstacles = [Obstacles;
                  OctagonLines];
 end

@@ -38,7 +38,7 @@ H_screen = screensize(4);
 W = W_screen/2;
 H = 18/25 * W;
 
-set(fig, 'Position', [0 H_screen-H-100 W H]); %% matej
+set(fig, 'Position', [W H_screen-H-100 W H]); %% matej
 % set(fig, 'Position', [0 170 25*35 18*35]);
 end
 

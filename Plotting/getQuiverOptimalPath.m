@@ -1,15 +1,27 @@
-function [x,y,u,v] = getQuiverOptimalPath(OptimalPath)
+function [xx,yy,uu,vv] = getQuiverOptimalPath(Path)
 
-x = [];
-y = [];
-u = [];
-v = [];
+global Nodes
 
-for i = 1:size(OptimalPath,2)-1
-    x = [x OptimalPath(1,i)];
-    y = [y OptimalPath(2,i)];
-    u = [u OptimalPath(1,i+1)-OptimalPath(1,i)];
-    v = [v OptimalPath(2,i+1)-OptimalPath(2,i)];
+xx = [];
+yy = [];
+uu = [];
+vv = [];
+
+for idx = 1:length(Path)-1
+    if (Path(idx) == 0)
+        break;
+    end
+    
+    x = Nodes(Path(idx)).x;
+    y = Nodes(Path(idx)).y;
+    
+    u = Nodes(Path(idx+1)).x - Nodes(Path(idx)).x;
+    v = Nodes(Path(idx+1)).y - Nodes(Path(idx)).y;
+    
+    xx = [xx x];
+    yy = [yy y];
+    uu = [uu u];
+    vv = [vv v];
 end
 
 

@@ -1,5 +1,6 @@
-function [v,w] = SimulateEV3(qTrue,i)
+function [v,w] = SimulateEV3(i)
 global Robot OdoRobot LocalizationState
+
 
 if isempty(LocalizationState)
     LocalizationState = 'Init';
@@ -15,7 +16,7 @@ DriverGyro();       % pero
 DriverDist();       % pero
 
 if (first)
-    Robot = InitEV3(qTrue);
+    Robot = InitEV3();
     first = false;
     v = 0;
     w = 0;
@@ -53,10 +54,33 @@ else
 %     DriverRGB();        % pero
 %     DriverGyro();       % pero
 %     DriverDist();       % pero
-    [v,w] = Motion(Robot.q);
+
+    [v,w] = Controler(Robot.q);
     [Robot.q] = Localization(v,w);
 end
 
+
+global PolygonMapColors
+global Walls WallsKeepOut
+global ObstaclesCenters Obstacles ObstaclesKeepOut
+global Nodes Path Goal
+global PF 
+% global Motion
+global SenRGB SenDist SenGyro
+
+Robot.Walls = Walls;
+Robot.WallsKeepOut = WallsKeepOut;
+Robot.ObstaclesCenters = ObstaclesCenters;
+Robot.Obstacles = Obstacles;
+Robot.ObstaclesKeepOut = ObstaclesKeepOut;
+Robot.Nodes = Nodes;
+Robot.Path = Path;
+Robot.Goal = Goal;
+Robot.PF = PF;
+% Robot.Motion = Motion;
+Robot.SenRGB = SenRGB;
+Robot.SenDist = SenDist;
+Robot.SenGyro = SenGyro;
 
 
 end

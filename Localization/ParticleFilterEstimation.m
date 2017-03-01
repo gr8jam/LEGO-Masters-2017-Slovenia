@@ -2,6 +2,14 @@ function Estimate = ParticleFilterEstimation()
 
 global Robot Ts
 
+global PolygonMapColors
+global Walls WallsKeepOut
+global ObstaclesCenters Obstacles ObstaclesKeepOut
+global Nodes Path Goal
+global PF 
+global Motion
+global SenRGB SenDist SenGyro
+
 persistent errCnt
 if isempty(errCnt)
     errCnt = 0;
@@ -38,8 +46,11 @@ end
 % end
 
 
-zTrueL = Robot.idxL;
-zTrueR = Robot.idxR;
+% zTrueL = Robot.idxL;
+% zTrueR = Robot.idxR;
+
+zTrueL = SenRGB.Left.idx;
+zTrueR = SenRGB.Right.idx;
 
 [zL, zR] = SimulationRGB(Robot.q);
 
@@ -55,7 +66,7 @@ switch EstimateState
             errCnt = errCnt +1;
         end
 
-        if errCnt > 3/Ts
+        if errCnt > 1/Ts
             EstimateState = Searching;
             DEBUG = true;
         else
