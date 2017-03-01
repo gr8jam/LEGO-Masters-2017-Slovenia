@@ -47,9 +47,12 @@ else
     DriverGyro();
     DriverDist();
     
-    Localization(v,w);
+    task_Localization();
+    task_EnviromentDetection();
+    task_PathPlanning();
+    task_Controler();
     
-    [v,w] = Controler(Robot.PF.q);
+    DriverMotors();
     
 end
 

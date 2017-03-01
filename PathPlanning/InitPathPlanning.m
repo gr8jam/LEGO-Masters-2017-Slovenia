@@ -1,0 +1,13 @@
+function PP = InitPathPlanning()
+
+PP = 0;
+
+% PP = struct('State', 'New',...
+%             '', ,...
+%             '', ,...
+%             '', ,...
+
+
+
+
+end

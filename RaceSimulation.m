@@ -65,9 +65,9 @@ InitGrafic();
 
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
 idx0 = 80;
-x0 = Nodes(idx0).x + randi([-1 1]);
-y0 = Nodes(idx0).y + randi([-1 1]);
-fi0 = Nodes(idx0).fi + randi([-10 10])*pi/180;
+x0 = Nodes(idx0).x + randi([-10 10]);
+y0 = Nodes(idx0).y + randi([-10 10]);
+fi0 = Nodes(idx0).fi + randi([-5 5])*pi/180;
 TrueRobot = InitTrueRobot([x0 y0 fi0]');
 % TrueRobot = InitTrueRobot([163 820 pi/2]');
 

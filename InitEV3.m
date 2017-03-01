@@ -1,13 +1,18 @@
 function Robot = InitEV3()
 
-global v w
+
 global PolygonMapColors
 global Walls WallsKeepOut
 global ObstaclesCenters Obstacles ObstaclesKeepOut
 global Nodes Path Goal
 global PF 
-global Motion
+global PP
+global Controler
+global ED
 global SenRGB SenDist SenGyro
+global v w
+
+global Motion
 
 v = 0;
 w = 0;
@@ -30,6 +35,7 @@ Path = zeros(1,100);
 Goal = 0;
 
 PF = InitParticleFilter();
+PP = InitPathPlanning();
 Motion = InitMotion();
 
 SenRGB = InitSenRGB();
@@ -45,6 +51,7 @@ posL = [0 0]';
 posR = [0 0]';
 dist = 1;
 fi = 0;
+
 
 Robot = struct('R', 0.05,...
                'L', 0.15,...
@@ -70,6 +77,9 @@ Robot = struct('R', 0.05,...
                'Path', Path,...
                'Goal', Goal,...
                'PF', PF,...
+               'PP', PP,...
+               'Controler', Controler,...
+               'ED', ED,...
                'Motion', Motion,...
                'SenRGB', SenRGB,...
                'SenDist', SenDist,...

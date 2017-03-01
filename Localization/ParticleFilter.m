@@ -1,6 +1,9 @@
-function ParticleFilter(u)
+function ParticleFilter()
 
-global Ts PF SenRGB
+global Ts 
+global PF 
+global SenRGB
+global v w
 
 persistent WCET
 if isempty(WCET)
@@ -20,7 +23,7 @@ W = ones(PF.nParticles,1)/PF.nParticles;
 % c = cos(PF.xP(3,p));
 % s = sin(PF.xP(3,p));
 for p = 1:PF.nParticles
-    un = u + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
+    un = [v w]' + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
     PF.xP(:,p) = PF.xP(:,p) + Ts*[ un(1)*cos(PF.xP(3,p)); ...
                                                un(1)*sin(PF.xP(3,p)); ...
                                                un(2) ] ;

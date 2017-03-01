@@ -1,4 +1,4 @@
-function Localization(v,w)
+function task_Localization()
 global Robot PF
 DEBUG = true;
 
@@ -22,7 +22,7 @@ switch PF.State
         if (DEBUG) fprintf('PF reinit complete. \n'); end;
         
     case 'Operational'
-        ParticleFilter([v w]');
+        ParticleFilter();
         ParticleFilterEstimation();
         
         switch PF.Estimate
