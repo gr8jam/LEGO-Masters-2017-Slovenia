@@ -1,4 +1,5 @@
 function OctagonLines = GetOctagonLines(x,y,v)
+
 ver = GetOctagonVertices(x, y, v);
 OctagonLines = [
            ver(1,:) ver(2,:);

@@ -2,7 +2,7 @@ function q_path = GetOptimalpath()
 
 global Nodes
 
-idx = [20 25 30 35 40];
+idx = [20 25 30 35 40 45 50 52 55 90 93 65 68 75];
 q_path = []; 
 
 for i = 1:length(idx)

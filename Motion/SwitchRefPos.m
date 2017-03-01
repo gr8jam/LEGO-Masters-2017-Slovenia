@@ -10,9 +10,9 @@ if isempty(q_ref)
     q_ref = q_path(1:3,idx);
 end
 
-d_min = 10;
+d_min = 25;
 
-if (abs(q_ref(1) - q_sen(1)) < 10) && (abs(q_ref(2) - q_sen(2)) < 10)
+if (abs(q_ref(1) - q_sen(1)) < d_min) && (abs(q_ref(2) - q_sen(2)) < d_min)
     idx = idx + 1;
     q_ref = q_path(1:3,idx);
     DEBUG = true;

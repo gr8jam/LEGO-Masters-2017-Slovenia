@@ -8,7 +8,7 @@ load('PolygonColorData.mat');
 
 
 Walls = InitWalls();
-Obstacles = InitObstacles(2);
+Obstacles = InitTrueObstacleCenters(2);
 KeepOut = InitKeepOut(Walls, Obstacles);
 
 fig = figure;

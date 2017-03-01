@@ -5,12 +5,14 @@ cd(fileparts(mfilename('fullpath')))
 
 addpath('ParticleFilter');
 addpath('Motion');
-addpath('Nodes');
+addpath('PathPlanning');
 addpath('Sensors');
 addpath('PolygonMap');
-addpath('Obstacles');
+addpath('Enviroment');
+addpath('TrueWorld');
+addpath('Plotting');
 
-global Ts Obstacles Walls
+global Ts TrueWalls TrueObstacleCenters TrueKeepOut 
 global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV BarvnaLestvicaRGB_pastel 
 global DRAW_MORE
 global user
@@ -33,7 +35,7 @@ stanjeend = zeros(1);
 
 
 load('PolygonMap/PolygonColorData.mat')
-load('Nodes/Nodes.mat');
+load('PathPlanning/Nodes.mat');
 
 %% Init
 Tend = 120;      % Simulation lasts 50s
@@ -52,16 +54,21 @@ StartMode = 2;
 if StartMode == 1
     InitGrafic();
 end
-Obstacles = InitTrueObstacles(StartMode);
-Walls = InitWalls();
+
+load('TrueWalls.mat')
+load('TrueObstacleCenters.mat')
+
+TrueWalls = InitTrueWalls();
+TrueObstacleCenters = InitTrueObstacleCenters(StartMode);
+TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters);
 
 InitGrafic();
 
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
 idx0 = 80;
-x0 = Nodes(idx0).x;
-y0 = Nodes(idx0).y;
-fi0 = Nodes(idx0).fi;
+x0 = Nodes(idx0).x + randi([-15 15]);
+y0 = Nodes(idx0).y + randi([-15 15]);
+fi0 = Nodes(idx0).fi + randi([-10 10])*pi/180;
 TrueRobot = InitTrueRobot([x0 y0 fi0]');
 % TrueRobot = InitTrueRobot([163 820 pi/2]');
 
@@ -179,7 +186,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB %BarvnaLestvicaRGB_pastel
-global Walls Obstacles
+global Walls TrueObstacleCenters TrueKeepOut
 global hhh
 global user
 figure(10); clf; 
@@ -207,7 +214,7 @@ hhh(9)= plot(2675, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize'
 hhh(10)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Levega RGB senzorja
 hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RGB senzorja
 
-hhh(12)= quiver(0,0,0,0,'b','LineWidth',2); % optimal path
+hhh(12)= quiver(0,0,0,0,'b','LineWidth',2,'AutoScale', 'Off'); % optimal path
 
 % Draw polygon colors
 ColorMap = BarvnaLestvicaRGB/255;
@@ -217,10 +224,10 @@ ColorMap = BarvnaLestvicaRGB/255;
 DrawWalls(10, Walls)
 
 % Draw obstacles
-DrawObstacles(10, Obstacles);
+DrawObstacles(10, TrueObstacleCenters);
 
-% % Draw KeepOut
-% DrawKeepOut(10, KeepOut);
+% Draw KeepOut
+DrawKeepOut(10, TrueKeepOut, 'r--');
 
 % hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 % hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
