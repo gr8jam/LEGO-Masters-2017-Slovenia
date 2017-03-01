@@ -25,14 +25,13 @@ BarvnaLestvicaRGB = [];
 BarvnaLestvicaHSV = [];
 BarvnaLestvicaRGB_pastel = [];
 
-global TrueRobot
+global TrueRobot Robot
 global hhh
 global qqqTrue qqq qP
 
 global stanje stanjeend        % naèin delovanja
 stanje = zeros(1);             % naèin delovanja
 stanjeend = zeros(1);
-
 
 load('PolygonMap/PolygonColorData.mat')
 load('PathPlanning/Nodes.mat');
@@ -76,8 +75,8 @@ TrueRobot = InitTrueRobot([x0 y0 fi0]');
 %Robot = InitEV3([343 680 pi/2]');
 
 
-StoreData();
-UpdateGrafic();
+% StoreData();
+% UpdateGrafic();
 
 %% Simulation
 
@@ -90,11 +89,10 @@ for i=1:length(ttt)
         time_debug_stop = time_debug_stop + 1;
     end
     
-%     if (2 < i ) && (i < 35)
-%         pause(0.4 - i/100);
-%     end
-    [v,w] = SimulateEV3(i);
+    SimulateEV3(i);
     
+    v = Robot.v;
+    w = Robot.w;
     SimulateTrueRobot(v,w);
     
     StoreData();
@@ -130,7 +128,8 @@ global qqqTrue qqq qP
 
 qqqTrue = [qqqTrue TrueRobot.q];
 if (~isempty(Robot))
-    qqq = [qqq Robot.q];
+    q = [Robot.PF.q]; % X Robot.Y Robot.Fi]';
+    qqq = [qqq q];
     
     if (~isempty(Robot.PF.xP))
         qP = Robot.PF.xP;
@@ -146,7 +145,7 @@ global TrueRobot Robot BarvnaLestvicaRGB
 global qqqTrue qqq qP hhh 
 DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
 if (~isempty(Robot))
-    DrawRobot(Robot.q,2);            % drugi parameter: robot=1, odometrija=2
+    DrawRobot(Robot.PF.q,2);            % drugi parameter: robot=1, odometrija=2
 
     set(hhh(3),'XData',qqqTrue(1,:),'YData',qqqTrue(2,:));      % izris prave poti
     set(hhh(4),'XData',qqq(1,:),'YData',qqq(2,:));              % izris ocenjene poti

@@ -2,9 +2,9 @@ function [v,w] = Controler(q)
 
 global Robot 
 
-global PolygonMapColors
-global Walls WallsKeepOut
-global ObstaclesCenters Obstacles ObstaclesKeepOut
+% global PolygonMapColors
+% global Walls WallsKeepOut
+% global ObstaclesCenters Obstacles ObstaclesKeepOut
 global Nodes Path Goal
 global PF 
 global Motion
@@ -44,7 +44,7 @@ switch MotionState
         [T,v,w] = evalc('LineTracking(Robot.q);');
         
     case 'Point2Point'
-        q_sen = Robot.q;
+        q_sen = PF.q;
         
         if (Flag_RecalculatePath)
 %             q_path = GetOptimalpath();

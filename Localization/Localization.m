@@ -1,41 +1,39 @@
-function [q] = Localization(v,w)
-global Robot LocalizationState PF
+function Localization(v,w)
+global Robot PF
 DEBUG = true;
 
-q = [0 0 0]';
+% State = 'Init';
+% State = 'Reinit';
+% State = 'Operational';
 
-% LocalizationState = 'Init';
-% LocalizationState = 'Reinit';
-% LocalizationState = 'Operational';
-
-switch LocalizationState
+switch PF.State
     case 'Init'
         InitParticles();
-        LocalizationState = 'Operational';
+        PF.State = 'Operational';
         PF.Estimate = 'Searching';
         
         if (DEBUG) fprintf('PF init complete. \n'); end;
         
     case 'Reinit'
         InitParticles();
-        LocalizationState = 'Operational';
+        PF.State = 'Operational';
         PF.Estimate = 'Searching';
         
         if (DEBUG) fprintf('PF reinit complete. \n'); end;
         
     case 'Operational'
-        Robot.q = ParticleFilter([v w]');
-        PF.Estimate = ParticleFilterEstimation();
+        ParticleFilter([v w]');
+        ParticleFilterEstimation();
         
         switch PF.Estimate
             case 'Working'
-                LocalizationState = 'Operational';
+                PF.State = 'Operational';
                 
             case 'Searching'
-                LocalizationState = 'Operational';
+                PF.State = 'Operational';
                 
             case 'Error'
-                LocalizationState = 'Reinit';
+                PF.State = 'Reinit';
                 error('PF Estimation in state "Error"! \n')
             otherwise 
                 error('PF Estimation in unknown state! \n')
@@ -45,7 +43,6 @@ switch LocalizationState
         error('PF in unknown state! \n')
 end
 
-q = Robot.q;
 
 end
 

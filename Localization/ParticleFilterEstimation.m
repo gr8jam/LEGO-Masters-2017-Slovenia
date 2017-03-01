@@ -1,14 +1,13 @@
-function Estimate = ParticleFilterEstimation()
+function ParticleFilterEstimation()
 
-global Robot Ts
-
-global PolygonMapColors
-global Walls WallsKeepOut
-global ObstaclesCenters Obstacles ObstaclesKeepOut
-global Nodes Path Goal
+global Ts
+% global PolygonMapColors
+% global Walls WallsKeepOut
+% global ObstaclesCenters Obstacles ObstaclesKeepOut
+% global Nodes Path Goal
 global PF 
-global Motion
-global SenRGB SenDist SenGyro
+% global Motion
+global SenRGB %SenDist SenGyro
 
 persistent errCnt
 if isempty(errCnt)
@@ -20,46 +19,26 @@ if isempty(validCnt)
     validCnt = 0;
 end
 
-Working = 1;
-Searching = 2;
-Error = 3;
-
-persistent EstimateState
-if isempty(EstimateState)
-    EstimateState = Searching;
-end
-
-
-% [idxL, idxR] = SimulationRGB(Robot.q);
+% Working = 1;
+% Searching = 2;
+% Error = 3;
 % 
-% if (Robot.idxL == idxL) && (Robot.idxR == idxR)
-%     errCnt = 0;
-% else
-%     errCnt = errCnt +1;
-% end
-% 
-% if errCnt > 50000
-%     Estimate = true;
-%     errCnt = 0;
-% else
-%     Estimate = false;
+% persistent EstimateState
+% if isempty(EstimateState)
+%     EstimateState = Searching;
 % end
 
 
-% zTrueL = Robot.idxL;
-% zTrueR = Robot.idxR;
 
 zTrueL = SenRGB.Left.idx;
 zTrueR = SenRGB.Right.idx;
-
-[zL, zR] = SimulationRGB(Robot.q);
-
+[zL, zR] = SimulationRGB(PF.q);
 
 
 DEBUG = false;
 
-switch EstimateState
-    case Working
+switch PF.Estimate
+    case 'Working'
         if (zTrueL == zL) && (zTrueR == zR)
             errCnt = 0;
         else
@@ -67,13 +46,13 @@ switch EstimateState
         end
 
         if errCnt > 1/Ts
-            EstimateState = Searching;
+            PF.Estimate = 'Searching';
             DEBUG = true;
         else
-            EstimateState = Working;
+            PF.Estimate = 'Working';
         end
         
-    case Searching
+    case 'Searching'
         if (zTrueL == zL) && (zTrueR == zR)
             validCnt = validCnt +1;
         else
@@ -81,10 +60,10 @@ switch EstimateState
         end
 
         if validCnt > 1/Ts
-            EstimateState = Working;
+            PF.Estimate = 'Working';
             DEBUG = true;
         else
-            EstimateState = Searching;
+            PF.Estimate = 'Searching';
         end
         
     otherwise
@@ -97,45 +76,15 @@ end
 % Estimate = 'Searching';  ....2
 % Estimate = 'Error';      ....3
 
-switch EstimateState
-    case Working
-        Estimate = 'Working';
-    case Searching
-        Estimate = 'Searching';
-end
+% switch EstimateState
+%     case Working
+%         PF.Estimate = 'Working';
+%     case Searching
+%         PF.Estimate = 'Searching';
+% end
 
 % DEBUG = true;
-if (DEBUG) fprintf('PF estimate is %s. \n', Estimate); end;
-
-
-% errCntPar = 0;
-%
-% for i = 1:Robot.PF.nParticles
-%     dist = (Robot.PF.xP(1,i) - Robot.q(1))^2 + (Robot.PF.xP(2,i) - Robot.q(2))^2;
-%     
-%     Robot.q(1);
-%     
-%     if (dist > 121)
-%         errCntPar = errCntPar +1;
-%         Estimate = 'Searching';
-%         if errCntPar > Robot.PF.nParticles * 0.10;
-%             
-%             if errCnt > 1/Ts;
-%                 Estimate = 'Error';
-%                 errCnt = 0;
-%             else
-%                 Estimate = 'Searching';
-%             end
-%             break;
-%         end
-%     
-%     else 
-%         Estimate = 'Working';
-%     end
-%     
-%     
-%     
-% end
+if (DEBUG) fprintf('PF estimate is %s. \n', PF.Estimate); end;
 
 
 end

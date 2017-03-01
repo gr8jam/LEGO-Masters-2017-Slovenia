@@ -1,4 +1,4 @@
-function qMean = ParticleFilter(u)
+function ParticleFilter(u)
 
 global Ts PF SenRGB
 
@@ -14,6 +14,29 @@ R=diag([0.1^2])*1;        % variance of distance sensor noise
 
 % all particles have equal weights
 W = ones(PF.nParticles,1)/PF.nParticles;
+
+%% Predikcija delcev
+% Naredi predikcijo in poèakaj na novo meritev
+% c = cos(PF.xP(3,p));
+% s = sin(PF.xP(3,p));
+for p = 1:PF.nParticles
+    un = u + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
+    PF.xP(:,p) = PF.xP(:,p) + Ts*[ un(1)*cos(PF.xP(3,p)); ...
+                                               un(1)*sin(PF.xP(3,p)); ...
+                                               un(2) ] ;
+    PF.xP(3,p) = wrapToPi(PF.xP(3,p));
+end
+
+PF.xP((PF.xP(1:2, :) < 1)) = 1;
+PF.xP((PF.xP(1, :) > 2500)) = 2500;
+PF.xP((PF.xP(2, :) > 1800)) = 1800;
+
+
+finish = toc - start;
+if WCET < finish
+    WCET = finish;
+end
+
 
 %% Pridobi meritev
 zTrueL = SenRGB.Left.idx;
@@ -141,29 +164,9 @@ end
 x = mean(PF.xP,2);
 x(3) = wrapToPi(x(3));
 % Particle filter (PF) estimate is obtained by the avarage od praticle states 
-qMean = x;     % here write current pose estimate from PF 
+PF.q = x;     % here write current pose estimate from PF 
 
 
-%% Predikcija delcev
-% Naredi predikcijo in poèakaj na novo meritev
-% c = cos(PF.xP(3,p));
-% s = sin(PF.xP(3,p));
-for p = 1:PF.nParticles
-    un = u + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
-    PF.xP(:,p) = PF.xP(:,p) + Ts*[ un(1)*cos(PF.xP(3,p)); ...
-                                               un(1)*sin(PF.xP(3,p)); ...
-                                               un(2) ] ;
-    PF.xP(3,p) = wrapToPi(PF.xP(3,p));
-end
 
-PF.xP((PF.xP(1:2, :) < 1)) = 1;
-PF.xP((PF.xP(1, :) > 2500)) = 2500;
-PF.xP((PF.xP(2, :) > 1800)) = 1800;
-
-
-finish = toc - start;
-if WCET < finish
-    WCET = finish;
-end
 
 end
