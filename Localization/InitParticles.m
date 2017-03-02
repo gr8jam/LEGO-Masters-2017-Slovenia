@@ -26,7 +26,7 @@ for p = 1:PF.nParticles
         
         PF.xP(1,p) = Nodes(idxNode).x + randi([5 5]);
         PF.xP(2,p) = Nodes(idxNode).y + randi([-5 5]);
-        PF.xP(3,p) = Nodes(idxNode).fi + randi([-10 10])*pi/180;
+        PF.xP(3,p) = Nodes(idxNode).fi + randi([-5 5])*pi/180;
        
         [idxLxP, idxRxP] = SimulationRGB(PF.xP(:,p));
         if ((idxL == idxLxP) && (idxR == idxRxP))  
