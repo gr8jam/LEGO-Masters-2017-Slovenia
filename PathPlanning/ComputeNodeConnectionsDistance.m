@@ -1,36 +1,42 @@
 close all;
 clear all;
 
-global Nodes Obstacles PolygonMapColors
-Nodes = [];
-BarvnaLestvicaRGB_pastel = [];
-PolygonMapColors = [];
 
-% d_max_tr_1 = 290;
-% d_max_tr_2 = 330;
-% d_max_tr_3 = 380;
+cd(fileparts(mfilename('fullpath')))
 
 addpath('..\PolygonMap')
 addpath('..\Sensors')
-addpath('..\Obstacles')
+addpath('..\Enviroment')
+addpath('..\TrueWorld')
+addpath('..\Plotting')
+
+Nodes = [];
+PolygonMapColors = [];
+Walls = [];
+WallsKeepOut = [];
 
 load('Nodes');
 load('PolygonColorData.mat');
+load('Walls');
+load('WallsKeepOut');
 
-Walls = InitWalls();
-Obstacles = InitTrueObstacles(2);
-KeepOut = InitKeepOut(Walls, Obstacles);
+TrueObstacleCenters = InitTrueObstacleCenters(2);
+ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters, 140);
+
 
 fig = figure;
-set(fig, 'Position', [0 170 25*35 18*35]); %% matej
+FigureSettings(fig,'matej');
+% set(fig, 'Position', [0 170 25*35 18*35]); %% matej
 hold on;
 
 ColorMap = BarvnaLestvicaRGB_pastel;
 DrawPolygonMapColors(fig,PolygonMapColors,ColorMap);
 DrawNodesPositions(fig,Nodes,0);
-DrawObstacles(fig, Obstacles);
-DrawKeepOut(fig, KeepOut);
+DrawObstacles(fig, TrueObstacleCenters);
+DrawKeepOut(fig, WallsKeepOut, 'r--');
+DrawKeepOut(fig, ObstaclesKeepOut, 'r--');
 
+KeepOut = [WallsKeepOut; ObstaclesKeepOut]; 
 %% Init plot handels
 hj = plot(1250,900,'b.','MarkerSize',20,'erasemode','xor');
 hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor');
@@ -140,7 +146,7 @@ for i = 1:length(Nodes)
 end
 
 %%
-save('Nodes2','Nodes','d_max_tr_1','d_max_tr_2','d_max_tr_3');
+% save('Nodes2','Nodes','d_max_tr_1','d_max_tr_2','d_max_tr_3');
 % 
 % clear all
 % load('Nodes')

@@ -176,8 +176,18 @@ end
 function DrawRobot(Xr,tip)
 global hhh
 
-P=[1 4 4 -4 -4 -1 -1 -4 -4 4 4 1 1;...  % oblika robota
-   3 3 4 4 3 3 -3 -3 -4 -4 -3 -3 3]*20;         
+L_half = 90;
+W_half = 60;
+
+L_iner = 30;
+W_iner = 30;
+
+P=[L_iner L_half L_half -L_half -L_half -L_iner -L_iner -L_half -L_half  L_half  L_half  L_iner L_iner;...  % oblika robota
+   W_iner W_iner W_half  W_half  W_iner  W_iner -W_iner -W_iner -W_half -W_half -W_iner -W_iner W_iner];
+
+% 
+% P=[1 4 4 -4 -4 -1 -1 -4 -4 4 4 1 1;...  % oblika robota
+%    3 3 4 4 3 3 -3 -3 -4 -4 -3 -3 3]*20;         
 
 theta = Xr(3); 
 Rkolo=[cos(theta) -sin(theta); sin(theta) cos(theta)];

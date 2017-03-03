@@ -1,17 +1,34 @@
 close all;
 clear all;
 
-addpath('..\')
-addpath('..\Obstacles')
-addpath('..\Nodes')
+global Nodes WallsKeepOut ObstaclesKeepOut
+
+cd(fileparts(mfilename('fullpath')))
+
 addpath('..\PolygonMap')
-load('Nodes2');
-load('PolygonColorData.mat')
+addpath('..\Sensors')
+addpath('..\Enviroment')
+addpath('..\TrueWorld')
+addpath('..\Plotting')
+
+Nodes = [];
+PolygonMapColors = [];
+Walls = [];
+WallsKeepOut = [];
+
+load('Nodes');
+load('PolygonColorData.mat');
+load('Walls');
+load('WallsKeepOut');
+
+TrueObstacleCenters = InitTrueObstacleCenters(2);
+ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters, 140);
+
 
 fig = figure;
 FigureSettings(fig,'matej');
-
 wait =0;
+
 %% Draw Polygon
 % ColorMap = BarvnaLestvicaRGB/255;
 % DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
@@ -23,13 +40,10 @@ DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 pause(wait);
 
 %% Draw Enviroment and KeepOut
-Walls = InitWalls();
-Obstacles = InitObstacles(2);
-KeepOut = InitKeepOut(Walls, Obstacles);
-
 DrawWalls(fig, Walls)
-DrawObstacles(fig, Obstacles);
-DrawKeepOut(fig, KeepOut);
+DrawObstacles(fig, TrueObstacleCenters);
+DrawKeepOut(fig, WallsKeepOut, 'r--');
+DrawKeepOut(fig, ObstaclesKeepOut, 'r--');
 
 %% Draw Gray polygon
 % clf;
@@ -40,20 +54,12 @@ DrawKeepOut(fig, KeepOut);
 %% Show all nodes as red dots
 DrawNodesPositions(fig, Nodes, 0);
 pause(0);
+
+%% Recompute the nodes connections
+RecomputeNodeConnections(fig,0,0,0);
+
+%% Draw Nodes connections
 DrawNodesConnections(fig,Nodes);
-
-%%
-
-
-
-
-
-
-
-
-
-
-
 
 
 

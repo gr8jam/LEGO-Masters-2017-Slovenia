@@ -3,6 +3,8 @@ global Robot
 
 global Walls WallsKeepOut
 global ObstaclesCenters Obstacles ObstaclesKeepOut
+global DistanceKeepOut_Obstacles
+global NodeConnectionDistanceMax NodeConnectionAngleLimit
 global Nodes Path Goal
 global PF 
 % global Motion
@@ -14,6 +16,9 @@ Robot.WallsKeepOut = WallsKeepOut;
 Robot.ObstaclesCenters = ObstaclesCenters;
 Robot.Obstacles = Obstacles;
 Robot.ObstaclesKeepOut = ObstaclesKeepOut;
+Robot.DistanceKeepOut_Obstacles = DistanceKeepOut_Obstacles;
+Robot.NodeConnectionDistanceMax = NodeConnectionDistanceMax;
+Robot.NodeConnectionAngleLimit = NodeConnectionAngleLimit;
 Robot.Nodes = Nodes;
 Robot.Path = Path;
 Robot.Goal = Goal;

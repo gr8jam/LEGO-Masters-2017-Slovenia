@@ -1,22 +1,43 @@
 close all;
 clear all;
 
-
-global Nodes
-Nodes = [];
+global Nodes WallsKeepOut ObstaclesKeepOut
+global DistanceKeepOut_Obstacles 
+global NodeConnectionDistanceMax
+global NodeConnectionAngleLimit
 
 cd(fileparts(mfilename('fullpath')))
-addpath('..\PolygonMap')
-addpath('..\Obstacles')
 
-load('Nodes2');
-load('../PolygonMap/PolygonColorData.mat')
-% load('Dijkstra_example_nodes');
+addpath('..\PolygonMap')
+% addpath('..\Sensors')
+addpath('..\Enviroment')
+addpath('..\TrueWorld')
+addpath('..\Plotting')
+
+Nodes = [];
+PolygonMapColors = [];
+Walls = [];
+WallsKeepOut = [];
+
+DistanceKeepOut_Obstacles = 50 + 90;
+NodeConnectionDistanceMax = 500;
+NodeConnectionAngleLimit = pi/2;
+
+load('Nodes');
+load('PolygonColorData.mat');
+load('Walls');
+load('WallsKeepOut');
+
 
 fig = figure;
-set(fig, 'Position', [0 170 25*35 18*35]); %% matej
-% axis([-1 4 -1 3]);
-hold on;
+FigureSettings(fig,'matej');
+wait =0;
+
+
+% load('Nodes2');
+% load('../PolygonMap/PolygonColorData.mat')
+% load('Dijkstra_example_nodes');
+
 
 %% Draw Polygon
 % ColorMap = BarvnaLestvicaRGB/255;
@@ -30,13 +51,13 @@ DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 % pause(3);
 
 %% Draw Enviroment and KeepOut
-Walls = InitWalls();
-Obstacles = InitTrueObstacles(2);
-KeepOut = InitKeepOut(Walls, Obstacles);
+TrueObstacleCenters = InitTrueObstacleCenters(2);
+ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters);
 
 DrawWalls(fig, Walls)
-DrawObstacles(fig, Obstacles);
-DrawKeepOut(fig, KeepOut);
+DrawObstacles(fig, TrueObstacleCenters);
+DrawKeepOut(fig, WallsKeepOut, 'r--');
+DrawKeepOut(fig, ObstaclesKeepOut, 'r--');
 
 %%
 % clf;
@@ -48,15 +69,25 @@ DrawKeepOut(fig, KeepOut);
 DrawNodesPositions(fig, Nodes, 0);
 % pause(2);
 
-%% Run Dijkstra Algorithm
-StartIdx = 58;
+%% Recompute the nodes connections
 tic;
-ComputeDijkstra(StartIdx);
+for i = 1:length(TrueObstacleCenters)
+    x = TrueObstacleCenters(i,1);
+    y = TrueObstacleCenters(i,2);
+    
+    RecomputeNodeConnections(fig,false,x,y);
+    
+end
 
+%% Run Dijkstra Algorithm
+StartIdx = 59;
+
+ComputeDijkstra(StartIdx);
+duration = toc
 %% Obtain optimal path
 StopIdx = 55;
 OptimalPath = ComputeOptimalPathDijkstra(Nodes, StartIdx, StopIdx);
-duration = toc
+
 %% Highlight Start and End position
 plot(Nodes(StartIdx).x,Nodes(StartIdx).y,'g.','MarkerSize',35)
 % pause(1);
@@ -68,6 +99,8 @@ delay = 0;
 DrawOptimalPathDijkstra(fig, Nodes, OptimalPath, delay);
 
 axis([-200 2770 -200 1950])
+
+% % % % save('Nodes.mat', 'Nodes')
 
 
 

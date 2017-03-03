@@ -1,5 +1,6 @@
-function ObstaclesKeepOut = ComputeObstaclesKeepOut(ObstaclesCenters, d)
-ObstaclesKeepOut = ComputeObstacles(ObstaclesCenters, d);
+function ObstaclesKeepOut = ComputeObstaclesKeepOut(ObstaclesCenters)
+global DistanceKeepOut_Obstacles 
+ObstaclesKeepOut = ComputeObstacles(ObstaclesCenters, DistanceKeepOut_Obstacles);
 
 end
 
