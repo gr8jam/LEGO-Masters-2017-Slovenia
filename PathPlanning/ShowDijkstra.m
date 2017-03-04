@@ -20,7 +20,7 @@ Walls = [];
 WallsKeepOut = [];
 
 DistanceKeepOut_Obstacles = 50 + 90;
-NodeConnectionDistanceMax = 500;
+NodeConnectionDistanceMax = 700;
 NodeConnectionAngleLimit = pi/2;
 
 load('Nodes');
@@ -70,20 +70,22 @@ DrawNodesPositions(fig, Nodes, 0);
 % pause(2);
 
 %% Recompute the nodes connections
-tic;
+ComputeNodeConnections(fig,false,9999,9999);
+
 for i = 1:length(TrueObstacleCenters)
     x = TrueObstacleCenters(i,1);
     y = TrueObstacleCenters(i,2);
-    
-    RecomputeNodeConnections(fig,false,x,y);
-    
+    tic;
+    RecomputeNodeConnections(fig,false,x,y,false);
+    duration = toc;
+    fprintf('Duration = %1.3f s\n', duration);
 end
 
 %% Run Dijkstra Algorithm
 StartIdx = 59;
 
 ComputeDijkstra(StartIdx);
-duration = toc
+
 %% Obtain optimal path
 StopIdx = 55;
 OptimalPath = ComputeOptimalPathDijkstra(Nodes, StartIdx, StopIdx);

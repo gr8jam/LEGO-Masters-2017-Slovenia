@@ -12,7 +12,8 @@ addpath('Enviroment');
 addpath('TrueWorld');
 addpath('Plotting');
 
-global Ts TrueWalls TrueObstacleCenters TrueKeepOut 
+global Ts 
+global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut 
 global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV BarvnaLestvicaRGB_pastel 
 global DRAW_MORE
 global user
@@ -59,6 +60,7 @@ load('TrueObstaclesCenters.mat')
 
 TrueWalls = InitTrueWalls();
 TrueObstacleCenters = InitTrueObstacleCenters(StartMode);
+TrueObstacles = ComputeObstacles(TrueObstacleCenters, 50);
 TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters);
 
 InitGrafic();
@@ -160,13 +162,6 @@ if (~isempty(Robot))
         set(hhh(12),'XData',x,'YData',y,'UData',u,'VData',v);   % naèrtovane poti
     end
     
-%     if(DRAW_MORE)
-%       set(hhh(7), ...   % sensor
-%             'XData', reshape([TrueRobot.q(1)*ones(1,1); TrueRobot.q(1)*ones(1,1)+Robot.dist.*cos(TrueRobot.q(3)); nan(1,1)], 1, []), ...
-%             'YData', reshape([TrueRobot.q(2)*ones(1,1); TrueRobot.q(2)*ones(1,1)+Robot.dist.*sin(TrueRobot.q(3)); nan(1,1)], 1, []), ...
-%             'ZData', reshape([10+0.1*ones(1, 1); 10+0.1*ones(1, 1); 10+0.1*ones(1, 1)], 1, []));
-%      end
-%     Robot.dist
 end
 
 drawnow;
@@ -178,16 +173,10 @@ global hhh
 
 L_half = 90;
 W_half = 60;
-
 L_iner = 30;
 W_iner = 30;
-
 P=[L_iner L_half L_half -L_half -L_half -L_iner -L_iner -L_half -L_half  L_half  L_half  L_iner L_iner;...  % oblika robota
    W_iner W_iner W_half  W_half  W_iner  W_iner -W_iner -W_iner -W_half -W_half -W_iner -W_iner W_iner];
-
-% 
-% P=[1 4 4 -4 -4 -1 -1 -4 -4 4 4 1 1;...  % oblika robota
-%    3 3 4 4 3 3 -3 -3 -4 -4 -3 -3 3]*20;         
 
 theta = Xr(3); 
 Rkolo=[cos(theta) -sin(theta); sin(theta) cos(theta)];
@@ -201,7 +190,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB %BarvnaLestvicaRGB_pastel
-global Walls TrueObstacleCenters TrueKeepOut
+global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut
 global hhh
 global user
 figure(10); clf; 
@@ -236,18 +225,14 @@ ColorMap = BarvnaLestvicaRGB/255;
 % DrawPolygonMapColors(10, PolygonMapColors, ColorMap);
 
 % Draw Walls
-DrawWalls(10, Walls)
+DrawWalls(10, TrueWalls)
 
 % Draw obstacles
 DrawObstacles(10, TrueObstacleCenters);
+DrawTrueObstacles(10, TrueObstacles, 'y--');
 
 % Draw KeepOut
 DrawKeepOut(10, TrueKeepOut, 'r--');
-
-% hhh(10)= plot(2650, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
-% hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10);
-% hhh(12)= plot(2550, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
-% hhh(13)= plot(2700, 900, 'k.', 'LineStyle', 'none', 'MarkerSize', 50);
 
 %hhh(6)=plot(0,0,'r','erasemode','xor')
 legend('TrueRobot','EV3','path True','path EV3','particles')

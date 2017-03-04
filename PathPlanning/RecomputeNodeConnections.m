@@ -1,16 +1,14 @@
-function RecomputeNodeConnections(fig, DRAW, x_ob,y_ob)
+function RecomputeNodeConnections(fig, DRAW, x_ob,y_ob, all)
 global Nodes WallsKeepOut ObstaclesKeepOut
 global DistanceKeepOut_Obstacles 
 global NodeConnectionDistanceMax
 global NodeConnectionAngleLimit
 
-figure(fig);
-hold on;
-
-KeepOut = [WallsKeepOut; ObstaclesKeepOut]; 
-
 if (DRAW)
     %% Init plot handels
+    figure(fig);
+    hold on;
+
     hj = plot(1250,900,'b.','MarkerSize',20,'erasemode','xor');
     hi = plot(1250,900,'g.','MarkerSize',20,'erasemode','xor');
     hd = plot(1250,900,'b-','MarkerSize',2);
@@ -111,29 +109,30 @@ for i = 1:length(Nodes)
 %     end
     
     %% Optimized scalar product
-    cosFi = cos(Nodes(i).fi);
-    sinFi = sin(Nodes(i).fi); % it is actually minus sin
-    
-    x_obNew = (x_ob - Nodes(i).x) * cosFi + (y_ob - Nodes(i).y) * sinFi;
-%     y_obNew = (x_ob - Nodes(i).x) * sinFi + (y_ob - Nodes(i).y) * cosFi;
-    
-    scalar_prod = x_obNew; % + 0 * y_obNew;
-    if (scalar_prod >= 0)
-        % Obstacle is ahead of the node
-%         d = 1;
-        
-        if (((Nodes(i).x - x_ob)^2 + (Nodes(i).y - y_ob)^2 ) > (NodeConnectionDistanceMax + DistanceKeepOut_Obstacles)^2) 
-            continue;
-        end        
-    else
-        % Obstacle is behind of the node
-%         d = 2;
-        
-        if ((x_obNew) < DistanceKeepOut_Obstacles) 
-            continue;
-        end 
+    if (~all)
+        cosFi = cos(Nodes(i).fi);
+        sinFi = sin(Nodes(i).fi); % it is actually minus sin
+
+        x_obNew = (x_ob - Nodes(i).x) * cosFi + (y_ob - Nodes(i).y) * sinFi;
+    %     y_obNew = (x_ob - Nodes(i).x) * sinFi + (y_ob - Nodes(i).y) * cosFi;
+
+        scalar_prod = x_obNew; % + 0 * y_obNew;
+        if (scalar_prod >= 0)
+            % Obstacle is ahead of the node
+    %         d = 1;
+
+            if (((Nodes(i).x - x_ob)^2 + (Nodes(i).y - y_ob)^2 ) > (NodeConnectionDistanceMax + DistanceKeepOut_Obstacles)^2) 
+                continue;
+            end        
+        else
+            % Obstacle is behind of the node
+    %         d = 2;
+
+            if ((x_obNew) < DistanceKeepOut_Obstacles) 
+                continue;
+            end 
+        end
     end
-    
     
     
     
@@ -207,7 +206,6 @@ for i = 1:length(Nodes)
                 %% Check if no 
                 
 
-                fi_to_node = atan2(Nodes(j).y - Nodes(i).y, Nodes(j).x - Nodes(i).x);
                 
                 d_to_node = sqrt((Nodes(i).x-Nodes(j).x)^2 + ...
                                  (Nodes(i).y-Nodes(j).y)^2 );
@@ -218,7 +216,10 @@ for i = 1:length(Nodes)
                         set(hc,'XData',[xi xj],'YData',[yi yj]);
                     end
                     
-                    d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node], KeepOut);
+                    fi_to_node = atan2(Nodes(j).y - Nodes(i).y, Nodes(j).x - Nodes(i).x);
+                
+                    d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],....
+                                                WallsKeepOut,ObstaclesKeepOut);
                 
                     if (d_to_node < d_to_obst) 
                         Nodes(i).ConnCount = Nodes(i).ConnCount + 1;
