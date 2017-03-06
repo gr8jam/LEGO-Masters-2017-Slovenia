@@ -1,13 +1,8 @@
 function ParticleFilterEstimation()
 
 global Ts
-% global PolygonMapColors
-% global Walls WallsKeepOut
-% global ObstaclesCenters Obstacles ObstaclesKeepOut
-% global Nodes Path Goal
-global PF 
-% global Motion
-global SenRGB %SenDist SenGyro
+global PF PP
+global SenRGB
 
 persistent errCnt
 if isempty(errCnt)
@@ -22,18 +17,10 @@ end
 % Working = 1;
 % Searching = 2;
 % Error = 3;
-% 
-% persistent EstimateState
-% if isempty(EstimateState)
-%     EstimateState = Searching;
-% end
-
-
 
 zTrueL = SenRGB.Left.idx;
 zTrueR = SenRGB.Right.idx;
-[zL, zR] = SimulationRGB(PF.q);
-
+[zL, zR] = SimulationRGB(PF.x, PF.y, PF.fi);
 
 DEBUG = false;
 
@@ -61,6 +48,7 @@ switch PF.Estimate
 
         if validCnt > 1/Ts
             PF.Estimate = 'Working';
+            PP.Flag_RecalculatePath = true;
             DEBUG = true;
         else
             PF.Estimate = 'Searching';
@@ -70,7 +58,6 @@ switch PF.Estimate
         error('Unknown EstimateState');
         
 end
-
 
 % Estimate = 'Working';    ....1
 % Estimate = 'Searching';  ....2
@@ -86,5 +73,5 @@ end
 % DEBUG = true;
 if (DEBUG) fprintf('PF estimate is %s. \n', PF.Estimate); end;
 
-
 end
+

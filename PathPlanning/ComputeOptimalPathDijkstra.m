@@ -1,18 +1,16 @@
-function [OptimalPath] = ComputeOptimalPathDijkstra(Nodes, StartIdx, StopIdx)
+function ComputeOptimalPathDijkstra(StartIdx, StopIdx)
+
+global PP Nodes
 
 NextIdx = StopIdx;
-Path = [NextIdx];
+PP.lenPath = 0;
+PP.cntPath = 0;
+
 while (NextIdx ~= StartIdx)
-    try
-        
-        NextIdx = Nodes(NextIdx).path;
-        Path = [Path NextIdx];
-    catch exception
-        statements = 1;
-   
-    end
+    PP.lenPath = PP.lenPath + 1;
+    PP.Path(PP.lenPath) = NextIdx;
+    NextIdx = Nodes(NextIdx).path;
 end
 
-OptimalPath = Path(end:-1:1);
-
 end
+

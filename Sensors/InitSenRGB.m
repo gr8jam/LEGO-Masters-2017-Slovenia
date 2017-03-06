@@ -8,7 +8,7 @@ Left.Hue = 0;
 Left.Satration = 0;
 Left.Value = 0;
 
-Left.idx = 0;
+Left.idx = 1;
 
 Left.dx = 50;
 Left.dy = 30;
@@ -25,7 +25,7 @@ Right.Hue = 0;
 Right.Satration = 0;
 Right.Value = 0;
 
-Right.idx = 0;
+Right.idx = 1;
 
 Right.dx = 50;
 Right.dy = -30;

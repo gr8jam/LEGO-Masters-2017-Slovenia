@@ -24,7 +24,7 @@ if (DRAW)
     ang = 0:0.01:2*pi+0.01;
     xaa = ra_max*cos(ang) + xa;
     yaa = ra_max*sin(ang) + ya;
-%     set(ha,'XData',[xa xaa],'YData',[ya yaa])
+    set(ha,'XData',[xa xaa],'YData',[ya yaa])
 end
 
 %% Loop trough all Nodes
@@ -61,7 +61,7 @@ for i = 1:length(Nodes)
     end
   
     %% Debug tool
-    if i == 14
+    if i == 51
         a = 48;
     end
     %     k = waitforbuttonpress;
@@ -128,7 +128,7 @@ for i = 1:length(Nodes)
             % Obstacle is behind of the node
     %         d = 2;
 
-            if ((x_obNew) < DistanceKeepOut_Obstacles) 
+            if (abs(x_obNew) > DistanceKeepOut_Obstacles) 
                 continue;
             end 
         end
@@ -218,8 +218,12 @@ for i = 1:length(Nodes)
                     
                     fi_to_node = atan2(Nodes(j).y - Nodes(i).y, Nodes(j).x - Nodes(i).x);
                 
-                    d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],....
-                                                WallsKeepOut,ObstaclesKeepOut);
+                    if (~all)
+                        d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],....
+                                                    WallsKeepOut,ObstaclesKeepOut);
+                    else
+                        d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],WallsKeepOut,[]);
+                    end
                 
                     if (d_to_node < d_to_obst) 
                         Nodes(i).ConnCount = Nodes(i).ConnCount + 1;
@@ -235,7 +239,7 @@ for i = 1:length(Nodes)
                     end
 
                     if (DRAW)
-%                         pause(0.01);
+                        pause(0.01);
                     end
                 end
                 

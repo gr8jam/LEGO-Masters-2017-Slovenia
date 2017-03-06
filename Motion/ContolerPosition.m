@@ -1,26 +1,33 @@
-function [v,w] = ContolerPosition(q_ref, q_sen, w_sen)
+function [v,w] = ContolerPosition(w_sen)
+
+global PP PF
+
+% x = PP.xRef;
+% y = PP.yRef;
+% 
+% x = Nodes(PP.Goal).x;
+% y = Nodes(PP.Goal).y;
+% fi = Nodes(PP.Goal).fi;
 
 
-e(1:2) = q_ref(1:2) - q_sen(1:2);
-q_ref(3) = atan2((q_ref(2) - q_sen(2)), (q_ref(1) - q_sen(1)));
-e(3) = CorrectAngle(q_ref(3) - q_sen(3));
+eX = PP.xRef - PF.x;
+eY = PP.yRef - PF.y;
 
+fiRef = atan2(eY,eX);
 
+eFi = wrapToPi(fiRef - PF.fi);
+eD = sqrt(eX^2 + eY^2);
 
 K1 = 3;
 K2 = 0.3;
-w = K1*e(3) - K2*w_sen; % PD controler
+w = K1*eFi - K2*w_sen; % PD controler
 w = ramp_omega(w);
 
-
-e_d = sqrt(e(1)^2 + e(2)^2);
-
-G = exp(-15*abs(e(3)));
+G = exp(-15*abs(eFi));
 
 K3 = 10;
-v = G * K3 * e_d;
+v = G * K3 * eD;
 v = ramp_velocity(v);
-    
 
 end
 

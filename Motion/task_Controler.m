@@ -1,34 +1,36 @@
 function [vv,ww] = task_Controler()
 
-global Nodes Path Goal
-global PF 
+% global Nodes Path Goal
+global PF PP
 global Motion
 global SenRGB SenDist SenGyro
-global v w
+global v w % Flag_RecalculatePath Flag_PathFound
 
 persistent w_sen
 if isempty(w_sen)
     w_sen = 0;
 end
 
-persistent Flag_RecalculatePath
-if isempty(Flag_RecalculatePath)
-    Flag_RecalculatePath = 0;
-end
+% persistent Flag_RecalculatePath
+% if isempty(Flag_RecalculatePath)
+%     Flag_RecalculatePath = 0;
+% end
 
-persistent q_path
-if isempty(q_path)
-    q_path = 0;
+
+persistent MotionState
+if isempty(MotionState)
+    MotionState = 'LineTracking';
 end
 
 DEBUG = true;
 
 if strcmp(PF.Estimate,'Searching')
     MotionState = 'LineTracking';
-    Flag_RecalculatePath = true;
 
 elseif strcmp(PF.Estimate, 'Working')
-    MotionState = 'Point2Point';
+    if (PP.Flag_PathFound)
+        MotionState = 'Point2Point';
+    end
 else
     if (DEBUG) fprintf('Robot STOP. \n'); end;
     error('Robot STOP. \n');
@@ -37,21 +39,14 @@ end
 
 switch MotionState
     case 'LineTracking'
-        [T,v,w] = evalc('LineTracking(PF.q);');
+        [T,v,w] = evalc('LineTracking();');
+        
         
     case 'Point2Point'
-        q_sen = PF.q;
-        if (Flag_RecalculatePath)
-            q_path = GetOptimalpath();
-            Path = [20 25 30 34 36 40 45 50 52 55 90 93 65 68 75];
-            Flag_RecalculatePath = false;
-        end
-
-        q_ref = SwitchRefPos(q_sen);
-        [v,w] = ContolerPosition(q_ref, q_sen, w_sen);
+        [v,w] = ContolerPosition(w_sen);
         
         w_sen = w;
-        Goal = q_ref;
+        
         
         
 %         if (DEBUG) fprintf('v = %4.2f \nw = %4.2f \n', v,w); end;

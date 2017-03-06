@@ -1,4 +1,4 @@
-function [v,w] = LineTracking(q)
+function [v,w] = LineTracking()
 
 global Robot OdoRobot
 DriverRGB();

@@ -3,7 +3,7 @@ global TrueRobot Robot
 global BarvnaLestvicaHSV  % BarvnaLestvicaRGB
 global SenRGB
 
-[idxL,idxR, posL, posR] = SimulationRGB(TrueRobot.q);
+[idxL,idxR, posL, posR] = SimulationRGB(TrueRobot.q(1), TrueRobot.q(2), TrueRobot.q(3));
 
 Robot.hsvL = BarvnaLestvicaHSV(idxL);
 Robot.hsvR = BarvnaLestvicaHSV(idxR);

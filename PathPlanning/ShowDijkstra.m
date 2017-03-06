@@ -51,7 +51,7 @@ DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 % pause(3);
 
 %% Draw Enviroment and KeepOut
-TrueObstacleCenters = InitTrueObstacleCenters(2);
+TrueObstacleCenters = InitTrueObstacleCenters(1);
 ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters);
 
 DrawWalls(fig, Walls)
@@ -70,7 +70,7 @@ DrawNodesPositions(fig, Nodes, 0);
 % pause(2);
 
 %% Recompute the nodes connections
-ComputeNodeConnections(fig,false,9999,9999);
+% ComputeNodeConnections(fig,false);
 
 for i = 1:length(TrueObstacleCenters)
     x = TrueObstacleCenters(i,1);
@@ -82,12 +82,12 @@ for i = 1:length(TrueObstacleCenters)
 end
 
 %% Run Dijkstra Algorithm
-StartIdx = 59;
+StartIdx = 96;
 
 ComputeDijkstra(StartIdx);
 
 %% Obtain optimal path
-StopIdx = 55;
+StopIdx = 95;
 OptimalPath = ComputeOptimalPathDijkstra(Nodes, StartIdx, StopIdx);
 
 %% Highlight Start and End position
@@ -102,7 +102,7 @@ DrawOptimalPathDijkstra(fig, Nodes, OptimalPath, delay);
 
 axis([-200 2770 -200 1950])
 
-% % % % save('Nodes.mat', 'Nodes')
+% save('Nodes.mat', 'Nodes')
 
 
 

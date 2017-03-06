@@ -55,9 +55,13 @@ if StartMode == 1
     InitGrafic();
 end
 
+
+
 load('TrueWalls.mat')
 load('TrueObstaclesCenters.mat')
 
+
+TrueRobot = InitTrueRobot(2);
 TrueWalls = InitTrueWalls();
 TrueObstacleCenters = InitTrueObstacleCenters(StartMode);
 TrueObstacles = ComputeObstacles(TrueObstacleCenters, 50);
@@ -65,12 +69,14 @@ TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters);
 
 InitGrafic();
 
+
+
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
-idx0 = 80;
-x0 = Nodes(idx0).x + randi([-5 5]);
-y0 = Nodes(idx0).y + randi([-5 5]);
-fi0 = Nodes(idx0).fi + randi([-5 5])*pi/180;
-TrueRobot = InitTrueRobot([x0 y0 fi0]');
+% idx0 = 80;
+% x0 = Nodes(idx0).x + randi([-5 5]);
+% y0 = Nodes(idx0).y + randi([-5 5]);
+% fi0 = Nodes(idx0).fi + randi([-5 5])*pi/180;
+
 % TrueRobot = InitTrueRobot([163 820 pi/2]');
 
 % TrueRobot = InitTrueRobot([293 820 pi/4]');
@@ -130,11 +136,11 @@ global qqqTrue qqq qP
 
 qqqTrue = [qqqTrue TrueRobot.q];
 if (~isempty(Robot))
-    q = [Robot.PF.q]; % X Robot.Y Robot.Fi]';
+    q = [Robot.PF.x Robot.PF.y Robot.PF.fi]'; % X Robot.Y Robot.Fi]';
     qqq = [qqq q];
     
-    if (~isempty(Robot.PF.xP))
-        qP = Robot.PF.xP;
+    if (~isempty(Robot.PF.xParticles))
+        qP = Robot.PF.xParticles;
     end
 end
 
@@ -147,20 +153,21 @@ global TrueRobot Robot BarvnaLestvicaRGB
 global qqqTrue qqq qP hhh 
 DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
 if (~isempty(Robot))
-    DrawRobot(Robot.PF.q,2);            % drugi parameter: robot=1, odometrija=2
+    DrawRobot([Robot.PF.x Robot.PF.y Robot.PF.fi]',2);            % drugi parameter: robot=1, odometrija=2
 
     set(hhh(3),'XData',qqqTrue(1,:),'YData',qqqTrue(2,:));      % izris prave poti
     set(hhh(4),'XData',qqq(1,:),'YData',qqq(2,:));              % izris ocenjene poti
     set(hhh(5),'XData',qP(1,:),'YData',qP(2,:));                % izris delcev
-    set(hhh(8),'Color',  BarvnaLestvicaRGB(Robot.idxL,:)/255);
-    set(hhh(9),'Color',  BarvnaLestvicaRGB(Robot.idxR,:)/255);
-    set(hhh(10),'XData',Robot.posL(1),'YData',Robot.posL(2));   % izris pozicije LEVEGA rgb senzorja
-    set(hhh(11),'XData',Robot.posR(1),'YData',Robot.posR(2));   % izris pozicije DESNEGA rgb senzorja
+    set(hhh(8),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Left.idx,:)/255);
+    set(hhh(9),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Right.idx,:)/255);
+    set(hhh(10),'XData',Robot.SenRGB.Left.x,'YData',Robot.SenRGB.Left.y);   % izris pozicije LEVEGA rgb senzorja
+    set(hhh(11),'XData',Robot.SenRGB.Right.x,'YData',Robot.SenRGB.Right.y);   % izris pozicije DESNEGA rgb senzorja
     
-    if (~isempty(Robot.q_path))
-        [x,y,u,v] = getQuiverOptimalPath(Robot.Path);
-        set(hhh(12),'XData',x,'YData',y,'UData',u,'VData',v);   % naèrtovane poti
-    end
+    
+    [x,y,u,v] = getQuiverOptimalPath();
+    set(hhh(12),'XData',x,'YData',y,'UData',u,'VData',v);   % naèrtovane poti
+    set(hhh(13),'XData',Robot.PP.xRef,'YData',Robot.PP.yRef);   % naèrtovane poti
+    
     
 end
 
@@ -189,7 +196,7 @@ end
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
-global PolygonMapColors BarvnaLestvicaRGB %BarvnaLestvicaRGB_pastel
+global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaRGB_pastel
 global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut
 global hhh
 global user
@@ -218,11 +225,12 @@ hhh(9)= plot(2675, 900, 'k.','erasemode','xor','LineStyle', 'none', 'MarkerSize'
 hhh(10)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Levega RGB senzorja
 hhh(11)= plot(0,0,'c+','erasemode','xor','MarkerSize', 10); % Položaj Desnega RGB senzorja
 
-hhh(12)= quiver(0,0,0,0,'b','LineWidth',2,'AutoScale', 'Off'); % optimal path
+
 
 % Draw polygon colors
-ColorMap = BarvnaLestvicaRGB/255;
-% DrawPolygonMapColors(10, PolygonMapColors, ColorMap);
+% ColorMap = BarvnaLestvicaRGB/255;
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawPolygonMapColors(10, PolygonMapColors, ColorMap);
 
 % Draw Walls
 DrawWalls(10, TrueWalls)
@@ -233,6 +241,10 @@ DrawTrueObstacles(10, TrueObstacles, 'y--');
 
 % Draw KeepOut
 DrawKeepOut(10, TrueKeepOut, 'r--');
+
+hhh(12)= quiver(0,0,0,0,'b','LineWidth',2,'AutoScale', 'Off'); % optimal path
+hhh(13)= plot(0,0,'r.','MarkerSize',20,'erasemode','xor');  % goal node
+
 
 %hhh(6)=plot(0,0,'r','erasemode','xor')
 legend('TrueRobot','EV3','path True','path EV3','particles')

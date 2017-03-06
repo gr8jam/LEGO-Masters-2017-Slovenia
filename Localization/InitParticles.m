@@ -1,13 +1,8 @@
 function InitParticles()
-global Robot
 
-% global PolygonMapColors
-% global Walls WallsKeepOut
-% global ObstaclesCenters Obstacles ObstaclesKeepOut
-global Nodes %Path Goal
+global Nodes 
 global PF 
-% global Motion
-global SenRGB %SenDist SenGyro
+global SenRGB
 
 
 idxL = SenRGB.Left.idx;
@@ -24,11 +19,12 @@ for p = 1:PF.nParticles
         cnt = cnt +1;
         idxNode = randi(96);
         
-        PF.xP(1,p) = Nodes(idxNode).x + randi([5 5]);
-        PF.xP(2,p) = Nodes(idxNode).y + randi([-5 5]);
-        PF.xP(3,p) = Nodes(idxNode).fi + randi([-5 5])*pi/180;
-       
-        [idxLxP, idxRxP] = SimulationRGB(PF.xP(:,p));
+        PF.xParticles(1,p) = Nodes(idxNode).x + randi([5 5]);
+        PF.xParticles(2,p) = Nodes(idxNode).y + randi([-5 5]);
+        PF.xParticles(3,p) = Nodes(idxNode).fi + randi([-5 5])*pi/180;
+        PF.xParticles(3,p) = wrapToPi(PF.xParticles(3,p));
+        
+        [idxLxP, idxRxP] = SimulationRGB(PF.xParticles(1,p),PF.xParticles(2,p),PF.xParticles(3,p));
         if ((idxL == idxLxP) && (idxR == idxRxP))  
             not_done = false;
         end
@@ -51,10 +47,23 @@ end
 % xP(2,:) = xP(2,:) * 1799 + 1;
 % xP(3,:) = xP(3,:) * 2*pi - pi;
 
-PF.xP(3,:) = wrapToPi(PF.xP(3,:));
 
-qMean = mean(PF.xP,2);
-Robot.q = qMean;
+
+GetPoseFromParticleAvrage();
+
+% xMean = 0;
+% yMean = 0;
+% fiMean = 0;
+% for i=1:PF.nParticles
+%     xMean = xMean + PF.xParticles(1,i);
+%     yMean = yMean + PF.xParticles(2,i);
+%     fiMean = fiMean + wrapToPi(PF.xParticles(3,i));
+% end
+% 
+% PF.x = xMean/PF.nParticles;
+% PF.y = yMean/PF.nParticles;
+% PF.fi = fiMean/PF.nParticles;
+
 
 end
 

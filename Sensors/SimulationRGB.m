@@ -1,10 +1,4 @@
-function [idxLeft, idxRight, posLeft, posRight] = SimulationRGB(q)
-
-% global Robot
-
-x = q(1);
-y = q(2);
-fi = q(3);
+function [idxLeft, idxRight, posLeft, posRight] = SimulationRGB(x, y, fi)
 
 % Lokalni koordinatni sistem je izbran tako, da je x os vzporedna
 % smeri gibanja robota, ko se ta pelje naravnost. Središèe lokalnega
