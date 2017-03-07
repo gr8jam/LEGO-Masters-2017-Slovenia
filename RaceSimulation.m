@@ -53,7 +53,7 @@ ttt = [];
 hhh = 0;
 
 % DRAW_MORE = 1;
-StartModeRobot = 2;
+StartModeRobot = 4;
 if StartModeRobot == 1
     InitGrafic();
 end

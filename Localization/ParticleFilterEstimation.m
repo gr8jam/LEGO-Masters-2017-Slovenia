@@ -51,14 +51,14 @@ else
     end
 end
 
-if validCnt > 3/Ts
+if validCnt > 2/Ts
     if  strcmp(PF.Estimate,'Searching')
         DEBUG = true;
         PF.Estimate = 'Working';
         PP.Flag_RecalculatePath = true;
     end
 
-elseif errorCnt > 3/Ts
+elseif errorCnt > 2/Ts
     if  strcmp(PF.Estimate,'Working')
         DEBUG = true;
     end

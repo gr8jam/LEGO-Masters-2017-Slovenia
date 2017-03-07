@@ -47,7 +47,7 @@ else
     DriverDist();
     
     task_Localization();
-    task_EnviromentDetection();
+    task_EnviromentDetection(i);
     task_PathPlanning();
     task_Controler();
     

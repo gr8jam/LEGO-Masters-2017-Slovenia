@@ -23,16 +23,23 @@ SenRGB.Left.Valid = (sum(sum(bool)) == 0);
 bool = (SenRGB.Right.ColorArray ~= idxR);
 SenRGB.Right.Valid = (sum(sum(bool)) == 0);
 
-if (SenRGB.Left.idx ~= idxL)
-    SenRGB.Left.Changed = true;
-else
-    SenRGB.Left.Changed = false;
+if SenRGB.Left.Valid
+    if (SenRGB.Left.idx ~= idxL)
+        SenRGB.Left.Changed = true;
+        SenRGB.Left.idx = idxL;
+    else
+        SenRGB.Left.Changed = false;
+    end
 end
-if (SenRGB.Right.idx ~= idxR)
-    SenRGB.Right.Changed = true;
-%     fprintf('Color CHANGED \n')
-else
-    SenRGB.Right.Changed = false;
+
+if SenRGB.Right.Valid
+    if (SenRGB.Right.idx ~= idxR)
+        SenRGB.Right.Changed = true;
+        SenRGB.Right.idx = idxR;
+    %     fprintf('Color CHANGED \n')
+    else
+        SenRGB.Right.Changed = false;
+    end
 end
 
 % Robot.hsvL = BarvnaLestvicaHSV(idxL);
@@ -44,11 +51,11 @@ end
 % Robot.posL = posL;
 % Robot.posR = posR;
 
-SenRGB.Left.idx = idxL;
+
 SenRGB.Left.x = posL(1);
 SenRGB.Left.y = posL(2);
 
-SenRGB.Right.idx = idxR;
+
 SenRGB.Right.x = posR(1);
 SenRGB.Right.y = posR(2);
 

@@ -14,18 +14,7 @@ global ObstaclesKeepOut
 
 
 
-if (PP.Flag_RecalculatePath)    
-    ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters);
-    
-    for i = 1:length(TrueObstacleCenters)
-        x = TrueObstacleCenters(i,1);
-        y = TrueObstacleCenters(i,2);
-        tic;
-        RecomputeNodeConnections(10,false,x,y,false);
-        duration = toc;
-        fprintf('Duration = %1.3f s\n', duration);
-    end
-
+if (PP.Flag_RecalculatePath)
     StartIdx = GetClosestNode();
     ComputeDijkstra(StartIdx);
     StopIdx = GetStopIdx(StartIdx); 
