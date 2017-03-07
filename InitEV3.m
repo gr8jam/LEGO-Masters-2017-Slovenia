@@ -13,10 +13,6 @@ global MC
 global ED
 global SenRGB SenDist SenGyro
 
-global Motion
-
-v = 0;
-w = 0;
 
 PolygonMapColors = [];
 Walls = []; 
@@ -41,8 +37,6 @@ PF = InitParticleFilter();
 PP = InitPathPlanning();
 MC = InitMotionControler();
 
-Motion = InitMotion();
-
 SenRGB = InitSenRGB();
 SenDist = InitSenDist();
 SenGyro = InitSenGyro();
@@ -57,7 +51,6 @@ Robot = struct('Walls',Walls,...
                'PP', PP,...
                'MC', MC,...
                'ED', ED,...
-               'Motion', Motion,...
                'SenRGB', SenRGB,...
                'SenDist', SenDist,...
                'SenGyro', SenGyro); 

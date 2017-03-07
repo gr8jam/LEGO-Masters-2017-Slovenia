@@ -4,7 +4,7 @@ close all, clear all
 cd(fileparts(mfilename('fullpath')))
 
 addpath('Localization');
-addpath('Motion');
+addpath('Controler');
 addpath('PathPlanning');
 addpath('Sensors');
 addpath('PolygonMap');
@@ -54,8 +54,6 @@ StartMode = 2;
 if StartMode == 1
     InitGrafic();
 end
-
-
 
 load('TrueWalls.mat')
 load('TrueObstaclesCenters.mat')

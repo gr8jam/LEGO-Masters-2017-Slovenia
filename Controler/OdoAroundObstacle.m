@@ -38,7 +38,7 @@ function [ v, w ] = OdoAroundObstacle(  )
         OdoRobot.idx = OdoRobot.idx + 1;
         if OdoRobot.idx > 4
             OdoRobot.idx = 4;
-            Robot.Motrion.Odo = 0;
+            Robot.LF.Odo = 0;
             v = 0;
             w = 0;
             2020
