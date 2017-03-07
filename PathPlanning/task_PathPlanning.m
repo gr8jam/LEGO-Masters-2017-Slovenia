@@ -12,6 +12,8 @@ global ObstaclesKeepOut
 %     Flag_PathFound = false;
 % end
 
+
+
 if (PP.Flag_RecalculatePath)    
     ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters);
     

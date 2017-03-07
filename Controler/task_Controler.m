@@ -25,6 +25,8 @@ elseif strcmp(PF.Estimate, 'Working')
     if (PP.Flag_PathFound)
         MC.ControlerState = 'Point2Point';
     end
+elseif strcmp(PF.Estimate, 'Error')
+    MC.ControlerState = 'Stop';
 else
     if (DEBUG) fprintf('Robot STOP. \n'); end;
     error('Robot STOP. \n');
@@ -49,6 +51,8 @@ switch MC.ControlerState
     case 'Stop'
         v = 0;
         w = 0;
+        MC.v = v;
+        MC.w = w;
         
     otherwise
         error('MotionState in unkonwn state. \n')

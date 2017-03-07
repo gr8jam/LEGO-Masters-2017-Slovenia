@@ -2,10 +2,10 @@ function SwitchGoal()
 
 global PP PF Nodes
 
-% persistent idx
-% if isempty(idx)
-%     idx = 1;
-% end
+persistent halfPath
+if isempty(halfPath)
+    halfPath = 0;
+end
 
 % persistent q_ref
 % if isempty(q_ref)
@@ -29,6 +29,10 @@ if ((PP.xRef - PF.x)^2 + (PP.yRef - PF.y)^2 < d_min^2)
     
     DEBUG = false;
     if (DEBUG) fprintf('path_idx = %d\n', PP.Path(PP.cntPath)); end;
+    
+    if (PP.cntPath >= PP.lenPath/2)
+        PP.Flag_RecalculatePath = true;
+    end
     
 end
 

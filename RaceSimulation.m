@@ -28,7 +28,7 @@ BarvnaLestvicaRGB_pastel = [];
 
 global TrueRobot Robot
 global hhh
-global qqqTrue qqq qP
+global qqqTrue qqq qP vvv www ttt
 
 global stanje stanjeend        % naèin delovanja
 stanje = zeros(1);             % naèin delovanja
@@ -40,42 +40,39 @@ load('PathPlanning/Nodes.mat');
 %% Init
 Tend = 120;      % Simulation lasts 50s
 Ts=0.033;       % sample time
-ttt=0:Ts:Tend;    % time vector
+t=0:Ts:Tend;    % time vector
 % U=[];Tvzorcenja=[] ;Z=[];
 
 qqqTrue = [];
 qqq = [];
 qP = [];
+vvv = [];
+www = [];
+ttt = [];
 
 hhh = 0;
 
 % DRAW_MORE = 1;
-StartMode = 2;
-if StartMode == 1
+StartModeRobot = 2;
+if StartModeRobot == 1
+    InitGrafic();
+end
+
+StartModeObst = 2;
+if StartModeObst == 1
     InitGrafic();
 end
 
 load('TrueWalls.mat')
 load('TrueObstaclesCenters.mat')
 
-TrueRobot = InitTrueRobot(2);
+TrueRobot = InitTrueRobot(StartModeRobot);
 TrueWalls = InitTrueWalls();
-TrueObstacleCenters = InitTrueObstacleCenters(StartMode);
+TrueObstacleCenters = InitTrueObstacleCenters(StartModeObst);
 TrueObstacles = ComputeObstacles(TrueObstacleCenters, 50);
 TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters);
 
 InitGrafic();
-
-% TrueRobot = InitTrueRobot([190 530 3*pi/7]');
-% idx0 = 80;
-% x0 = Nodes(idx0).x + randi([-5 5]);
-% y0 = Nodes(idx0).y + randi([-5 5]);
-% fi0 = Nodes(idx0).fi + randi([-5 5])*pi/180;
-
-% TrueRobot = InitTrueRobot([163 820 pi/2]');
-
-% TrueRobot = InitTrueRobot([293 820 pi/4]');
-%Robot = InitEV3([343 680 pi/2]');
 
 % StoreData();
 % UpdateGrafic();
@@ -85,7 +82,7 @@ InitGrafic();
 time_debug_stop = 15;
 
 tic;
-for i=1:length(ttt)
+for i=1:length(t)
     
     if (i*Ts > time_debug_stop)
         time_debug_stop = time_debug_stop + 1;
@@ -98,6 +95,7 @@ for i=1:length(ttt)
     SimulateTrueRobot(v,w);
     
     StoreData();
+    ttt = [ttt Ts*i];
     UpdateGrafic();
     
 %      pause(0.03);
@@ -106,14 +104,22 @@ for i=1:length(ttt)
 %     end   
 end
 duration = toc;
-fprintf('Simulated %i sec, simulation finished in %i sec. /n', Tend, int32(duration));
+fprintf('Simulated %i sec, simulation finished in %i sec. \n', Tend, int32(duration));
 
-% figure
-% plot(qqTrue(:,1),qqTrue(:,2),qq(:,1),qq(:,2),'--')
-% xlabel('x [m]'),ylabel('y [m]')
-% figure
-% plot(Tvzorcenja,U(:,1),Tvzorcenja,U(:,2),'--')
-% xlabel('t [s]'),ylabel('v [m/s], \omega [rad/s]'),legend('v','\omega'),
+%% Draw robot path
+figure
+plot(qqqTrue(1,:),qqqTrue(2,:),qqq(1,:),qqq(2,:),'--')
+xlabel('x [mm]'),ylabel('y [mm]')
+
+%% Draw speed and angular speed
+figure
+subplot(2,1,1)
+plot(ttt,vvv,'-');
+xlabel('t [s]'),ylabel('v [mm/s]');
+subplot(2,1,2)
+plot(ttt,www,'-');
+xlabel('t [s]'),ylabel('omega [rad/s]');
+
 % figure
 % plot(Tvzorcenja,Z(:,1),Tvzorcenja,Z(:,2),Tvzorcenja,Z(:,3),'--')
 % xlabel('t [s]'),ylabel('d [m/s]'),legend('d1','d2','d3'),
@@ -126,7 +132,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function StoreData
 global TrueRobot Robot
-global qqqTrue qqq qP
+global qqqTrue qqq qP vvv www
 
 qqqTrue = [qqqTrue TrueRobot.q];
 if (~isempty(Robot))
@@ -136,6 +142,11 @@ if (~isempty(Robot))
     if (~isempty(Robot.PF.xParticles))
         qP = Robot.PF.xParticles;
     end
+    
+    vvv = [vvv Robot.MC.v];
+    www = [www Robot.MC.w];
+    
+    
 end
 
 end
@@ -144,7 +155,7 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function UpdateGrafic()
 global TrueRobot Robot BarvnaLestvicaRGB
-global qqqTrue qqq qP hhh 
+global qqqTrue qqq qP hhh hhL hhR
 DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
 if (~isempty(Robot))
     DrawRobot([Robot.PF.x Robot.PF.y Robot.PF.fi]',2);            % drugi parameter: robot=1, odometrija=2
@@ -162,6 +173,34 @@ if (~isempty(Robot))
     set(hhh(12),'XData',x,'YData',y,'UData',u,'VData',v);   % naèrtovane poti
     set(hhh(13),'XData',Robot.PP.xRef,'YData',Robot.PP.yRef);   % naèrtovane poti
     
+    
+    for i = -3:1:3
+        for j = -3:1:3
+            idx = Robot.SenRGB.Left.ColorArray(4-j,4-i);
+            if (idx > 0)
+                set(hhL(4-j,4-i),'FaceColor',BarvnaLestvicaRGB(idx,:)/255);
+            else
+                set(hhL(4-j,4-i),'FaceColor','m');
+            end
+        end
+    end
+    
+    for i = 1:7
+        for j = 1:7
+            idx = Robot.SenRGB.Right.ColorArray(j,i);
+            if (idx > 0)
+                set(hhR(j,i),'FaceColor',BarvnaLestvicaRGB(idx,:)/255);
+            else
+                set(hhR(j,i),'FaceColor','m');
+            end
+        end
+    end
+
+    if (Robot.SenRGB.Right.Valid)
+        a = 5;
+    else
+        a = 0;
+    end
     
 end
 
@@ -192,8 +231,42 @@ end
 function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaRGB_pastel
 global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut
-global hhh
+global hhh hhL hhR
 global user
+
+figure(9); clf;
+screensize = get( groot, 'Screensize' );
+W_screen = screensize(3);
+H_screen = screensize(4);
+W = W_screen/2;
+H = 0.4 * W;
+set(9, 'Position', [0 H_screen-H-100 W H]); %% matej
+% set(9, 'Position', [W 0 W H]); %% matej
+
+
+subplot(1,2,1);
+title('Left RGB sensor ColorArray ')
+hold on;
+hhL = zeros(7,7);
+for i = -3:1:3
+    for j = -3:1:3
+        hhL(4-j,4-i) = rectangle('Position',[i-0.5,j-0.5,1,1]);
+    end
+end
+axis equal;
+
+subplot(1,2,2);
+title('Right RGB sensor ColorArray ')
+hold on;
+hhR = zeros(7,7);
+for i = -3:1:3
+    for j = -3:1:3
+        hhR(4-j,4-i) = rectangle('Position',[i-0.5,j-0.5,1,1]);
+    end
+end
+axis equal;
+
+
 figure(10); clf; 
 FigureSettings(10,user);
 hold on;
@@ -245,6 +318,8 @@ legend('TrueRobot','EV3','path True','path EV3','particles')
 
 hold off;
 zoom on;
+
+
 
 end
 

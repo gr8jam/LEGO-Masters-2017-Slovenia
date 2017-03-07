@@ -1,6 +1,5 @@
 function SimulateEV3(i)
-global Robot 
-global v w
+global Robot
 
 
 persistent first
