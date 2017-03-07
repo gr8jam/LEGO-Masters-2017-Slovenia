@@ -1,9 +1,15 @@
 function [v,w] = LineTracking()
 
-global PF MC OdoRobot SenRGB
+global PF MC OdoRobot SenRGB Robot
 DriverRGB();
 Lokal = 0;
 
+Maxw = 0.8;
+KP = 0.3;
+KD = 0.15;
+KI = 0.15;
+MC.LF.offse = 24;
+MC.LF.SENVAL = sum(sum(Robot.SenRGB.Left.ColorArray(:,:)-1));
 
 L = SenRGB.Left.idx;
 D = SenRGB.Right.idx;
@@ -12,22 +18,47 @@ k = 0.75;
 
 crna = 1;
 bela = 2;
-
 if MC.LF.SwitchLeft == 0 && MC.LF.SwitchRight == 0
-    if L ~= crna && D ~= crna
-        MC.LF.ww = 0; 
-        MC.LF.vv = 100;
-    elseif L == crna && D ~= crna
-        MC.LF.ww = k;
-        MC.LF.vv = 80;
-    elseif L ~= crna && D == crna 
-        MC.LF.ww = -k;
-        MC.LF.vv = 80;
-    else 
-        MC.LF.vv = 40;
-        MC.LF.ww = 0;
+    MC.LF.err = MC.LF.SENVAL - MC.LF.offse;
+    MC.LF.integ = MC.LF.integ + MC.LF.err * KI;
+    MC.LF.deriv = MC.LF.err - MC.LF.olderr;
+
+    if (MC.LF.integ < -Maxw) 
+        MC.LF.integ = -Maxw; 
     end
+    if (MC.LF.integ > Maxw)  
+        MC.LF.integ =  Maxw; 
+    end
+
+    MC.LF.Turn = KP * MC.LF.err + MC.LF.integ + MC.LF.deriv * KD;
+
+    if (MC.LF.Turn < -Maxw) 
+        MC.LF.Turn = -Maxw; 
+    end
+    if (MC.LF.Turn > Maxw)  
+        MC.LF.Turn =  Maxw; 
+    end
+    MC.LF.olderr = MC.LF.err;
+    
+    MC.LF.ww = -MC.LF.Turn; 
+    MC.LF.vv = 160;
 end
+
+% if MC.LF.SwitchLeft == 0 && MC.LF.SwitchRight == 0
+%     if L ~= crna && D ~= crna
+%         MC.LF.ww = 0; 
+%         MC.LF.vv = 100;
+%     elseif L == crna && D ~= crna
+%         MC.LF.ww = k;
+%         MC.LF.vv = 80;
+%     elseif L ~= crna && D == crna 
+%         MC.LF.ww = -k;
+%         MC.LF.vv = 80;
+%     else 
+%         MC.LF.vv = 40;
+%         MC.LF.ww = 0;
+%     end
+% end
 %% ovira pred lokalizacijo
 % if Robot.dist < 270 && MC.LF.Localisation == 0 && MC.LF.Odo == 0
 %     MC.LF.Odo = 1;

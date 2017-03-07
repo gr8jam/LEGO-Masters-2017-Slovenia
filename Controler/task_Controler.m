@@ -32,7 +32,7 @@ else
     error('Robot STOP. \n');
     MC.ControlerState = 'Stop';
 end
-
+MC.ControlerState = 'LineTracking';
 switch MC.ControlerState
     case 'LineTracking'
         [T,v,w] = evalc('LineTracking();');
