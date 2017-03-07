@@ -1,9 +1,8 @@
 function ParticleFilter()
 
 global Ts 
-global PF 
+global PF MC
 global SenRGB
-global v w
 
 persistent WCET
 if isempty(WCET)
@@ -21,10 +20,12 @@ R=diag([0.1^2])*1;        % variance of distance sensor noise
 % c = cos(PF.xP(3,p));
 % s = sin(PF.xP(3,p));
 for p = 1:PF.nParticles
-    un = [v w]' + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
-    PF.xParticles(:,p) = PF.xParticles(:,p) + Ts*[ un(1)*cos(PF.xParticles(3,p)); ...
-                                               un(1)*sin(PF.xParticles(3,p)); ...
-                                               un(2) ] ;
+    v = MC.v + 5 * randn(1,1);
+    w = MC.w + 0.5 * randn(1,1);
+%     un = [v w]' + sqrt(Q)*randn(2,1)*1 ; % delce premaknemo s šumom modela
+    PF.xParticles(1,p) = PF.xParticles(1,p) + Ts * v *cos(PF.xParticles(3,p));
+    PF.xParticles(2,p) = PF.xParticles(2,p) + Ts * v *sin(PF.xParticles(3,p));
+    PF.xParticles(3,p) = PF.xParticles(3,p) + Ts * w;
     PF.xParticles(3,p) = wrapToPi(PF.xParticles(3,p));
 end
 

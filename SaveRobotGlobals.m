@@ -6,7 +6,7 @@ global ObstaclesCenters Obstacles ObstaclesKeepOut
 global DistanceKeepOut_Obstacles
 global NodeConnectionDistanceMax NodeConnectionAngleLimit
 global Nodes Path Goal
-global PF PP
+global PF PP MC
 % global Motion
 global SenRGB SenDist SenGyro
 global v w
@@ -24,6 +24,7 @@ Robot.Path = Path;
 Robot.Goal = Goal;
 Robot.PF = PF;
 Robot.PP = PP;
+Robot.MC = MC;
 % Robot.Motion = Motion;
 Robot.SenRGB = SenRGB;
 Robot.SenDist = SenDist;

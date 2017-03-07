@@ -60,7 +60,6 @@ end
 load('TrueWalls.mat')
 load('TrueObstaclesCenters.mat')
 
-
 TrueRobot = InitTrueRobot(2);
 TrueWalls = InitTrueWalls();
 TrueObstacleCenters = InitTrueObstacleCenters(StartMode);
@@ -68,8 +67,6 @@ TrueObstacles = ComputeObstacles(TrueObstacleCenters, 50);
 TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters);
 
 InitGrafic();
-
-
 
 % TrueRobot = InitTrueRobot([190 530 3*pi/7]');
 % idx0 = 80;
@@ -81,7 +78,6 @@ InitGrafic();
 
 % TrueRobot = InitTrueRobot([293 820 pi/4]');
 %Robot = InitEV3([343 680 pi/2]');
-
 
 % StoreData();
 % UpdateGrafic();
@@ -99,8 +95,8 @@ for i=1:length(ttt)
     
     SimulateEV3(i);
     
-    v = Robot.v;
-    w = Robot.w;
+    v = Robot.MC.v;
+    w = Robot.MC.w;
     SimulateTrueRobot(v,w);
     
     StoreData();
