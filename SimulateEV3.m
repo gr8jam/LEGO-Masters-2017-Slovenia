@@ -46,10 +46,12 @@ else
     DriverGyro();
     DriverDist();
     
-    task_Localization();
-    task_EnviromentDetection(i);
+    task_Localization2();
+%     task_Localization();
+%     task_EnviromentDetection(i);
     task_PathPlanning();
     task_Controler();
+    
     
     DriverMotors();
     

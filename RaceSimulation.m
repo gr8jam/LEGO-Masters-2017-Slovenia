@@ -11,6 +11,8 @@ addpath('PolygonMap');
 addpath('Enviroment');
 addpath('TrueWorld');
 addpath('Plotting');
+addpath('Pipe');
+addpath('Stack');
 
 global Ts 
 global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut 
@@ -37,8 +39,10 @@ stanjeend = zeros(1);
 load('PolygonMap/PolygonColorData.mat')
 load('PathPlanning/Nodes.mat');
 
+Robot.Nodes = Nodes;
+
 %% Init
-Tend = 120;      % Simulation lasts 50s
+Tend = 60;      % Simulation lasts 50s
 Ts=0.033;       % sample time
 t=0:Ts:Tend;    % time vector
 % U=[];Tvzorcenja=[] ;Z=[];
@@ -79,13 +83,13 @@ InitGrafic();
 
 %% Simulation
 
-time_debug_stop = 15;
+time_debug_stop = 3;
 
 tic;
 for i=1:length(t)
     
     if (i*Ts > time_debug_stop)
-        time_debug_stop = time_debug_stop + 1;
+        time_debug_stop = time_debug_stop + 2;
     end
     
     SimulateEV3(i);
@@ -136,8 +140,8 @@ global qqqTrue qqq qP vvv www
 
 qqqTrue = [qqqTrue TrueRobot.q];
 if (~isempty(Robot))
-    q = [Robot.PF.x Robot.PF.y Robot.PF.fi]'; % X Robot.Y Robot.Fi]';
-    qqq = [qqq q];
+%     q = [Robot.PF.x Robot.PF.y Robot.PF.fi]'; % X Robot.Y Robot.Fi]';
+%     qqq = [qqq q];
     
     if (~isempty(Robot.PF.xParticles))
         qP = Robot.PF.xParticles;
@@ -146,6 +150,14 @@ if (~isempty(Robot))
     vvv = [vvv Robot.MC.v];
     www = [www Robot.MC.w];
     
+    if (Robot.SF.bestMtcIdx ~= 0)
+        idx = Robot.SF.bestMtcIdx;
+        x = Robot.Nodes(idx).x;
+        y = Robot.Nodes(idx).y;
+        fi = Robot.Nodes(idx).fi;
+        q = [x y fi]'; % X Robot.Y Robot.Fi]';
+        qqq = [qqq q]; 
+    end
     
 end
 
@@ -155,13 +167,13 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function UpdateGrafic()
 global TrueRobot Robot BarvnaLestvicaRGB
-global qqqTrue qqq qP hhh hhL hhR
+global qqqTrue qqq qP hhh hhL hhR hhS hhN hhB
 DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
 if (~isempty(Robot))
     DrawRobot([Robot.PF.x Robot.PF.y Robot.PF.fi]',2);            % drugi parameter: robot=1, odometrija=2
 
     set(hhh(3),'XData',qqqTrue(1,:),'YData',qqqTrue(2,:));      % izris prave poti
-    set(hhh(4),'XData',qqq(1,:),'YData',qqq(2,:));              % izris ocenjene poti
+%     set(hhh(4),'XData',qqq(1,:),'YData',qqq(2,:));              % izris ocenjene poti
     set(hhh(5),'XData',qP(1,:),'YData',qP(2,:));                % izris delcev
     set(hhh(8),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Left.idx,:)/255);
     set(hhh(9),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Right.idx,:)/255);
@@ -195,11 +207,26 @@ if (~isempty(Robot))
             end
         end
     end
-
-    if (Robot.SenRGB.Right.Valid)
-        a = 5;
-    else
-        a = 0;
+    
+    for i = 1:length(hhS)
+        idx = Robot.SF.StackLastColors.buffer(i);
+        if (idx > 0)
+            set(hhS(i),'FaceColor',BarvnaLestvicaRGB(idx,:)/255);
+        else
+            set(hhS(i),'FaceColor','m');
+        end
+    end
+   
+    for i = 1:96
+        set(hhN(i),'MarkerSize', 5*Robot.Nodes(i).mtcColor + 1);
+    end
+    
+    
+    if (~isempty(qqq))
+        idx = Robot.SF.bestMtcIdx;
+        if (idx > 0)
+            set(hhB,'XData',qqq(1,end),'YData',qqq(2,end),'MarkerSize', 10*Robot.Nodes(idx).mtcColor + 1);
+        end
     end
     
 end
@@ -230,9 +257,9 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function InitGrafic()
 global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaRGB_pastel
-global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut
-global hhh hhL hhR
-global user
+global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut 
+global hhh hhL hhR hhS hhN hhB
+global user Robot
 
 figure(9); clf;
 screensize = get( groot, 'Screensize' );
@@ -244,7 +271,7 @@ set(9, 'Position', [0 H_screen-H-100 W H]); %% matej
 % set(9, 'Position', [W 0 W H]); %% matej
 
 
-subplot(1,2,1);
+subplot(2,2,1);
 title('Left RGB sensor ColorArray ')
 hold on;
 hhL = zeros(7,7);
@@ -255,7 +282,7 @@ for i = -3:1:3
 end
 axis equal;
 
-subplot(1,2,2);
+subplot(2,2,2);
 title('Right RGB sensor ColorArray ')
 hold on;
 hhR = zeros(7,7);
@@ -265,6 +292,19 @@ for i = -3:1:3
     end
 end
 axis equal;
+
+subplot(2,2,4);
+title('StackLastColors ')
+hold on;
+hhS = zeros(5,1);
+for i = 1:length(hhS)
+    hhS(i) = rectangle('Position',[0,-i,1,1]);
+end
+axis([0 1 -5 0])
+
+
+
+
 
 
 figure(10); clf; 
@@ -311,6 +351,13 @@ DrawKeepOut(10, TrueKeepOut, 'r--');
 
 hhh(12)= quiver(0,0,0,0,'b','LineWidth',2,'AutoScale', 'Off'); % optimal path
 hhh(13)= plot(0,0,'r.','MarkerSize',20,'erasemode','xor');  % goal node
+
+hhN = zeros(96,1);
+for i = 1:96
+    hhN(i) = plot(Robot.Nodes(i).x, Robot.Nodes(i).y, 'ko', 'LineWidth', 3, 'MarkerSize', 1, 'erasemode','xor');
+end
+
+hhB = plot(0,0, 'm.', 'MarkerSize', 15, 'erasemode','xor');
 
 
 %hhh(6)=plot(0,0,'r','erasemode','xor')
