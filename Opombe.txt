@@ -33,3 +33,13 @@ SimulateEV3
 
 
 
+
+
+### 3.1.2017
+
+Lokalizacja z 1D
+
+
+
+
+

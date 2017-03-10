@@ -1,7 +1,7 @@
 close all;
 clear all;
 
-global Nodes WallsKeepOut ObstaclesKeepOut
+global Nodes WallsKeepOut ObstaclesKeepOut DistanceKeepOut_Obstacles
 
 cd(fileparts(mfilename('fullpath')))
 
@@ -15,6 +15,7 @@ Nodes = [];
 PolygonMapColors = [];
 Walls = [];
 WallsKeepOut = [];
+DistanceKeepOut_Obstacles = 50+70;
 
 load('Nodes');
 load('PolygonColorData.mat');
@@ -22,7 +23,7 @@ load('Walls');
 load('WallsKeepOut');
 
 TrueObstacleCenters = InitTrueObstacleCenters(2);
-ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters, 140);
+ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters);
 
 
 fig = figure;
@@ -52,11 +53,12 @@ DrawKeepOut(fig, ObstaclesKeepOut, 'r--');
 % pause(0);
 
 %% Show all nodes as red dots
-DrawNodesPositions(fig, Nodes, 0);
-pause(0);
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawNodesPositions(fig, Nodes,ColorMap, 0);
+
 
 %% Recompute the nodes connections
-RecomputeNodeConnections(fig,0,0,0);
+RecomputeNodeConnectionsBayesFilter(fig,true,0,0,true);
 
 %% Draw Nodes connections
 DrawNodesConnections(fig,Nodes);

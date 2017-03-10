@@ -38,7 +38,7 @@ DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 % DrawKeepOut(fig, WallsKeepOut, 'r--');
 % DrawKeepOut(fig, ObstaclesKeepOut, 'r--');
 
-%% Show all nodes as red dots
+%% Draw Nodes
 ColorMap = BarvnaLestvicaRGB/255;
 DrawNodesPositions(fig, Nodes, ColorMap, 0);
 

@@ -1,19 +1,40 @@
 close all;
 clear all;
 
-global Nodes
+cd(fileparts(mfilename('fullpath')))
+
+addpath('..\PolygonMap')
+addpath('..\Sensors')
+addpath('..\Enviroment')
+addpath('..\TrueWorld')
+addpath('..\Plotting')
+
 Nodes = [];
-% d_max_tr_1 = 290;
-% d_max_tr_2 = 330;
-% d_max_tr_3 = 380;
+PolygonMapColors = [];
+Walls = [];
+WallsKeepOut = [];
 
 load('Nodes');
+load('PolygonColorData.mat');
+load('Walls');
+load('WallsKeepOut');
+
+d_max_tr_1 = 290;
+d_max_tr_2 = 330;
+d_max_tr_3 = 380;
 
 fig = figure;
-set(fig, 'Position', [1600 -150 25*60 18*60]); %% matej
+FigureSettings(fig,'matej');
 hold on;
 
-DrawNodesPositions(fig,0);
+
+%% Draw Polygon
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
+
+%% Draw Nodes
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawNodesPositions(fig,Nodes,ColorMap,0);
 
 %% Init plot handels
 hj = plot(1250,900,'b.','MarkerSize',20,'erasemode','xor');
@@ -106,11 +127,13 @@ for i = 1:length(Nodes)
     end
     [Nodes(i).ConnWeight, sortIdx] = sort(Nodes(i).ConnWeight);
     Nodes(i).ConnIndex = Nodes(i).ConnIndex(sortIdx);
+    
+    pause(0.1);
 
 end
 
 %%
-save('Nodes','Nodes','d_max_tr_1','d_max_tr_2','d_max_tr_3');
+% save('Nodes','Nodes','d_max_tr_1','d_max_tr_2','d_max_tr_3');
 
 clear all
 load('Nodes')
