@@ -52,7 +52,7 @@ switch f
     
 end
 
-noise = 25;
+noise = 5;
 TrueRobot.q(1) = Nodes(StartIdx).x + randi([-noise noise]);
 TrueRobot.q(2) = Nodes(StartIdx).y + randi([-noise noise]);
 TrueRobot.q(3) = Nodes(StartIdx).fi + randi([-noise noise]./5)*pi/180;

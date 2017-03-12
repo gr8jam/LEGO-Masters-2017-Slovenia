@@ -30,7 +30,11 @@ if ((PP.xRef - PF.x)^2 + (PP.yRef - PF.y)^2 < d_min^2)
     DEBUG = false;
     if (DEBUG) fprintf('path_idx = %d\n', PP.Path(PP.cntPath)); end;
     
-    if (PP.cntPath >= PP.lenPath/2)
+%     if (PP.cntPath >= PP.lenPath/2)
+%         PP.Flag_RecalculatePath = true;
+%     end
+    
+    if (PP.cntPath >= PP.lenPath-1)
         PP.Flag_RecalculatePath = true;
     end
     

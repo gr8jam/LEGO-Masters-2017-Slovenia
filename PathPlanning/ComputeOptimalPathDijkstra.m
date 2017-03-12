@@ -12,5 +12,9 @@ while (NextIdx ~= StartIdx)
     NextIdx = Nodes(NextIdx).path;
 end
 
+%% Only for viewing
+% PP.lenPath = PP.lenPath + 1;
+% PP.Path(PP.lenPath) = StartIdx;
+
 end
 

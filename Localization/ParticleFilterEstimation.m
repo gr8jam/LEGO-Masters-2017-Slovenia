@@ -51,7 +51,7 @@ else
     end
 end
 
-if validCnt > 2/Ts
+if validCnt > 1/Ts
     if  strcmp(PF.Estimate,'Searching')
         DEBUG = true;
         PF.Estimate = 'Working';

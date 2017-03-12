@@ -47,10 +47,10 @@ for p = 1:PF.nParticles
     while not_done
         cnt = cnt +1;
         idxNode = randi(96);
-        
-        if (idxNode == 91)
-            idxNode = 41;
-        end
+%         idxNode = 54;
+%         if (idxNode == 91)
+%             idxNode = 41;
+%         end
         
         noise = 25;
         PF.xParticles(1,p) = Nodes(idxNode).x + randi([-noise noise]);

@@ -1,4 +1,4 @@
-function RaceSimulation
+function [qqqTrue_out qqq_out] = RaceSimulation
 close all, clear all 
 
 cd(fileparts(mfilename('fullpath')))
@@ -30,7 +30,7 @@ BarvnaLestvicaRGB_pastel = [];
 
 global TrueRobot Robot
 global hhh
-global qqqTrue qqq qP vvv www ttt
+global qqqTrue qqqPF qqqSF xxxPF vvv www ttt
 
 global stanje stanjeend        % naèin delovanja
 stanje = zeros(1);             % naèin delovanja
@@ -42,7 +42,7 @@ load('PathPlanning/Nodes.mat');
 Robot.Nodes = Nodes;
 
 %% Init
-Tend = 60;      % Simulation lasts 50s
+Tend = 15; % 53.85;      % Simulation end time
 Ts=0.033;       % sample time
 t=0:Ts:Tend;    % time vector
 % U=[];Tvzorcenja=[] ;Z=[];
@@ -57,7 +57,7 @@ ttt = [];
 hhh = 0;
 
 % DRAW_MORE = 1;
-StartModeRobot = 4;
+StartModeRobot = 2;
 if StartModeRobot == 1
     InitGrafic();
 end
@@ -83,13 +83,15 @@ InitGrafic();
 
 %% Simulation
 
-time_debug_stop = 3;
+time_debug_stop = 44;
 
 tic;
 for i=1:length(t)
     
     if (i*Ts > time_debug_stop)
-        time_debug_stop = time_debug_stop + 2;
+        time_debug_stop = time_debug_stop + 4;
+%         UpdateGrafic();
+%         i*Ts
     end
     
     SimulateEV3(i);
@@ -112,8 +114,12 @@ fprintf('Simulated %i sec, simulation finished in %i sec. \n', Tend, int32(durat
 
 %% Draw robot path
 figure
-plot(qqqTrue(1,:),qqqTrue(2,:),qqq(1,:),qqq(2,:),'--')
+hold on;
+plot(qqqTrue(1,:),qqqTrue(2,:),'b');
+plot(qqqPF(1,:),qqqPF(2,:),'g--');
+plot(qqqSF(1,:),qqqSF(2,:),'r.')
 xlabel('x [mm]'),ylabel('y [mm]')
+hold off;
 
 %% Draw speed and angular speed
 figure
@@ -124,6 +130,8 @@ subplot(2,1,2)
 plot(ttt,www,'-');
 xlabel('t [s]'),ylabel('omega [rad/s]');
 
+qqqTrue_out = qqqTrue;
+qqq_out = qqq;
 % figure
 % plot(Tvzorcenja,Z(:,1),Tvzorcenja,Z(:,2),Tvzorcenja,Z(:,3),'--')
 % xlabel('t [s]'),ylabel('d [m/s]'),legend('d1','d2','d3'),
@@ -136,15 +144,15 @@ end
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function StoreData
 global TrueRobot Robot
-global qqqTrue qqq qP vvv www
+global qqqTrue qqqPF qqqSF xxxPF vvv www
 
 qqqTrue = [qqqTrue TrueRobot.q];
 if (~isempty(Robot))
-%     q = [Robot.PF.x Robot.PF.y Robot.PF.fi]'; % X Robot.Y Robot.Fi]';
-%     qqq = [qqq q];
+    q = [Robot.PF.x Robot.PF.y Robot.PF.fi]'; % X Robot.Y Robot.Fi]';
+    qqqPF = [qqqPF q];
     
     if (~isempty(Robot.PF.xParticles))
-        qP = Robot.PF.xParticles;
+        xxxPF = Robot.PF.xParticles;
     end
     
     vvv = [vvv Robot.MC.v];
@@ -156,7 +164,7 @@ if (~isempty(Robot))
         y = Robot.Nodes(idx).y;
         fi = Robot.Nodes(idx).fi;
         q = [x y fi]'; % X Robot.Y Robot.Fi]';
-        qqq = [qqq q]; 
+        qqqSF = [qqqSF q]; 
     end
     
 end
@@ -174,7 +182,7 @@ if (~isempty(Robot))
 
     set(hhh(3),'XData',qqqTrue(1,:),'YData',qqqTrue(2,:));      % izris prave poti
 %     set(hhh(4),'XData',qqq(1,:),'YData',qqq(2,:));              % izris ocenjene poti
-    set(hhh(5),'XData',qP(1,:),'YData',qP(2,:));                % izris delcev
+%     set(hhh(5),'XData',qP(1,:),'YData',qP(2,:));                % izris delcev
     set(hhh(8),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Left.idx,:)/255);
     set(hhh(9),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Right.idx,:)/255);
     set(hhh(10),'XData',Robot.SenRGB.Left.x,'YData',Robot.SenRGB.Left.y);   % izris pozicije LEVEGA rgb senzorja

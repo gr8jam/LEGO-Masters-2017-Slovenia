@@ -16,7 +16,7 @@ end
 ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters);
 
 if (Ts*i > time) && (cnt < 4)
-    time = time + 3;
+    time = time + 1;
     cnt = cnt + 1;
     
     x = TrueObstacleCenters(cnt,1);

@@ -223,6 +223,7 @@ for i = 1:length(Nodes)
                                                     WallsKeepOut,ObstaclesKeepOut);
                     else
                         d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],WallsKeepOut,[]);
+                        d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],WallsKeepOut,ObstaclesKeepOut);
                     end
                 
                     if (d_to_node < d_to_obst) 

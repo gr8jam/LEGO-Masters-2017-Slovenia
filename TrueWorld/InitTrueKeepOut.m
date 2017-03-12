@@ -1,6 +1,6 @@
 function TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters)
 
-d = 55;
+d = 50;
 
 %% Walls
 TrueKeepOut = TrueWalls(1:4,:) +[+d +d -d +d;
@@ -60,7 +60,7 @@ TrueKeepOut = [TrueKeepOut;
 
 %% Obstacles
 for i = 1:size(TrueObstacleCenters,1)
-    OctagonLines = GetOctagonLines(TrueObstacleCenters(i,1), TrueObstacleCenters(i,2), d + 50);
+    OctagonLines = GetOctagonLines(TrueObstacleCenters(i,1), TrueObstacleCenters(i,2), d + 90);
     TrueKeepOut = [TrueKeepOut;
                     OctagonLines];
 end
