@@ -1,5 +1,6 @@
-function [qqqTrue_out qqqPF_out] = RaceSimulation
-close all, clear all 
+function [qqqTrue_out, qqqPF_out] = RaceSimulation()
+close all;
+clear all; 
 
 cd(fileparts(mfilename('fullpath')))
 
@@ -15,32 +16,49 @@ addpath('Pipe');
 addpath('Stack');
 
 
+%% Changed user for prefered figure settings
+global user
+user = 'matej';
+% user = 'peter';
+
+%% Simulation time, Sampling rate
 global Ts 
-global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut 
-global TrueRobot Robot
+Ts=0.033;               % sampling time
+Tend = 15; % 53.85;      % Simulation end time
+t=0:Ts:Tend;            % time vector
+
+%% Global storage of different data
+global qqqTrue qqqPF qqqSF xxxPF vvv www ttt
+qqqTrue = -1 * ones(3,length(t));   % Robot real states
+qqqPF = -1 * ones(3,length(t));     % Robot estimated states (Particel Filter)
+xxxPF = [];                         % Particle Filter particles states at certain moment
+qqqSF = -1 * ones(3,length(t));     % Robot estimated state (Simple Filter)
+vvv = -1 * ones(1,length(t));       % Robot translator speed
+www = -1 * ones(1,length(t));       % Robot angular speed
+ttt = -1 * ones(1,length(t));       % Time vector
+
+%% Real enviroment data
+global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut
+StartModeObst = 2;
+if StartModeObst == 1
+    InitGrafic();
+end
+TrueObstacleCenters = InitTrueObstacleCenters(StartModeObst);
+TrueObstacles = ComputeObstacles(TrueObstacleCenters, 50);
+TrueWalls = InitTrueWalls();
+TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters);
 
 %% Plot handels
 global hFigMap hFigRGB
 hFigMap = [];
 hFigRGB = [];
 
-%% Global storage of different data
-global qqqTrue qqqPF qqqSF xxxPF vvv www ttt
-qqqTrue = [];   % Robot real states
-qqqPF = [];     % Robot estimated states (Particel Filter)
-xxxPF = [];     % Robot particles at certain moment
-vvv = [];       % Robot translator speed
-www = [];       % Robot angular speed
-ttt = [];       % Time vector
-
-global user
-user = 'matej';
-% user = 'peter';
-
+%% Global data for line follower
 % global stanje stanjeend        % naèin delovanja
 % stanje = zeros(1);             % naèin delovanja
 % stanjeend = zeros(1);
 
+%% Polygon Map data
 global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaHSV BarvnaLestvicaRGB_pastel 
 PolygonMapColors  = [];
 BarvnaLestvicaRGB = [];
@@ -48,50 +66,24 @@ BarvnaLestvicaHSV = [];
 BarvnaLestvicaRGB_pastel = [];
 load('PolygonMap/PolygonColorData.mat')
 
+%% Nodes data
 global Nodes
 Nodes = [];
 load('PathPlanning/Nodes.mat');
 
-
-
-%% Init
-Tend = 15; % 53.85;      % Simulation end time
-Ts=0.033;       % sample time
-t=0:Ts:Tend;    % time vector
-% U=[];Tvzorcenja=[] ;Z=[];
-
-
-
-
-% DRAW_MORE = 1;
-StartModeRobot = 4;
-if StartModeRobot == 1
+%% Variables describing real robot and simulated robot
+global TrueRobot Robot
+StartModeTrueRobot = 4;
+if StartModeTrueRobot == 1
     InitGrafic();
 end
+TrueRobot = InitTrueRobot(StartModeTrueRobot);
 
-StartModeObst = 2;
-if StartModeObst == 1
-    InitGrafic();
-end
-
-load('TrueWalls.mat')
-load('TrueObstaclesCenters.mat')
-
-TrueRobot = InitTrueRobot(StartModeRobot);
-TrueWalls = InitTrueWalls();
-TrueObstacleCenters = InitTrueObstacleCenters(StartModeObst);
-TrueObstacles = ComputeObstacles(TrueObstacleCenters, 50);
-TrueKeepOut = InitTrueKeepOut(TrueWalls, TrueObstacleCenters);
-
-InitGrafic();
-
-% StoreData();
-% UpdateGrafic();
 
 %% Simulation
+InitGrafic();
 
 time_debug_stop = 7;
-
 tic;
 for i=1:length(t)
     
@@ -107,9 +99,8 @@ for i=1:length(t)
     w = Robot.MC.w;
     SimulateTrueRobot(v,w);
     
-    StoreData();
-    ttt = [ttt Ts*i];
-    UpdateGrafic();
+    StoreData(i);
+    UpdateGrafic(i);
     
 %      pause(0.03);
 %     if (ttt(i) > 30)
@@ -137,12 +128,10 @@ subplot(2,1,2)
 plot(ttt,www,'-');
 xlabel('t [s]'),ylabel('omega [rad/s]');
 
-% qqqTrue_out = qqqTrue;
-% qqqPF_out = qqqPF;
+%% Race Simulation output
+qqqTrue_out = qqqTrue;
+qqqPF_out = qqqPF;
 
-% figure
-% plot(Tvzorcenja,Z(:,1),Tvzorcenja,Z(:,2),Tvzorcenja,Z(:,3),'--')
-% xlabel('t [s]'),ylabel('d [m/s]'),legend('d1','d2','d3'),
 end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -150,21 +139,22 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function StoreData
-global TrueRobot Robot
-global qqqTrue qqqPF qqqSF xxxPF vvv www
+function StoreData(i)
+global TrueRobot Robot Ts
+global qqqTrue qqqPF qqqSF xxxPF vvv www ttt
 
-qqqTrue = [qqqTrue TrueRobot.q];
+qqqTrue(:,i) = TrueRobot.q;
 if (~isempty(Robot))
     q = [Robot.PF.x Robot.PF.y Robot.PF.fi]'; % X Robot.Y Robot.Fi]';
-    qqqPF = [qqqPF q];
+    qqqPF(:,i) = q; % = [qqqPF q];
     
     if (~isempty(Robot.PF.xParticles))
         xxxPF = Robot.PF.xParticles;
     end
     
-    vvv = [vvv Robot.MC.v];
-    www = [www Robot.MC.w];
+    vvv(i) = Robot.MC.v;
+    www(i) = Robot.MC.w;
+    ttt(i) = Ts*i;
     
     if (Robot.SF.bestMtcIdx ~= 0)
         idx = Robot.SF.bestMtcIdx;
@@ -172,7 +162,7 @@ if (~isempty(Robot))
         y = Robot.Nodes(idx).y;
         fi = Robot.Nodes(idx).fi;
         q = [x y fi]'; % X Robot.Y Robot.Fi]';
-        qqqSF = [qqqSF q]; 
+        qqqSF(:,i) = q; 
     end
     
 end
@@ -181,7 +171,7 @@ end
 
 
 %% %%%%%%%%%%%%%%%%%%%%%%%%%%%
-function UpdateGrafic()
+function UpdateGrafic(i)
 
 persistent cnt
 if (isempty(cnt))
@@ -189,9 +179,9 @@ if (isempty(cnt))
 end
 
 cnt = cnt + 1;
-if (mod(cnt,3) == 0)
+if (mod(cnt,5) == 0)
     cnt = 0;
-    UpdateGrafic_FigPolygon();   
+    UpdateGrafic_FigMap(i);   
     UpdateGrafic_FigRGB();
     drawnow;
 end

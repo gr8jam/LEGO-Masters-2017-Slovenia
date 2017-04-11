@@ -1,6 +1,6 @@
-function UpdateGrafic_FigPolygon()
+function UpdateGrafic_FigMap(i)
 global TrueRobot Robot BarvnaLestvicaRGB
-global qqqTrue qqqPF xPF qqq hFigMap hhN hhB
+global qqqTrue qqqPF xxxPF qqq hFigMap hhN hhB
 
 persistent cnt
 if (isempty(cnt))
@@ -12,11 +12,11 @@ DrawRobot(TrueRobot.q,1);        % drugi parameter: robot=1, odometrija=2
 if (~isempty(Robot))
     DrawRobot([Robot.PF.x Robot.PF.y Robot.PF.fi]',2);            % drugi parameter: robot=1, odometrija=2
 
-    set(hFigMap(3),'XData',qqqTrue(1,:),'YData',qqqTrue(2,:));      % izris prave poti
-    set(hFigMap(4),'XData',qqqPF(1,:),'YData',qqqPF(2,:));          % izris ocenjene poti PF
-%     set(hFigMap(5),'XData',xPF(1,:),'YData',xPF(2,:));                % izris delcev
-    set(hFigMap(8),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Left.idx,:)/255);
-    set(hFigMap(9),'Color',  BarvnaLestvicaRGB(Robot.SenRGB.Right.idx,:)/255);
+    set(hFigMap(3),'XData',qqqTrue(1,1:i),'YData',qqqTrue(2,1:i));      % izris prave poti
+    set(hFigMap(4),'XData',  qqqPF(1,1:i),'YData',  qqqPF(2,1:i));      % izris ocenjene poti PF
+    set(hFigMap(5),'XData',xxxPF(1,:),'YData',xxxPF(2,:));                  % izris delcev
+    set(hFigMap(8),'Color',BarvnaLestvicaRGB(Robot.SenRGB.Left.idx,:)/255);
+    set(hFigMap(9),'Color',BarvnaLestvicaRGB(Robot.SenRGB.Right.idx,:)/255);
     set(hFigMap(10),'XData',Robot.SenRGB.Left.x,'YData',Robot.SenRGB.Left.y);   % izris pozicije LEVEGA rgb senzorja
     set(hFigMap(11),'XData',Robot.SenRGB.Right.x,'YData',Robot.SenRGB.Right.y);   % izris pozicije DESNEGA rgb senzorja
     
