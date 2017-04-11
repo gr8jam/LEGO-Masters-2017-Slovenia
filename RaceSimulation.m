@@ -5,6 +5,7 @@ clear all;
 cd(fileparts(mfilename('fullpath')))
 
 addpath('Localization');
+addpath('EV3');
 addpath('Controler');
 addpath('PathPlanning');
 addpath('Sensors');

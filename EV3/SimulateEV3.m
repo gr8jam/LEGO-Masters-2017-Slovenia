@@ -53,8 +53,6 @@ else
     task_Controler();
     
     
-    DriverMotors();
-    
 end
 
 SaveRobotGlobals();
