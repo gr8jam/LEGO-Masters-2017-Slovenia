@@ -72,7 +72,7 @@ load('PathPlanning/Nodes.mat');
 
 %% Variables describing real robot and simulated robot
 global TrueRobot Robot
-StartModeTrueRobot = 4;
+StartModeTrueRobot = 2;
 if StartModeTrueRobot == 1
     InitGrafic();
 end

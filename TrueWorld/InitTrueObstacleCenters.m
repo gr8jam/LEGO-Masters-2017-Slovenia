@@ -36,7 +36,7 @@ if f == 1
     TrueObstaclesCenters = [xx yy];
     save('TrueObstaclesCenters.mat', 'TrueObstaclesCenters') 
 elseif f == 2
-    load('TrueObstaclesCenters.mat');
+    load('TrueWorld/TrueObstaclesCenters.mat');
 end
 
 end
