@@ -1,5 +1,4 @@
-function UpdateGrafic()
-global TrueRobot Robot 
+function UpdateGrafic(i)
 
 persistent cnt
 if (isempty(cnt))
@@ -7,9 +6,9 @@ if (isempty(cnt))
 end
 
 cnt = cnt + 1;
-if (mod(cnt,3) == 0)
+if (mod(cnt,5) == 0)
     cnt = 0;
-    UpdateGrafic_FigPolygon();   
+    UpdateGrafic_FigMap(i);   
     UpdateGrafic_FigRGB();
     drawnow;
 end
