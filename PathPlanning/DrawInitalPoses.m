@@ -1,8 +1,11 @@
-function DrawInitalPoses(fig,delay)
+function DrawInitalPoses(fig)
 global Nodes
 if isempty(Nodes)
     error('variable Nodes is empty! \n ');
 end
+
+delay = 0;
+
 figure(fig)
 hold on;
 
@@ -11,11 +14,11 @@ for i = 1:length(Nodes)
     ys = Nodes(i).y;
     fi = Nodes(i).fi;
     
-    d  = 120;
+    d  = 100;
     xe = d*cos(fi) + xs;
     ye = d*sin(fi) + ys;
     
-    [x_arrow, y_arrow] =  ComputeArrowHead(xs,ys,xe,ye,pi/8,25);
+    [x_arrow, y_arrow] =  ComputeArrowHead(xs,ys,xe,ye,pi/6,30);
     
 %     fi_arrow = pi/8;
 %     d_arrow = 25;

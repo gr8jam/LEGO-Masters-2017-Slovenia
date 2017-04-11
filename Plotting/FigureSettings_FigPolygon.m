@@ -1,4 +1,4 @@
-function FigureSettings(fig,user)
+function FigureSettings_FigPolygon(fig,user)
 %% input parameter user has two options
 % 1 - for matej
 % 2 - for peter

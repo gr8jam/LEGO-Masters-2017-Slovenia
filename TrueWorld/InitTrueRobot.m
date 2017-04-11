@@ -45,7 +45,7 @@ switch f
 %         save('TrueWorld/TrueRobot.mat' ,'TrueRobot');
     
     case 4
-        StartIdx = 91;
+        StartIdx = 81;
 
     otherwise
         error('Parameter error! \n')

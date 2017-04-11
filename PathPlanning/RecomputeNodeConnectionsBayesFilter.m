@@ -1,8 +1,9 @@
-function RecomputeNodeConnectionsBayesFilter(fig, DRAW, x_ob,y_ob, all)
+function RecomputeNodeConnectionsBayesFilter(fig, DRAW, x_ob,y_ob, all, init)
 global Nodes WallsKeepOut ObstaclesKeepOut
 global DistanceKeepOut_Obstacles 
 global NodeConnectionDistanceMax
-global NodeConnectionAngleLimit
+
+TrackChangeFactor = 2;
 
 if (DRAW)
     %% Init plot handels
@@ -37,12 +38,12 @@ for i = 1:length(Nodes)
         set(hi,'XData',xi,'YData',yi);
         
         %% Area around current node  
-%         dr = 220;
-%         wr = 200;
-%         Ar = [xi yi]' + wr*[cos(fi - pi/2) sin(fi - pi/2) ]';
-%         Br = [xi yi]' + wr*[cos(fi + pi/2) sin(fi + pi/2) ]';
-%         Cr = Br + dr*[cos(fi) sin(fi)]';
-%         Dr = Ar + dr*[cos(fi) sin(fi)]';
+        dr = 220;
+        wr = 200;
+        Ar = [xi yi]' + wr*[cos(fi - pi/2) sin(fi - pi/2) ]';
+        Br = [xi yi]' + wr*[cos(fi + pi/2) sin(fi + pi/2) ]';
+        Cr = Br + dr*[cos(fi) sin(fi)]';
+        Dr = Ar + dr*[cos(fi) sin(fi)]';
         
 %         rd_max = NodeConnectionDistanceMax;
 %         ang_limit = NodeConnectionAngleLimit;
@@ -65,7 +66,7 @@ for i = 1:length(Nodes)
 %         xr = xr(bool);
 %         yr = yr(bool);
 
-%         set(hr,'XData',[Ar(1) Br(1) Cr(1) Dr(1) Ar(1)],'YData',[Ar(2) Br(2) Cr(2) Dr(2) Ar(2)]);
+        set(hr,'XData',[Ar(1) Br(1) Cr(1) Dr(1) Ar(1)],'YData',[Ar(2) Br(2) Cr(2) Dr(2) Ar(2)]);
     end
   
     %% Debug tool
@@ -117,7 +118,7 @@ for i = 1:length(Nodes)
 %     end
     
     %% Optimized scalar product
-    if (~all)
+    if (~all) && (~init)
         cosFi = cos(Nodes(i).fi);
         sinFi = sin(Nodes(i).fi); % it is actually minus sin
 
@@ -175,31 +176,40 @@ for i = 1:length(Nodes)
     Nodes(i).BFconnWghF = ones(1,1) * 99999;
     Nodes(i).BFconnCntF = 0;
     
-    j = i + 1;
+    j = (i + 1);
     iTrack = ceil(i/32);
     switch iTrack
         case 1
-            if (j < 1)
-                j = 32 + j;
+%             if (j < 1)
+%                 j = 32 + j;
+%             end
+            if (j > 32)
+                j = j - 32;
             end
         case 2
-            if (j < 33)
-                j = 32 + j;
+%             if (j < 33)
+%                 j = 32 + j;
+%             end
+            if (j > 64)
+                j = j - 32;
             end
-
         case 3
-            if (j < 65)
-                j = 32 + j;
+%             if (j < 65)
+%                 j = 32 + j;
+%             end
+            if (j > 96)
+                j = j - 32;
             end
-
         otherwise
             error('Wrong track \n');
     end   
+    
     
     d_to_node = sqrt((Nodes(i).x-Nodes(j).x)^2 + ...
                      (Nodes(i).y-Nodes(j).y)^2 );
     
     fi_to_node = atan2(Nodes(j).y - Nodes(i).y, Nodes(j).x - Nodes(i).x);
+    
     if (~all)
         d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],....
                                     WallsKeepOut,ObstaclesKeepOut);
@@ -215,7 +225,7 @@ for i = 1:length(Nodes)
     
         
     %% Loop trough nodes and connect neighbours in the area
-    for j = 1:0 %length(Nodes)      
+    for j = 1:96 %length(Nodes)      
 %         %%  
 %         if j == 53
 %             a = 48;
@@ -229,14 +239,8 @@ for i = 1:length(Nodes)
         
         jTrack = ceil(j/32);
         
+        if (iTrack ~= jTrack)
         
-            
-        
-        if (i ~= j)
-            %% Show j-th node
-%             if ()
-            
-            
             if (DRAW)
                 xj = Nodes(j).x;
                 yj = Nodes(j).y;
@@ -251,7 +255,7 @@ for i = 1:length(Nodes)
         %     y_obNew = (x_ob - Nodes(i).x) * sinFi + (y_ob - Nodes(i).y) * cosFi;
 
             scalar_prod = x_jNew; % + 0 * y_obNew;
-            if (scalar_prod >= -0.0001)
+            if (scalar_prod >= 30) % 30 mm forward
 %                 
 %                 bb = 1;
 %             else
@@ -282,19 +286,63 @@ for i = 1:length(Nodes)
                     
                     fi_to_node = atan2(Nodes(j).y - Nodes(i).y, Nodes(j).x - Nodes(i).x);
                 
-                    if (~all)
+                    if (~init)
                         d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],....
                                                     WallsKeepOut,ObstaclesKeepOut);
                     else
                         d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],WallsKeepOut,[]);
                     end
                 
+                    
                     if (d_to_node < d_to_obst) 
-                        Nodes(i).ConnCount = Nodes(i).ConnCount + 1;
-                        Nodes(i).ConnIndex(Nodes(i).ConnCount) = j;
-                        Nodes(i).ConnWeight(Nodes(i).ConnCount) = d_to_node;
-                    else 
+                        switch iTrack
+                            case 1
+                                switch jTrack
+                                    case 1
+                                        error('Same track! \n')
+                                    case 2
+                                        Nodes(i).BFconnCntL = Nodes(i).BFconnCntL + 1;
+                                        Nodes(i).BFconnIdxL(Nodes(i).BFconnCntL) = j;
+                                        Nodes(i).BFconnWghL(Nodes(i).BFconnCntL) = d_to_node * TrackChangeFactor;
+%                                         Nodes(i).BFconnCntL = Nodes(i).BFconnCntL + 1;
+                                    case 3
+                                        % Dubble track change is not
+                                        % allowed
+                                end
+                                
+                            case 2
+                                switch jTrack
+                                    case 1
+                                        Nodes(i).BFconnCntR = Nodes(i).BFconnCntR + 1;
+                                        Nodes(i).BFconnIdxR(Nodes(i).BFconnCntR) = j;
+                                        Nodes(i).BFconnWghR(Nodes(i).BFconnCntR) = d_to_node * TrackChangeFactor;
+%                                         Nodes(i).BFconnCntR = Nodes(i).BFconnCntR + 1;
+                                    case 2
+                                        error('Same track! \n')
+                                    case 3
+                                        Nodes(i).BFconnCntL = Nodes(i).BFconnCntL + 1;
+                                        Nodes(i).BFconnIdxL(Nodes(i).BFconnCntL) = j;
+                                        Nodes(i).BFconnWghL(Nodes(i).BFconnCntL) = d_to_node * TrackChangeFactor;
+%                                         Nodes(i).BFconnCntL = Nodes(i).BFconnCntL + 1;
+                                end
+                                
+                            case 3
+                                switch jTrack
+                                    case 1
+                                        % Dubble track change is not
+                                        % allowed
+                                    case 2
+                                        Nodes(i).BFconnCntR = Nodes(i).BFconnCntR + 1;
+                                        Nodes(i).BFconnIdxR(Nodes(i).BFconnCntR) = j;
+                                        Nodes(i).BFconnWghR(Nodes(i).BFconnCntR) = d_to_node * TrackChangeFactor;
+%                                         Nodes(i).BFconnCntR = Nodes(i).BFconnCntR + 1;
+                                    case 3
+                                        error('Same track! \n')
+                                end
+                        end
+                                   
                         
+                    else 
                         if (DRAW)
                             xo = d_to_obst*cos(fi_to_node) + Nodes(i).x;
                             yo = d_to_obst*sin(fi_to_node) + Nodes(i).y;
@@ -322,13 +370,13 @@ for i = 1:length(Nodes)
         
             
     end
-    if Nodes(i).ConnCount >= 100
-        error('To many connections for node %d within the area! \n', i);
+    if Nodes(i).BFconnCntF > 1
+        error('To many forward connections for node %d within the area! \n', i);
     end
-    [Nodes(i).ConnWeight, sortIdx] = sort(Nodes(i).ConnWeight);
-    Nodes(i).ConnIndex = Nodes(i).ConnIndex(sortIdx);
+%     [Nodes(i).ConnWeight, sortIdx] = sort(Nodes(i).ConnWeight);
+%     Nodes(i).ConnIndex = Nodes(i).ConnIndex(sortIdx);
     
-    pause(0.01);
+%     pause(0.01);
 end
 
 if (DRAW)

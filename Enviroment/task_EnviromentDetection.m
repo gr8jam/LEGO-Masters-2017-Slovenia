@@ -4,7 +4,7 @@ global PP
 
 persistent time
 if (isempty(time))
-    time = 15;
+    time = 0;
 end
 
 persistent cnt
@@ -16,13 +16,16 @@ end
 ObstaclesKeepOut = ComputeObstaclesKeepOut(TrueObstacleCenters);
 
 if (Ts*i > time) && (cnt < 4)
-    time = time + 1;
+    time = time + 0;
     cnt = cnt + 1;
     
     x = TrueObstacleCenters(cnt,1);
     y = TrueObstacleCenters(cnt,2);
     tic;
-    RecomputeNodeConnections(10,false,x,y,false);
+    DRAW = false;
+    all = false;
+    init = true;
+    RecomputeNodeConnections(10,DRAW,x,y,all,init);
     duration = toc;
     fprintf('Duration = %1.3f s\n', duration);
 

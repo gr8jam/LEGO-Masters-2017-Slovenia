@@ -60,6 +60,66 @@ SenRGB.Right.x = posR(1);
 SenRGB.Right.y = posR(2);
 
 
+ColorChangeFilter();
+
+end
+
+
+function ColorChangeFilter()
+global SenRGB
+
+persistent ColorIdxR_old
+if isempty(ColorIdxR_old)
+    ColorIdxR_old = 1;
+end
+
+persistent ColorIdxL_old
+if isempty(ColorIdxL_old)
+    ColorIdxL_old = 1;
+end
+
+persistent cntRight
+if isempty(cntRight)
+    cntRight = 1;
+end
+
+persistent cntLeft
+if isempty(cntLeft)
+    cntLeft = 0;
+end
+
+SenRGB.Right.ChangedFil = false;
+if (SenRGB.Right.Valid)
+    if (SenRGB.Right.idx == ColorIdxR_old) && (SenRGB.Right.idx ~= SenRGB.Right.idxFil)
+        cntRight = cntRight + 1;
+        if (cntRight > 3)
+            SenRGB.Right.ChangedFil = true;
+            SenRGB.Right.idxFil = SenRGB.Right.idx;
+        end
+    else
+        cntRight = 0;        
+    end
+    
+    ColorIdxR_old = SenRGB.Right.idx;
+end
+
+SenRGB.Left.ChangedFil = false;
+if (SenRGB.Left.Valid)
+    if (SenRGB.Left.idx == ColorIdxL_old) && (SenRGB.Left.idx ~= SenRGB.Left.idxFil)
+        cntLeft = cntLeft + 1;
+        if (cntLeft > 3)
+            SenRGB.Left.ChangedFil = true;
+            SenRGB.Left.idxFil = SenRGB.Left.idx;
+        end
+    else
+        cntLeft = 0;        
+    end
+    
+    ColorIdxL_old = SenRGB.Right.idx;
+end
+
+
+
 
 end
 

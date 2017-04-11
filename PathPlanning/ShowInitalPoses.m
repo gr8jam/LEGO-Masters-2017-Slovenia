@@ -1,45 +1,51 @@
-close all;
-clear all;
+% close all;
+% clear all;
 
 global Nodes PolygonMapColors
 Nodes = [];
 PolygonMapColors = [];
 
-load('Nodes');
+addpath('..\PolygonMap')
+% addpath('..\Sensors')
+addpath('..\Enviroment')
+addpath('..\TrueWorld')
+addpath('..\Plotting')
 
-fig = figure;
-set(fig, 'Position', [1600 -150 25*60 18*60]); %% matej
-hold on;
-load('../PolygonColorData.mat')
+% fig = figure;
+% FigureSettings(fig,'matej');
+wait =0;
+% 
+% fig = figure;
+% set(fig, 'Position', [1600 -150 25*60 18*60]); %% matej
+% hold on;
+
+
+load('Nodes');
+load('PolygonColorData.mat');
+load('Walls');
 
 wait =0;
-%% Draw Polygon
-colorMap = BarvnaLestvicaRGB/255;
-DrawPolygonMapColors(fig,colorMap)
-pause(0);
-
 %% Draw Polygon with Pastel colors
-% clf;
-% colorMap = BarvnaLestvicaRGB_pastel;
-% DrawPolygonMapColors(fig,colorMap)
-% pause(wait);
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 
-%%
-clf;
-colorMap = [0 0 0] + 0.70;
-DrawPolygonMapColors(fig,colorMap)
-pause(0);
 
-%% Draw Nodes postions
-DrawNodesPositions(fig, Nodes, 0/96)
-pause(2);
+%% Draw Enviroment and KeepOut
+DrawWalls(fig, Walls)
+% DrawObstacles(fig, TrueObstacleCenters);
+% DrawKeepOut(fig, WallsKeepOut, 'r--');
+% DrawKeepOut(fig, ObstaclesKeepOut, 'r--');
 
 %% Draw Nodes orientations
-DrawInitalPoses(fig,4/96);
+DrawInitalPoses(fig);
+
+%% Draw Nodes postions
+ColorMap = BarvnaLestvicaRGB/255;
+DrawNodesPositions(fig, Nodes, ColorMap);
 
 
-
-
+%%
+axis([-100 2700 -50 1820])
 
 
 

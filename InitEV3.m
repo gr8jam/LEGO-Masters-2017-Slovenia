@@ -30,7 +30,7 @@ ObstaclesKeepOut = zeros(32,4);
 
 % DEFINE MACRO
 DistanceKeepOut_Obstacles = 50 + 90;
-NodeConnectionDistanceMax = 700;
+NodeConnectionDistanceMax = 300; %700;
 NodeConnectionAngleLimit = pi/2;
 
 PF = InitParticleFilter();

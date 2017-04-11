@@ -8,7 +8,7 @@ CloseListIndex = [];
 
 %% Set cost of all nodes to something high
 for i = 1:length(Nodes)
-    Nodes(i).cost = 99999;
+    Nodes(i).cost = 99999999;
 end
 Nodes(StartIdx).cost = 0;
 

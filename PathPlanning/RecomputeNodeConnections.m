@@ -1,4 +1,4 @@
-function RecomputeNodeConnections(fig, DRAW, x_ob,y_ob, all)
+function RecomputeNodeConnections(fig, DRAW, x_ob,y_ob, all, init)
 global Nodes WallsKeepOut ObstaclesKeepOut
 global DistanceKeepOut_Obstacles 
 global NodeConnectionDistanceMax
@@ -109,7 +109,7 @@ for i = 1:length(Nodes)
 %     end
     
     %% Optimized scalar product
-    if (~all)
+    if (~all) && (~init)
         cosFi = cos(Nodes(i).fi);
         sinFi = sin(Nodes(i).fi); % it is actually minus sin
 
@@ -156,7 +156,7 @@ for i = 1:length(Nodes)
     
     %% Init Connections
     Nodes(i).ConnIndex = zeros(1,100);
-    Nodes(i).ConnWeight = ones(1,100) * 99999;
+    Nodes(i).ConnWeight = ones(1,100) * 99999999;
     Nodes(i).ConnCount = 0;
     
     %% Loop trough nodes and connect neighbours in the area
@@ -218,18 +218,25 @@ for i = 1:length(Nodes)
                     
                     fi_to_node = atan2(Nodes(j).y - Nodes(i).y, Nodes(j).x - Nodes(i).x);
                 
-                    if (~all)
+                    if (~init)
                         d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],....
                                                     WallsKeepOut,ObstaclesKeepOut);
                     else
                         d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],WallsKeepOut,[]);
-                        d_to_obst = SimulationDist([Nodes(i).x Nodes(i).y fi_to_node],WallsKeepOut,ObstaclesKeepOut);
                     end
                 
                     if (d_to_node < d_to_obst) 
+                        iTrack = ceil(i/32);
+                        jTrack = ceil(j/32);
+                        if (iTrack ~= jTrack)
+                            factor = 5;
+                        else
+                            factor = 1;
+                        end
+
                         Nodes(i).ConnCount = Nodes(i).ConnCount + 1;
                         Nodes(i).ConnIndex(Nodes(i).ConnCount) = j;
-                        Nodes(i).ConnWeight(Nodes(i).ConnCount) = d_to_node;
+                        Nodes(i).ConnWeight(Nodes(i).ConnCount) = d_to_node*factor;
                     else 
                         
                         if (DRAW)

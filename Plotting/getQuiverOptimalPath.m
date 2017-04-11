@@ -1,5 +1,4 @@
 function [xx,yy,uu,vv] = getQuiverOptimalPath()
-
 global Nodes Robot
 
 xx = [];

@@ -1,4 +1,4 @@
-function DrawNodesConnections(fig,Nodes)
+function DrawNodesConnectionsBayesFilter(fig,Nodes)
 global NodeConnectionDistanceMax
 global NodeConnectionAngleLimit
 % global  d_max_tr_1 d_max_tr_2 d_max_tr_3
@@ -15,13 +15,13 @@ end
 %% Add handels for current node, node area, node connections
 hi = plot(1250,900,'g.','MarkerSize',20); % current node
 hd = plot(1250,900,'b-','LineWidth',2);   % current node area
-for j = 1:length(Nodes(1).ConnIndex)
+for j = 1:3+3+1
 %     hj(j) = plot([0 0],[0 1],'k-','LineWidth',2.6,'erasemode','xor'); % current node connections
     hj(j) = plot([0 0],[0 1],'k-','LineWidth',2.2); % current node connections
 end
- 
+
 %% Go trough all nodes 
-i = 5;
+i = 1;
 while i <= length(Nodes)
     %% Draw current Node
     xi = Nodes(i).x;
@@ -37,13 +37,30 @@ while i <= length(Nodes)
     drawnow;
     
     %% Draw connection to current Node's Neighbours
-    for j = 1:length(Nodes(i).ConnIndex)
+    for j = 1:length(hj)
         set(hj(j),'XData',[0 0],'YData',[0 0]);
 %         drawnow;
     end
         
-    for j = 1:length(Nodes(i).ConnIndex)
-        idxj = Nodes(i).ConnIndex(j);
+    hjCnt = 0;
+    
+    for j = 1:Nodes(i).BFconnCntF
+        idxj = Nodes(i).BFconnIdxF(j);
+        if (idxj == 0)
+            break;
+        else
+            xj = Nodes(idxj).x;
+            yj = Nodes(idxj).y;
+
+            [xarrow, yarrow] = ComputeArrowHead(xi,yi,xj,yj,pi/6,35);
+%             hj(j) = plot([xi xj],[yi yj],'b-','LineWidth',2,'erasemode','xor');
+            hjCnt = hjCnt + 1;
+            set(hj(hjCnt),'XData',[xi xj xarrow],'YData',[yi yj yarrow]);
+        end
+    end
+    
+    for j = 1:Nodes(i).BFconnCntL
+        idxj = Nodes(i).BFconnIdxL(j);
         if (idxj == 0)
             break;
         else
@@ -52,10 +69,24 @@ while i <= length(Nodes)
 
             [xarrow, yarrow] = ComputeArrowHead(xi,yi,xj,yj,pi/6,35);
 %             hj(j) = plot([xi xj],[yi yj],'b-','LineWidth',2,'erasemode','xor');    
-            set(hj(j),'XData',[xi xj xarrow],'YData',[yi yj yarrow]);
-            drawnow;
+            hjCnt = hjCnt + 1;
+            set(hj(hjCnt),'XData',[xi xj xarrow],'YData',[yi yj yarrow]);
         end
-%         pause(0.01);
+    end
+    
+    for j = 1:Nodes(i).BFconnCntR
+        idxj = Nodes(i).BFconnIdxR(j);
+        if (idxj == 0)
+            break;
+        else
+            xj = Nodes(idxj).x;
+            yj = Nodes(idxj).y;
+
+            [xarrow, yarrow] = ComputeArrowHead(xi,yi,xj,yj,pi/6,35);
+%             hj(j) = plot([xi xj],[yi yj],'b-','LineWidth',2,'erasemode','xor');    
+            hjCnt = hjCnt + 1;
+            set(hj(hjCnt),'XData',[xi xj xarrow],'YData',[yi yj yarrow]);
+        end
     end
     
     %% Highlight current node

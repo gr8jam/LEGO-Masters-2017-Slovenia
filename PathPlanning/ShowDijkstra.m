@@ -70,14 +70,19 @@ DrawNodesPositions(fig, Nodes, ColorMap,0);
 %% Recompute the nodes connections
 % ComputeNodeConnections(fig,false);
 
-for i = 1:length(TrueObstacleCenters)
-    x = TrueObstacleCenters(i,1);
-    y = TrueObstacleCenters(i,2);
-    tic;
-    RecomputeNodeConnections(fig,false,x,y,false);
-    duration = toc;
-%     fprintf('Duration = %1.3f s\n', duration);
-end
+DRAW = false;
+all = true;
+init = false;
+RecomputeNodeConnections(fig,DRAW,0,0,all,init);
+
+% for i = 1:length(TrueObstacleCenters)
+%     x = TrueObstacleCenters(i,1);
+%     y = TrueObstacleCenters(i,2);
+%     tic;
+%     RecomputeNodeConnections(fig,false,x,y,false);
+%     duration = toc;
+% %     fprintf('Duration = %1.3f s\n', duration);
+% end
 
 %% Run Dijkstra Algorithm
 StartIdx = 57;
@@ -90,26 +95,7 @@ ComputeOptimalPathDijkstra(StartIdx, StopIdx);
 OptimalPath = PP.Path;
 
 %% Draw Connections of the nodes on path
-% for i = 1:96
-for idx = 1:PP.lenPath 
-    i = PP.Path(idx);
-    xi = Nodes(i).x;
-    yi = Nodes(i).y;
-    for j = 1:length(Nodes(i).ConnIndex)
-        idxj = Nodes(i).ConnIndex(j);
-        if (idxj == 0)
-            break;
-        else
-            xj = Nodes(idxj).x;
-            yj = Nodes(idxj).y;
-
-            [xarrow, yarrow] = ComputeArrowHead(xi,yi,xj,yj,pi/6,45);
-%             hj(j) = plot([xi xj],[yi yj],'b-','LineWidth',2,'erasemode','xor');    
-%             set(hj(j),'XData',[xi xj xarrow],'YData',[yi yj yarrow]);
-            plot([xi xj xarrow],[yi yj yarrow], 'k-','LineWidth',2);
-        end
-    end
-end
+DrawAllConnection(fig, Nodes);
 
 %% Highlight Start and End position
 Color = [0, 200, 51]/255;

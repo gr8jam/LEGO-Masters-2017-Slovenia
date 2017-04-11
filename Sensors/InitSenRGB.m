@@ -20,6 +20,9 @@ Left.y = 0;
 
 Left.ColorArray = zeros(7,7);
 
+Left.idxFil = 1;
+Left.ChangedFil = 0;
+
 %% RGB color sensor on the RIGHT
 Right.Red = 0;
 Right.Green = 0;
@@ -40,6 +43,9 @@ Right.x = 0;
 Right.y = 0;
 
 Right.ColorArray = zeros(7,7);
+
+Right.idxFil = 1;
+Right.ChangedFil = 0;
 
 %% Output
 SenRGB.Left = Left;

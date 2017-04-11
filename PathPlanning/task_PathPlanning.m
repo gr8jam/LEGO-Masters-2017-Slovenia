@@ -16,8 +16,10 @@ global ObstaclesKeepOut
 
 if (PP.Flag_RecalculatePath)
     StartIdx = GetClosestNode();
+%     StartIdx = 81;
     ComputeDijkstra(StartIdx);
     StopIdx = GetStopIdx(StartIdx); 
+    StopIdx = 50;
     ComputeOptimalPathDijkstra(StartIdx, StopIdx);
     
     PP.Goal = PP.Path(PP.lenPath);

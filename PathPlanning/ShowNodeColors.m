@@ -18,19 +18,19 @@ load('PolygonColorData.mat');
 
 ComputeNodesColors();
 
-% save('Nodes.mat', 'Nodes')
+% % % % save('Nodes.mat', 'Nodes')
 
 fig = figure;
 FigureSettings(fig,'matej');
 wait =0;
 
 %% Draw Polygon
-ColorMap = BarvnaLestvicaRGB/255;
-DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
+% ColorMap = BarvnaLestvicaRGB/255;
+% DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 
 %% Draw Polygon with Pastel colors
-% ColorMap = BarvnaLestvicaRGB_pastel;
-% DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
+ColorMap = BarvnaLestvicaRGB_pastel;
+DrawPolygonMapColors(fig,PolygonMapColors,ColorMap)
 
 %% Draw Enviroment and KeepOut
 % DrawWalls(fig, Walls)

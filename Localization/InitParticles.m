@@ -47,7 +47,7 @@ for p = 1:PF.nParticles
     while not_done
         cnt = cnt +1;
         idxNode = randi(96);
-%         idxNode = 54;
+        idxNode = 81;
 %         if (idxNode == 91)
 %             idxNode = 41;
 %         end

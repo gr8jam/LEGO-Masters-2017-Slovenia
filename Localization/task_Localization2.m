@@ -3,7 +3,7 @@ function task_Localization2()
 
 SimpleFilter();
 
-% BayesFilter();
+BayesFilter();
 
 
 
@@ -11,23 +11,25 @@ end
 
 
 
-function BayesFilter()
+function DrivingBehaviour()
 
-global Nodes
-
-global BF SenRGB 
-
-if SenRGB.Right.Changed
-    
-    
-        
+persistent state
+if isempty(state)
+    state = 'forward'
 end
 
+state = 'forward';
+state = 'goingLeft';
+state = 'goingRight';
 
 
-
+% switch state
+%     case 'forward'
+%         if SenRGB.Right.Changed
+% 
+% 
+% end
 end
-
 
 
 % % function CalculateAposteriori()

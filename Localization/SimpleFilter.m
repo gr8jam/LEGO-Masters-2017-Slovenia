@@ -2,13 +2,13 @@ function SimpleFilter()
 
 global SF SenRGB 
 
-if SenRGB.Right.Changed
-    if (SenRGB.Right.idx == 1) || (SenRGB.Right.idx == 2)
+if SenRGB.Right.ChangedFil
+    if (SenRGB.Right.idxFil == 1) || (SenRGB.Right.idxFil == 2)
 %         error('Do not save black or whit colors')
-        return;
+%         return;
     end
     
-    SF.StackLastColors = Stack_PushElement(SF.StackLastColors, SenRGB.Right.idx);
+    SF.StackLastColorsR = Stack_PushElement(SF.StackLastColorsR, SenRGB.Right.idxFil);
 
     
     SimpleFilter_FindMatchingColors();
@@ -18,6 +18,16 @@ if SenRGB.Right.Changed
     
         
 end
+
+if SenRGB.Left.ChangedFil
+    if (SenRGB.Left.idxFil == 1) || (SenRGB.Left.idxFil == 2)
+%         error('Do not save black or whit colors')
+%         return;
+    end
+    
+    SF.StackLastColorsL = Stack_PushElement(SF.StackLastColorsL, SenRGB.Left.idxFil);
+
+    
 
 end
 
