@@ -1,5 +1,4 @@
-function DrawRobot(q,tip)
-global hFigMap
+function DrawRobot(q,hPlot)
 
 L_half = 90;
 W_half = 60;
@@ -14,6 +13,6 @@ T=repmat([q(1);q(2)],1,size(P,2)) ;
 
 % toèke obrisa robota transliramo in rotiramo
 P=Rkolo*P+T; 
-set(hFigMap(tip),'XData',P(1,:),'YData',P(2,:))   % izris dejanskega robota
+set(hPlot,'XData',P(1,:),'YData',P(2,:))   % izris dejanskega robota
 end
 

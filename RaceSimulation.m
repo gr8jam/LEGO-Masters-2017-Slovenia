@@ -24,7 +24,7 @@ user = 'matej';
 %% Simulation time, Sampling rate
 global Ts 
 Ts=0.033;               % sampling time
-Tend = 15; % 53.85;      % Simulation end time
+Tend = 45; % 53.85;      % Simulation end time
 t=0:Ts:Tend;            % time vector
 
 %% Global storage of different data
