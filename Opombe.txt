@@ -3,7 +3,7 @@ spremenljivka z opisom barv: PolygonMapColors		m
 scope: global
 opis barvnega poligona, matrika 1800x2500 z indeksi barv
 
-loèujeva funkije za senzorje:
+loèujeva funckije za senzorje:
 [HSV1, HSV2] = DriverRGB()  	p		klièi funkcijo SimulationRGB
 fiTrue 		 = DriverGyro() 	p		klièi funkcijo SimulationGyro
 distTrue 	 = DriverDist()		p		klièi funkcijo SimulationDist
