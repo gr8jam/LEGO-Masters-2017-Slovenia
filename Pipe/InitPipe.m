@@ -1,17 +1,12 @@
-function Pipe = InitPipe(bufferSize)
+function Pipe = InitPipe(PipeSize)
 
 
-begin = 0;
-stop = 0;
 inStock = 0;
-size = bufferSize + 1;
+size = PipeSize;
 buffer = zeros(size,1);
 
-Pipe = struct('begin',begin,...
-              'stop',stop,...
-              'inStock',inStock,...
-              'size',size,...
-              'buffer',buffer);
-
+Pipe = struct('inStock',inStock,...
+               'size', size,...
+               'buffer',buffer);
 
 end

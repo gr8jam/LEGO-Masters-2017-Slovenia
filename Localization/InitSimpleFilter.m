@@ -1,17 +1,16 @@
 function SF = InitSimpleFilter()
 
 
-PipeLastColors = InitPipe(5);
+% PipeLastColors = InitPipe(5);
 
-StackLastColorsR = InitStack(5);
-StackLastColorsL = InitStack(5);
+PipeLastColorsR = InitPipe(5);
+PipeLastColorsL = InitPipe(5);
 
                     
 bestMtcIdx = 0;
 
-SF = struct('PipeLastColors', PipeLastColors,...
-            'StackLastColorsR', StackLastColorsR,...
-            'StackLastColorsL', StackLastColorsL,...
+SF = struct('PipeLastColorsR', PipeLastColorsR,...
+            'PipeLastColorsL', PipeLastColorsL,...
             'bestMtcIdx',bestMtcIdx);
 
 

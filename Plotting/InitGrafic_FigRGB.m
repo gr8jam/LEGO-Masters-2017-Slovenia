@@ -38,20 +38,20 @@ axis([-4 4 -4 4])
 axis equal;
 
 subplot(2,2,3);
-title('StackLastColors ')
+title('PipeLastColors ')
 hold on;
-hFigRGB.StackL = zeros(5,1);
-for i = 1:length(hFigRGB.StackL)
-    hFigRGB.StackL(i) = rectangle('Position',[0,-i,1,1]);
+hFigRGB.PipeL = zeros(5,1);
+for i = 1:length(hFigRGB.PipeL)
+    hFigRGB.PipeL(i) = rectangle('Position',[0,-i,1,1]);
 end
 axis([0 1 -5 0])
 
 subplot(2,2,4);
-title('StackLastColors ')
+title('PipeLastColors ')
 hold on;
-hFigRGB.StackR = zeros(5,1);
-for i = 1:length(hFigRGB.StackR)
-    hFigRGB.StackR(i) = rectangle('Position',[0,-i,1,1]);
+hFigRGB.PipeR = zeros(5,1);
+for i = 1:length(hFigRGB.PipeR)
+    hFigRGB.PipeR(i) = rectangle('Position',[0,-i,1,1]);
 end
 axis([0 1 -5 0])
 

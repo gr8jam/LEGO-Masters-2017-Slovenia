@@ -5,7 +5,7 @@ global Nodes SF
 for i = 1:96
     
     cntMatch = 0;
-    for j = 1:SF.StackLastColorsR.inStock
+    for j = 1:SF.PipeLastColorsR.inStock
         idxNode = i - j +1;
         
         switch ceil(i/32)
@@ -30,7 +30,7 @@ for i = 1:96
         
         try 
         
-            if (Nodes(idxNode).idxColor == Stack_ReadElement(SF.StackLastColorsR, j))
+            if (Nodes(idxNode).idxColor == Pipe_ReadElement(SF.PipeLastColorsR, j))
                 cntMatch = cntMatch + 1;
             else
                 break;

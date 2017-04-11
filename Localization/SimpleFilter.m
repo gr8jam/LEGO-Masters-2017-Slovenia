@@ -8,7 +8,7 @@ if SenRGB.Right.ChangedFil
 %         return;
     end
     
-    SF.StackLastColorsR = Stack_PushElement(SF.StackLastColorsR, SenRGB.Right.idxFil);
+    SF.PipeLastColorsR = Pipe_PushElement(SF.PipeLastColorsR, SenRGB.Right.idxFil);
 
     
     SimpleFilter_FindMatchingColors();
@@ -25,7 +25,7 @@ if SenRGB.Left.ChangedFil
 %         return;
     end
     
-    SF.StackLastColorsL = Stack_PushElement(SF.StackLastColorsL, SenRGB.Left.idxFil);
+    SF.PipeLastColorsL = Pipe_PushElement(SF.PipeLastColorsL, SenRGB.Left.idxFil);
 
     
 

@@ -24,21 +24,21 @@ global hFigRGB
         end
     end
     
-    for i = 1:length(hFigRGB.StackR)
-        idx = Robot.SF.StackLastColorsR.buffer(i);
+    for i = 1:length(hFigRGB.PipeR)
+        idx = Robot.SF.PipeLastColorsR.buffer(i);
         if (idx > 0)
-            set(hFigRGB.StackR(i),'FaceColor',BarvnaLestvicaRGB(idx,:)/255);
+            set(hFigRGB.PipeR(i),'FaceColor',BarvnaLestvicaRGB(idx,:)/255);
         else
-            set(hFigRGB.StackR(i),'FaceColor','m');
+            set(hFigRGB.PipeR(i),'FaceColor','m');
         end
     end
 
-    for i = 1:length(hFigRGB.StackL)
-        idx = Robot.SF.StackLastColorsL.buffer(i);
+    for i = 1:length(hFigRGB.PipeL)
+        idx = Robot.SF.PipeLastColorsL.buffer(i);
         if (idx > 0)
-            set(hFigRGB.StackL(i),'FaceColor',BarvnaLestvicaRGB(idx,:)/255);
+            set(hFigRGB.PipeL(i),'FaceColor',BarvnaLestvicaRGB(idx,:)/255);
         else
-            set(hFigRGB.StackL(i),'FaceColor','m');
+            set(hFigRGB.PipeL(i),'FaceColor','m');
         end
     end
 end

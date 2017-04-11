@@ -14,7 +14,6 @@ addpath('Enviroment');
 addpath('TrueWorld');
 addpath('Plotting');
 addpath('Pipe');
-addpath('Stack');
 
 
 %% Changed user for prefered figure settings
@@ -130,8 +129,8 @@ plot(ttt,www,'-');
 xlabel('t [s]'),ylabel('omega [rad/s]');
 
 %% Race Simulation output
-qqqTrue_out = qqqTrue;
-qqqPF_out = qqqPF;
+% qqqTrue_out = qqqTrue;
+% qqqPF_out = qqqPF;
 
 end
 
