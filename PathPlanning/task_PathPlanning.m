@@ -1,7 +1,6 @@
 function task_PathPlanning()
 % global Flag_RecalculatePath
-global  PP PF TrueObstacleCenters Nodes % Flag_RecalculatePath Flag_PathFound Path Goal
-global ObstaclesKeepOut
+global  PP  Nodes
 
 % persistent Flag_RecalculatePath
 % if (isempty(Flag_RecalculatePath))
@@ -13,13 +12,10 @@ global ObstaclesKeepOut
 % end
 
 
-
 if (PP.Flag_RecalculatePath)
     StartIdx = GetClosestNode();
-%     StartIdx = 81;
     ComputeDijkstra(StartIdx);
     StopIdx = GetStopIdx(StartIdx); 
-    StopIdx = 50;
     ComputeOptimalPathDijkstra(StartIdx, StopIdx);
     
     PP.Goal = PP.Path(PP.lenPath);

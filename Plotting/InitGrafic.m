@@ -1,7 +1,8 @@
 function InitGrafic()
 
-InitGrafic_FigMap();
+
 InitGrafic_FigRGB();
+InitGrafic_FigMap();
 
 end
 

@@ -184,7 +184,7 @@ for i = 1:length(Nodes)
             sinFi = sin(Nodes(i).fi); % it is actually minus sin
 
             x_jNew = (Nodes(j).x - Nodes(i).x) * cosFi + (Nodes(j).y - Nodes(i).y) * sinFi;
-        %     y_obNew = (x_ob - Nodes(i).x) * sinFi + (y_ob - Nodes(i).y) * cosFi;
+            %    y_obNew = (x_ob - Nodes(i).x) * sinFi + (y_ob - Nodes(i).y) * cosFi;
 
             scalar_prod = x_jNew; % + 0 * y_obNew;
             if (scalar_prod >= -0.0001)
@@ -229,7 +229,7 @@ for i = 1:length(Nodes)
                         iTrack = ceil(i/32);
                         jTrack = ceil(j/32);
                         if (iTrack ~= jTrack)
-                            factor = 5;
+                            factor = 1.0;
                         else
                             factor = 1;
                         end

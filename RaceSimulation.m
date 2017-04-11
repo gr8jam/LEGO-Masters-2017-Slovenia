@@ -15,7 +15,6 @@ addpath('PolygonMap');
 addpath('Sensors');
 addpath('TrueWorld');
 
-
 %% Changed user for prefered figure settings
 global user
 user = 'matej';
@@ -23,9 +22,9 @@ user = 'matej';
 
 %% Simulation time, Sampling rate
 global Ts 
-Ts=0.033;               % sampling time
-Tend = 45; % 53.85;      % Simulation end time
-t=0:Ts:Tend;            % time vector
+Ts=0.033;               % Sampling time
+Tend = 60; % 53.85;     % Simulation end time
+t=0:Ts:Tend;            % Time vector
 
 %% Global storage of different data
 global qqqTrue qqqPF qqqSF xxxPF vvv www ttt
@@ -115,7 +114,7 @@ figure
 hold on;
 plot(qqqTrue(1,:),qqqTrue(2,:),'b');
 plot(qqqPF(1,:),qqqPF(2,:),'g--');
-plot(qqqSF(1,:),qqqSF(2,:),'r-.')
+% plot(qqqSF(1,:),qqqSF(2,:),'r-.')
 xlabel('x [mm]'),ylabel('y [mm]')
 hold off;
 
