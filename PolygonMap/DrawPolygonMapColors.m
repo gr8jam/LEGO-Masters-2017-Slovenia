@@ -1,8 +1,6 @@
 function DrawPolygonMapColors(fig,PolygonMap,ColorMap)
 
 figure(fig)
-axis([-20 2700 -20 1820])
-axis equal
 hold on;
 
 xGrid = repmat(1:2500,1800,1);

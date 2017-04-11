@@ -6,7 +6,7 @@ if (isempty(cnt))
 end
 
 cnt = cnt + 1;
-if (mod(cnt,5) == 0)
+if (mod(cnt,7) == 0)
     cnt = 0;
     UpdateGrafic_FigMap(i);   
     UpdateGrafic_FigRGB();

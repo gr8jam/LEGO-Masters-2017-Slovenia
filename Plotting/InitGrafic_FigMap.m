@@ -1,12 +1,12 @@
 function InitGrafic_FigMap()
 global PolygonMapColors BarvnaLestvicaRGB BarvnaLestvicaRGB_pastel
 global TrueWalls TrueObstacleCenters TrueObstacles TrueKeepOut 
-global hFigMap hhN hhB
+global hFigMap
 global user Nodes
 
-FigPolygon = figure(); 
+FigPolygon = figure(10); 
 clf; 
-FigureSettings_FigPolygon(FigPolygon,user);
+FigureSettings_FigMap(FigPolygon,user);
 hold on;
 
 %% Draw enviroment
@@ -16,13 +16,13 @@ ColorMap = BarvnaLestvicaRGB_pastel;
 DrawPolygonMapColors(FigPolygon, PolygonMapColors, ColorMap);
 
 % Draw Walls
-DrawWalls(FigPolygon, TrueWalls)
+DrawWalls(FigPolygon, TrueWalls);
 
 % Draw obstacles
 DrawObstacles(FigPolygon, TrueObstacleCenters);
 DrawTrueObstacles(FigPolygon, TrueObstacles, 'y--');
 
-% Draw KeepOut
+% Draw TrueKeepOut
 DrawKeepOut(FigPolygon, TrueKeepOut, 'r--');
 
 %% Initialize data sets
@@ -41,13 +41,13 @@ hFigMap.pathPF   = line(nan,nan,'Color','m','LineStyle', '--') ;    % Estimated 
 hFigMap.robotTrue = line(nan,nan,'Color','c','LineWidth',2) ;       % True robot 
 hFigMap.robotPF   = line(nan,nan,'Color','m','LineWidth',2) ;       % Robot Estimation PF
 
-plot([1175,1325], [-90,-90],'ko','MarkerSize',17,'LineWidth',2);    % Color sensors readings
-hFigMap.SenLCol = plot(1175,-90,'k.','MarkerSize',45);              % Left  color sensor reading
-hFigMap.SenRCol = plot(1325,-90,'k.','MarkerSize',45);              % Right color sensor reading
-hFigMap.SenLPos = plot(nan,nan,'c+','MarkerSize', 10);              % Left  color sensor position
-hFigMap.SenRPos = plot(nan,nan,'c+','MarkerSize', 10);              % Right color sensor position
+% plot([1175,1325], [-90,-90],'ko','MarkerSize',17,'LineWidth',2);    % Color sensors readings
+% hFigMap.SenLCol = plot(1175,-90,'k.','MarkerSize',45);              % Left  color sensor reading
+% hFigMap.SenRCol = plot(1325,-90,'k.','MarkerSize',45);              % Right color sensor reading
+% hFigMap.SenLPos = plot(nan,nan,'c+','MarkerSize', 10);              % Left  color sensor position
+% hFigMap.SenRPos = plot(nan,nan,'c+','MarkerSize', 10);              % Right color sensor position
 
-hFigMap.xxxPF = plot(nan,nan,'.','Color','r', 'MarkerSize', 5);     % Particles
+% hFigMap.xxxPF = plot(nan,nan,'.','Color','r', 'MarkerSize', 5);     % Particles
 
 % hhB = plot(0,0, 'm.', 'MarkerSize', 15, 'erasemode','xor');
 % hhB = plot(0,0, 'm.', 'MarkerSize', 15);

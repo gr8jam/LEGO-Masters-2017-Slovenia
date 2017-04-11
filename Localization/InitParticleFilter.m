@@ -1,6 +1,6 @@
 function PF = InitParticleFilter()
 
-nParticles = 2*96;
+nParticles = 1.5*96;
 
 PF = struct('State', 'Init',...
             'Estimate', 'Searching',...

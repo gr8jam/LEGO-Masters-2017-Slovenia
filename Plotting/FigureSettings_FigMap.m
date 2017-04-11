@@ -1,4 +1,4 @@
-function FigureSettings_FigPolygon(fig,user)
+function FigureSettings_FigMap(fig,user)
 %% input parameter user has two options
 % 1 - for matej
 % 2 - for peter
@@ -27,7 +27,7 @@ title('Localization of diferential drive robot');
 xlabel('x (mm)');
 ylabel('y (mm)');
 axis equal
-axis([-20 2800 -20 1820]);
+axis([-50 2550 -150 1850]);
 end
 
 
