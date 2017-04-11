@@ -4,16 +4,16 @@ clear all;
 
 cd(fileparts(mfilename('fullpath')))
 
-addpath('Localization');
-addpath('EV3');
 addpath('Controler');
-addpath('PathPlanning');
-addpath('Sensors');
-addpath('PolygonMap');
 addpath('Enviroment');
-addpath('TrueWorld');
-addpath('Plotting');
+addpath('EV3');
+addpath('Localization');
+addpath('PathPlanning');
 addpath('Pipe');
+addpath('Plotting');
+addpath('PolygonMap');
+addpath('Sensors');
+addpath('TrueWorld');
 
 
 %% Changed user for prefered figure settings
